@@ -1,0 +1,8428 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Pengelolaan Alter Profile Website Profile Magang PUSDATIN X BOC UBP Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#071128"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    Kelola Alter Profile — PUSDATIN X BOC
+  </title>
+
+
+  <!-- ===================================================
+       FAVICON
+       =================================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+
+  <!-- ===================================================
+       GOOGLE FONTS
+       =================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Oxanium:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       CSS UTAMA
+       =================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+
+  <!-- ===================================================
+       CSS ALTER ADMIN
+       =================================================== -->
+
+  <style>
+    :root {
+      --admin-bg: #020611;
+      --admin-bg-soft: #07142c;
+      --admin-panel: rgba(5, 18, 43, 0.96);
+      --admin-panel-light: rgba(10, 33, 70, 0.94);
+
+      --admin-blue: #0877ff;
+      --admin-blue-light: #55bcff;
+      --admin-cyan: #32e3ff;
+      --admin-purple: #a783ff;
+      --admin-purple-light: #d1bcff;
+      --admin-green: #3ff2a4;
+      --admin-yellow: #ffd45b;
+      --admin-red: #ff536b;
+
+      --admin-white: #f5f9ff;
+      --admin-text: #c5d9ef;
+      --admin-muted: #7793b6;
+
+      --admin-border: rgba(117, 185, 255, 0.22);
+      --admin-border-strong: rgba(145, 204, 255, 0.48);
+      --admin-purple-border: rgba(167, 131, 255, 0.42);
+    }
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      min-height: 100%;
+      background: var(--admin-bg);
+    }
+
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--admin-white);
+      background:
+        radial-gradient(
+          circle at 90% 0,
+          rgba(113, 62, 255, 0.18),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 10% 100%,
+          rgba(50, 227, 255, 0.08),
+          transparent 29%
+        ),
+        var(--admin-bg);
+      font-family: "Oxanium", sans-serif;
+    }
+
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+
+    button {
+      border-radius: 0;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    /*
+    =====================================================
+    BACKGROUND
+    =====================================================
+    */
+
+    .admin-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+
+    .admin-background-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      background-image:
+        linear-gradient(
+          rgba(125, 172, 255, 0.34) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(125, 172, 255, 0.34) 1px,
+          transparent 1px
+        );
+      background-size: 48px 48px;
+    }
+
+
+    .admin-background-lines {
+      position: absolute;
+      inset: 0;
+      opacity: 0.045;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent 0,
+          transparent 28px,
+          rgba(255, 255, 255, 0.35) 29px,
+          transparent 30px
+        );
+    }
+
+
+    .admin-background-orb {
+      position: absolute;
+      width: min(70vw, 850px);
+      aspect-ratio: 1;
+      top: -360px;
+      right: -270px;
+      border: 80px solid rgba(167, 131, 255, 0.035);
+      border-radius: 50%;
+      box-shadow:
+        0 0 180px rgba(95, 55, 255, 0.1),
+        inset 0 0 140px rgba(95, 55, 255, 0.06);
+    }
+
+
+    /*
+    =====================================================
+    PAGE
+    =====================================================
+    */
+
+    .admin-page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+
+    /*
+    =====================================================
+    LOADING BAR
+    =====================================================
+    */
+
+    .admin-loading-bar {
+      position: fixed;
+      z-index: 500;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(66, 91, 160, 0.3);
+      transition: opacity 150ms ease;
+    }
+
+
+    .admin-loading-bar.is-visible {
+      opacity: 1;
+    }
+
+
+    .admin-loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 35%;
+      height: 100%;
+      left: -35%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--admin-purple-light),
+          transparent
+        );
+      animation: loadingBar 1s linear infinite;
+    }
+
+
+    @keyframes loadingBar {
+      to {
+        transform: translateX(390%);
+      }
+    }
+
+
+    /*
+    =====================================================
+    TOPBAR
+    =====================================================
+    */
+
+    .admin-topbar {
+      position: sticky;
+      z-index: 70;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 28px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(2, 8, 22, 0.93);
+      backdrop-filter: blur(18px);
+    }
+
+
+    .admin-topbar-left {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+    .admin-logo {
+      width: 48px;
+      height: 48px;
+      padding: 5px;
+      object-fit: contain;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-heading-kicker {
+      color: var(--admin-purple-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-heading-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+
+    /*
+    =====================================================
+    BUTTON
+    =====================================================
+    */
+
+    .admin-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border: 1px solid var(--admin-border);
+      color: #dcecff;
+      background: rgba(5, 24, 54, 0.84);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        border-color 150ms ease,
+        color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+    }
+
+
+    .admin-button:hover:not(:disabled),
+    .admin-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(12, 67, 127, 0.78);
+      outline: none;
+    }
+
+
+    .admin-button.is-primary {
+      color: #ffffff;
+      border-color: var(--admin-purple-light);
+      background:
+        linear-gradient(
+          100deg,
+          #5a35ce,
+          #855cff
+        );
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-button.is-blue {
+      color: #ffffff;
+      border-color: var(--admin-blue-light);
+      background:
+        linear-gradient(
+          100deg,
+          #005ce6,
+          #0d83ff
+        );
+    }
+
+
+    .admin-button.is-success {
+      color: #dffff0;
+      border-color: rgba(63, 242, 164, 0.45);
+      background: rgba(12, 105, 69, 0.5);
+    }
+
+
+    .admin-button.is-danger {
+      color: #ffd1d8;
+      border-color: rgba(255, 83, 107, 0.38);
+      background: rgba(126, 17, 38, 0.42);
+    }
+
+
+    .admin-button.is-ghost {
+      background: transparent;
+    }
+
+
+    .admin-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+
+    /*
+    =====================================================
+    CONTENT
+    =====================================================
+    */
+
+    .admin-content {
+      width: 100%;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+
+    .admin-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-breadcrumb a {
+      color: var(--admin-blue-light);
+      text-decoration: none;
+    }
+
+
+    .admin-breadcrumb a:hover,
+    .admin-breadcrumb a:focus-visible {
+      color: #ffffff;
+      text-decoration: underline;
+      outline: none;
+    }
+
+
+    /*
+    =====================================================
+    PAGE HEADER
+    =====================================================
+    */
+
+    .admin-page-header {
+      position: relative;
+      min-height: 205px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 34px 39px;
+      border: 1px solid var(--admin-purple-border);
+      background:
+        linear-gradient(
+          115deg,
+          rgba(91, 51, 204, 0.9),
+          rgba(50, 35, 111, 0.94) 54%,
+          rgba(5, 17, 42, 0.98)
+        );
+      box-shadow: 0 22px 65px rgba(0, 0, 0, 0.24);
+      clip-path: polygon(
+        0 0,
+        calc(100% - 32px) 0,
+        100% 32px,
+        100% 100%,
+        32px 100%,
+        0 calc(100% - 32px)
+      );
+    }
+
+
+    .admin-page-header::before {
+      content: "";
+      position: absolute;
+      width: 410px;
+      height: 410px;
+      right: -105px;
+      bottom: -250px;
+      border: 68px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+    }
+
+
+    .admin-page-header::after {
+      content: "ALTER";
+      position: absolute;
+      right: -8px;
+      bottom: -24px;
+      color: rgba(255, 255, 255, 0.05);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(100px, 15vw, 190px);
+      font-weight: 900;
+      line-height: 0.78;
+      letter-spacing: -5px;
+      pointer-events: none;
+    }
+
+
+    .admin-page-header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+
+
+    .admin-page-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #e7dcff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-kicker::before {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background: var(--admin-purple-light);
+    }
+
+
+    .admin-page-title {
+      margin: 11px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 0.86;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-description {
+      max-width: 710px;
+      margin: 17px 0 0;
+      color: rgba(239, 235, 255, 0.8);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+
+    /*
+    =====================================================
+    SUMMARY
+    =====================================================
+    */
+
+    .admin-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+
+    .admin-summary {
+      position: relative;
+      min-height: 112px;
+      overflow: hidden;
+      padding: 17px 19px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 28, 62, 0.95),
+          rgba(3, 14, 34, 0.97)
+        );
+    }
+
+
+    .admin-summary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 66px;
+      height: 4px;
+      background: var(--accent, var(--admin-purple));
+    }
+
+
+    .admin-summary-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-summary-value {
+      margin-top: 9px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+
+    .admin-summary-note {
+      margin-top: 7px;
+      color: #8ea9c8;
+      font-size: 9px;
+    }
+
+
+    /*
+    =====================================================
+    PANEL
+    =====================================================
+    */
+
+    .admin-panel {
+      margin-top: 20px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(6, 24, 55, 0.96),
+          rgba(2, 12, 30, 0.98)
+        );
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .admin-panel-header {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(9, 35, 75, 0.62);
+    }
+
+
+    .admin-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-title::before {
+      content: "";
+      width: 5px;
+      height: 24px;
+      background: var(--admin-purple-light);
+    }
+
+
+    .admin-panel-subtitle {
+      margin-top: 3px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-body {
+      padding: 18px;
+    }
+
+
+    /*
+    =====================================================
+    FILTER
+    =====================================================
+    */
+
+    .admin-filter-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 1.4fr)
+        minmax(160px, 0.7fr)
+        minmax(160px, 0.7fr)
+        minmax(190px, 0.85fr)
+        minmax(140px, 0.5fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+
+    .admin-filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+
+    .admin-field {
+      min-width: 0;
+    }
+
+
+    .admin-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #b8d1ea;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-input,
+    .admin-select,
+    .admin-textarea {
+      width: 100%;
+      border: 1px solid rgba(129, 190, 255, 0.28);
+      border-radius: 0;
+      outline: none;
+      color: #ffffff;
+      background: rgba(0, 10, 27, 0.88);
+      font-family: "Oxanium", sans-serif;
+      font-size: 12px;
+      transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background 150ms ease;
+    }
+
+
+    .admin-input,
+    .admin-select {
+      min-height: 45px;
+      padding: 10px 13px;
+    }
+
+
+    .admin-textarea {
+      min-height: 112px;
+      padding: 12px 13px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+
+    .admin-textarea.is-code {
+      min-height: 170px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+      tab-size: 2;
+    }
+
+
+    .admin-input:focus,
+    .admin-select:focus,
+    .admin-textarea:focus {
+      border-color: var(--admin-purple-light);
+      background: rgba(6, 13, 38, 0.97);
+      box-shadow:
+        0 0 0 3px rgba(143, 97, 255, 0.14),
+        inset 4px 0 0 var(--admin-purple);
+    }
+
+
+    .admin-input:disabled,
+    .admin-select:disabled,
+    .admin-textarea:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+
+    .admin-input::placeholder,
+    .admin-textarea::placeholder {
+      color: rgba(146, 173, 207, 0.48);
+    }
+
+
+    .admin-checkbox {
+      min-height: 45px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border: 1px solid var(--admin-border);
+      color: #a8c0dc;
+      background: rgba(3, 17, 39, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+
+    .admin-checkbox input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--admin-purple);
+    }
+
+
+    /*
+    =====================================================
+    TABLE
+    =====================================================
+    */
+
+    .admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+
+    .admin-table {
+      width: 100%;
+      min-width: 1240px;
+      border-collapse: collapse;
+    }
+
+
+    .admin-table th {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--admin-border);
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(117, 185, 255, 0.1);
+      color: #c5d8ec;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+
+    .admin-table tbody tr {
+      transition: background 140ms ease;
+    }
+
+
+    .admin-table tbody tr:hover {
+      background: rgba(96, 59, 173, 0.12);
+    }
+
+
+    .admin-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+
+    .admin-alter-cell {
+      min-width: 225px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+
+    .admin-alter-photo {
+      width: 47px;
+      height: 47px;
+      flex: 0 0 47px;
+      object-fit: cover;
+      border: 1px solid var(--admin-purple-border);
+      background: #07152d;
+    }
+
+
+    .admin-alter-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-alter-id {
+      margin-top: 2px;
+      color: var(--admin-muted);
+      font-size: 9px;
+    }
+
+
+    .admin-base-member {
+      min-width: 170px;
+    }
+
+
+    .admin-base-member-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-theme-badge,
+    .admin-status-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border: 1px solid var(--admin-border);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-theme-badge {
+      color: #e2d6ff;
+      border-color: var(--admin-purple-border);
+      background: rgba(96, 54, 174, 0.22);
+    }
+
+
+    .admin-status-badge {
+      color: #c1d7ed;
+      background: rgba(6, 25, 56, 0.8);
+    }
+
+
+    .admin-status-badge.is-active {
+      color: #a9ffd6;
+      border-color: rgba(63, 242, 164, 0.3);
+      background: rgba(11, 105, 67, 0.2);
+    }
+
+
+    .admin-status-badge.is-inactive {
+      color: #d1dbe6;
+      border-color: rgba(173, 190, 208, 0.25);
+    }
+
+
+    .admin-status-badge.is-draft {
+      color: #ffe9aa;
+      border-color: rgba(255, 212, 91, 0.3);
+      background: rgba(123, 87, 8, 0.18);
+    }
+
+
+    .admin-status-badge.is-hidden {
+      color: #d8c5ff;
+      border-color: rgba(172, 129, 255, 0.3);
+      background: rgba(71, 35, 126, 0.2);
+    }
+
+
+    .admin-status-badge.is-deleted {
+      color: #ffc3cc;
+      border-color: rgba(255, 83, 107, 0.33);
+      background: rgba(126, 17, 38, 0.24);
+    }
+
+
+    .admin-actions {
+      min-width: 215px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+
+    .admin-action-button {
+      min-height: 31px;
+      padding: 6px 9px;
+      border: 1px solid var(--admin-border);
+      color: #bcd7f1;
+      background: rgba(6, 30, 65, 0.82);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-action-button:hover:not(:disabled),
+    .admin-action-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(75, 47, 143, 0.78);
+      outline: none;
+    }
+
+
+    .admin-action-button.is-danger {
+      color: #ffc4ce;
+      border-color: rgba(255, 83, 107, 0.3);
+      background: rgba(113, 15, 34, 0.3);
+    }
+
+
+    .admin-action-button.is-restore {
+      color: #baffdd;
+      border-color: rgba(63, 242, 164, 0.3);
+      background: rgba(12, 105, 69, 0.28);
+    }
+
+
+    .admin-action-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+
+    /*
+    =====================================================
+    EMPTY STATE
+    =====================================================
+    */
+
+    .admin-state {
+      padding: 50px 20px;
+      color: var(--admin-muted);
+      text-align: center;
+    }
+
+
+    .admin-state-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-state-message {
+      max-width: 540px;
+      margin: 8px auto 0;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+
+    /*
+    =====================================================
+    PAGINATION
+    =====================================================
+    */
+
+    .admin-pagination {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(4, 19, 44, 0.7);
+    }
+
+
+    .admin-pagination-info {
+      color: var(--admin-muted);
+      font-size: 10px;
+    }
+
+
+    .admin-pagination-info strong {
+      color: #ffffff;
+    }
+
+
+    .admin-pagination-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+
+    /*
+    =====================================================
+    TOAST
+    =====================================================
+    */
+
+    .admin-toast {
+      position: fixed;
+      z-index: 800;
+      right: 22px;
+      bottom: 22px;
+      width: min(390px, calc(100vw - 28px));
+      display: none;
+      padding: 14px 16px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      background: rgba(3, 15, 36, 0.98);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+    }
+
+
+    .admin-toast.is-visible {
+      display: block;
+    }
+
+
+    .admin-toast.is-success {
+      border-left-color: var(--admin-green);
+    }
+
+
+    .admin-toast.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-toast.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-toast-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-toast-message {
+      margin-top: 4px;
+      color: #a9c0db;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    /*
+    =====================================================
+    DIALOG
+    =====================================================
+    */
+
+    .admin-dialog {
+      width: min(1050px, calc(100vw - 26px));
+      max-height: calc(100vh - 26px);
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--admin-purple-border);
+      color: var(--admin-white);
+      background: #031027;
+      box-shadow: 0 35px 110px rgba(0, 0, 0, 0.76);
+    }
+
+
+    .admin-dialog::backdrop {
+      background: rgba(0, 4, 13, 0.84);
+      backdrop-filter: blur(5px);
+    }
+
+
+    .admin-dialog-shell {
+      max-height: calc(100vh - 28px);
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .admin-dialog-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 21px;
+      border-bottom: 1px solid var(--admin-purple-border);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(92, 50, 204, 0.92),
+          rgba(37, 29, 91, 0.98)
+        );
+    }
+
+
+    .admin-dialog-kicker {
+      color: #e4d7ff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-close {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 22px;
+    }
+
+
+    .admin-dialog-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+
+    .admin-dialog-footer {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      padding: 15px 20px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(2, 10, 25, 0.96);
+    }
+
+
+    /*
+    =====================================================
+    FORM
+    =====================================================
+    */
+
+    .admin-form-section {
+      padding: 17px;
+      border: 1px solid var(--admin-border);
+      background: rgba(5, 23, 51, 0.75);
+    }
+
+
+    .admin-form-section + .admin-form-section {
+      margin-top: 15px;
+    }
+
+
+    .admin-form-section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 15px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-form-section-title::before {
+      content: "";
+      width: 5px;
+      height: 21px;
+      background: var(--admin-purple-light);
+    }
+
+
+    .admin-form-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+
+    .admin-form-section-header
+    .admin-form-section-title {
+      margin-bottom: 0;
+    }
+
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .admin-form-grid.is-three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+
+    .admin-form-grid .is-full {
+      grid-column: 1 / -1;
+    }
+
+
+    .admin-field-note {
+      margin-top: 6px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-json-error {
+      display: none;
+      margin-top: 6px;
+      color: var(--admin-red);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-json-error.is-visible {
+      display: block;
+    }
+
+
+    .admin-base-preview {
+      display: none;
+      margin-top: 13px;
+      padding: 13px 14px;
+      border: 1px solid var(--admin-purple-border);
+      background: rgba(75, 42, 139, 0.16);
+    }
+
+
+    .admin-base-preview.is-visible {
+      display: block;
+    }
+
+
+    .admin-base-preview-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-base-preview-detail {
+      margin-top: 4px;
+      color: #aebfd8;
+      font-size: 9px;
+      line-height: 1.55;
+    }
+
+
+    /*
+    =====================================================
+    MEDIA DRIVE
+    =====================================================
+    */
+
+    .admin-media-intro {
+      margin-bottom: 15px;
+      padding: 12px 14px;
+      border: 1px solid rgba(50, 227, 255, 0.24);
+      border-left: 5px solid var(--admin-cyan);
+      color: #b8d3ed;
+      background: rgba(5, 30, 61, 0.66);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+
+    .admin-media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .admin-media-card {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(5, 28, 60, 0.88),
+          rgba(1, 12, 29, 0.94)
+        );
+    }
+
+
+    .admin-media-card.is-full {
+      grid-column: 1 / -1;
+    }
+
+
+    .admin-media-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-card-badge {
+      padding: 3px 7px;
+      border: 1px solid rgba(63, 242, 164, 0.28);
+      color: var(--admin-green);
+      background: rgba(63, 242, 164, 0.08);
+      font-size: 8px;
+      letter-spacing: 0.8px;
+    }
+
+
+    .admin-media-preview {
+      position: relative;
+      min-height: 210px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(7, 33, 70, 0.86),
+          rgba(1, 9, 23, 0.96)
+        );
+    }
+
+
+    .admin-media-preview.is-video {
+      min-height: 150px;
+    }
+
+
+    .admin-media-preview-image {
+      width: 100%;
+      height: 230px;
+      display: block;
+      object-fit: cover;
+      background: #07152d;
+    }
+
+
+    .admin-media-preview-placeholder {
+      padding: 25px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-preview-label {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      padding: 4px 7px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      background: rgba(0, 7, 20, 0.78);
+      font-size: 8px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-file-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px;
+      border: 1px dashed rgba(87, 188, 255, 0.38);
+      color: #b9d2eb;
+      background: rgba(0, 10, 27, 0.76);
+      font-size: 10px;
+    }
+
+
+    .admin-file-input::file-selector-button {
+      min-height: 30px;
+      margin-right: 9px;
+      padding: 5px 10px;
+      border: 1px solid var(--admin-border);
+      border-radius: 0;
+      color: #ffffff;
+      background: rgba(113, 71, 220, 0.78);
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+
+    .admin-media-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+
+    .admin-media-actions .admin-button {
+      min-height: 35px;
+      padding: 7px 10px;
+      font-size: 10px;
+    }
+
+
+    .admin-media-link {
+      min-height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 10px;
+      border: 1px solid var(--admin-border);
+      color: var(--admin-purple-light);
+      background: rgba(5, 29, 64, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-link:hover {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+    }
+
+
+    .admin-media-link[hidden] {
+      display: none;
+    }
+
+
+    .admin-media-status {
+      display: none;
+      margin-top: 13px;
+      padding: 11px 12px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      color: #b9d1e9;
+      background: rgba(1, 12, 29, 0.92);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    .admin-media-status.is-visible {
+      display: block;
+    }
+
+
+    .admin-media-status.is-info {
+      border-left-color: var(--admin-purple-light);
+    }
+
+
+    .admin-media-status.is-success {
+      border-left-color: var(--admin-green);
+    }
+
+
+    .admin-media-status.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-media-status.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-media-progress {
+      display: none;
+      margin-top: 12px;
+    }
+
+
+    .admin-media-progress.is-visible {
+      display: block;
+    }
+
+
+    .admin-media-progress-track {
+      height: 7px;
+      overflow: hidden;
+      border: 1px solid rgba(117, 185, 255, 0.22);
+      background: rgba(0, 8, 22, 0.9);
+    }
+
+
+    .admin-media-progress-bar {
+      width: 0;
+      height: 100%;
+      background:
+        linear-gradient(
+          90deg,
+          var(--admin-purple),
+          var(--admin-cyan)
+        );
+      transition: width 180ms ease;
+    }
+
+
+    .admin-media-progress-text {
+      margin-top: 6px;
+      color: var(--admin-muted);
+      font-size: 9px;
+    }
+
+
+    .admin-gallery-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 13px;
+    }
+
+
+    .admin-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+
+    .admin-gallery-empty {
+      grid-column: 1 / -1;
+      padding: 28px 18px;
+      border: 1px dashed rgba(117, 185, 255, 0.25);
+      color: var(--admin-muted);
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+
+    .admin-gallery-item {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      background: rgba(1, 12, 29, 0.92);
+    }
+
+
+    .admin-gallery-thumb-wrap {
+      position: relative;
+      height: 145px;
+      overflow: hidden;
+      background: #07152d;
+    }
+
+
+    .admin-gallery-thumb {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+
+    .admin-gallery-type {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      padding: 3px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      background: rgba(0, 7, 20, 0.78);
+      font-size: 8px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-gallery-body {
+      padding: 10px;
+    }
+
+
+    .admin-gallery-caption {
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 9px;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      color: #ffffff;
+      background: rgba(0, 8, 22, 0.84);
+      font-size: 9px;
+      outline: none;
+    }
+
+
+    .admin-gallery-caption:focus {
+      border-color: var(--admin-purple-light);
+    }
+
+
+    .admin-gallery-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+
+    .admin-gallery-remove {
+      min-height: 29px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 83, 107, 0.3);
+      color: #ffc4ce;
+      background: rgba(113, 15, 34, 0.3);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-disabled-note {
+      display: none;
+      margin-top: 10px;
+      color: var(--admin-yellow);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-media-disabled-note.is-visible {
+      display: block;
+    }
+
+
+    /*
+    =====================================================
+    RESPONSIVE
+    =====================================================
+    */
+
+    @media (max-width: 1199.98px) {
+      .admin-filter-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+
+    @media (max-width: 991.98px) {
+      .admin-summary-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-topbar {
+        padding-right: 17px;
+        padding-left: 17px;
+      }
+
+
+      .admin-content {
+        padding: 22px 17px;
+      }
+    }
+
+
+    @media (max-width: 767.98px) {
+      .admin-topbar-actions
+      .admin-button span {
+        display: none;
+      }
+
+
+      .admin-topbar-actions
+      .admin-button {
+        width: 43px;
+        padding: 8px;
+      }
+
+
+      .admin-page-header {
+        min-height: 235px;
+        padding: 30px 25px;
+      }
+
+
+      .admin-form-grid,
+      .admin-form-grid.is-three,
+      .admin-media-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-form-grid .is-full,
+      .admin-media-card.is-full {
+        grid-column: auto;
+      }
+
+
+      .admin-gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-form-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+
+      .admin-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+
+    @media (max-width: 575.98px) {
+      .admin-content {
+        padding: 15px 11px 30px;
+      }
+
+
+      .admin-logo {
+        display: none;
+      }
+
+
+      .admin-heading-title {
+        font-size: 21px;
+      }
+
+
+      .admin-heading-kicker {
+        display: none;
+      }
+
+
+      .admin-page-header {
+        padding: 26px 21px;
+        clip-path: none;
+      }
+
+
+      .admin-page-title {
+        font-size: 48px;
+      }
+
+
+      .admin-summary-grid,
+      .admin-filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-filter-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+
+      .admin-filter-actions
+      .admin-button,
+      .admin-filter-actions
+      .admin-checkbox {
+        width: 100%;
+      }
+
+
+      .admin-panel-body {
+        padding: 13px;
+      }
+
+
+      .admin-gallery-toolbar,
+      .admin-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-media-preview-image {
+        height: 210px;
+      }
+
+
+      .admin-dialog-body {
+        padding: 13px;
+      }
+
+
+      .admin-dialog-footer {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+
+
+      .admin-dialog-footer
+      .admin-button {
+        width: 100%;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- ===================================================
+       BACKGROUND
+       =================================================== -->
+
+  <div
+    class="admin-background"
+    aria-hidden="true"
+  >
+    <div class="admin-background-grid"></div>
+    <div class="admin-background-lines"></div>
+    <div class="admin-background-orb"></div>
+  </div>
+
+
+  <!-- ===================================================
+       LOADING BAR
+       =================================================== -->
+
+  <div
+    class="admin-loading-bar"
+    id="loadingBar"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- ===================================================
+       NOSCRIPT
+       =================================================== -->
+
+  <noscript>
+    <div
+      style="
+        position: relative;
+        z-index: 9999;
+        padding: 20px;
+        color: white;
+        background: #8e1830;
+      "
+    >
+      Halaman administrator membutuhkan JavaScript.
+    </div>
+  </noscript>
+
+
+  <!-- ===================================================
+       PAGE
+       =================================================== -->
+
+  <div class="admin-page">
+
+    <!-- =================================================
+         TOPBAR
+         ================================================= -->
+
+    <header class="admin-topbar">
+
+      <div class="admin-topbar-left">
+
+        <img
+          class="admin-logo"
+          src="./assets/img/logo.png"
+          alt="Logo PUSDATIN X BOC"
+          onerror="
+            this.onerror=null;
+            this.src='./assets/img/placeholder.png';
+          "
+        >
+
+        <div>
+          <div class="admin-heading-kicker">
+            Profile Management System
+          </div>
+
+          <h1 class="admin-heading-title">
+            Alter Profile Administration
+          </h1>
+        </div>
+
+      </div>
+
+
+      <div class="admin-topbar-actions">
+
+        <a
+          class="admin-button is-ghost"
+          href="./admin.html"
+          title="Kembali ke dashboard"
+        >
+          ←
+
+          <span>
+            Dashboard
+          </span>
+        </a>
+
+
+        <a
+          class="admin-button is-blue"
+          href="./admin-members.html"
+          title="Kelola member"
+        >
+          MB
+
+          <span>
+            Members
+          </span>
+        </a>
+
+
+        <button
+          class="admin-button is-primary"
+          id="addAlterButton"
+          type="button"
+          title="Tambah Alter Profile"
+        >
+          +
+
+          <span>
+            Tambah Alter
+          </span>
+        </button>
+
+
+        <button
+          class="admin-button is-danger"
+          id="logoutButton"
+          type="button"
+          title="Logout"
+        >
+          ×
+
+          <span>
+            Logout
+          </span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- =================================================
+         CONTENT
+         ================================================= -->
+
+    <main class="admin-content">
+
+      <!-- BREADCRUMB -->
+
+      <div class="admin-breadcrumb">
+
+        <a href="./admin.html">
+          Dashboard
+        </a>
+
+        <span>/</span>
+
+        <span>
+          Alter Profiles
+        </span>
+
+      </div>
+
+
+      <!-- PAGE HEADER -->
+
+      <section class="admin-page-header">
+
+        <div class="admin-page-header-content">
+
+          <div class="admin-page-kicker">
+            Alternative Identity Database
+          </div>
+
+          <h2 class="admin-page-title">
+            Manage
+            <br>
+            Alter Profiles
+          </h2>
+
+          <p class="admin-page-description">
+            Kelola versi alternatif dari profil member.
+            Setiap member hanya dapat memiliki satu Alter Profile
+            dan relasinya akan disinkronkan otomatis ke sheet Members.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <section class="admin-summary-grid">
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-purple-light)"
+        >
+          <div class="admin-summary-label">
+            Hasil Filter
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryTotal"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Total Alter sesuai filter.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-green)"
+        >
+          <div class="admin-summary-label">
+            Ditampilkan
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryDisplayed"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Alter pada halaman ini.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-cyan)"
+        >
+          <div class="admin-summary-label">
+            Base Members
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryBaseMembers"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Member yang dapat dipilih.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-yellow)"
+        >
+          <div class="admin-summary-label">
+            Halaman
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryPage"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Posisi halaman saat ini.
+          </div>
+        </article>
+
+      </section>
+
+
+      <!-- FILTER -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+
+          <div>
+            <div class="admin-panel-title">
+              Search & Filter
+            </div>
+
+            <div class="admin-panel-subtitle">
+              Pencarian Alter Profile
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="admin-panel-body">
+
+          <div class="admin-filter-grid">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="searchInput"
+              >
+                Pencarian
+              </label>
+
+              <input
+                class="admin-input"
+                id="searchInput"
+                type="search"
+                placeholder="Cari nama, ID, tema, atau role..."
+                autocomplete="off"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="statusFilter"
+              >
+                Status
+              </label>
+
+              <select
+                class="admin-select"
+                id="statusFilter"
+              >
+                <option value="">
+                  Semua status
+                </option>
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+                <option value="Draft">
+                  Draft
+                </option>
+
+                <option value="Hidden">
+                  Hidden
+                </option>
+
+                <option value="Deleted">
+                  Deleted
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="themeFilter"
+              >
+                Theme
+              </label>
+
+              <input
+                class="admin-input"
+                id="themeFilter"
+                type="text"
+                placeholder="Contoh: aigis"
+                autocomplete="off"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="baseMemberFilter"
+              >
+                Base Member
+              </label>
+
+              <select
+                class="admin-select"
+                id="baseMemberFilter"
+              >
+                <option value="">
+                  Semua member
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="pageSizeFilter"
+              >
+                Per Halaman
+              </label>
+
+              <select
+                class="admin-select"
+                id="pageSizeFilter"
+              >
+                <option value="10">
+                  10 data
+                </option>
+
+                <option value="20">
+                  20 data
+                </option>
+
+                <option value="50" selected>
+                  50 data
+                </option>
+
+                <option value="100">
+                  100 data
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="admin-filter-actions">
+
+            <label
+              class="admin-checkbox"
+              for="includeDeletedFilter"
+            >
+              <input
+                id="includeDeletedFilter"
+                type="checkbox"
+              >
+
+              Tampilkan Deleted
+            </label>
+
+
+            <button
+              class="admin-button is-primary"
+              id="applyFilterButton"
+              type="button"
+            >
+              Terapkan Filter
+            </button>
+
+
+            <button
+              class="admin-button is-ghost"
+              id="resetFilterButton"
+              type="button"
+            >
+              Reset Filter
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ALTER TABLE -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+
+          <div>
+            <div class="admin-panel-title">
+              Alter Profile Database
+            </div>
+
+            <div
+              class="admin-panel-subtitle"
+              id="tableSubtitle"
+            >
+              Menyiapkan data
+            </div>
+          </div>
+
+
+          <button
+            class="admin-button is-ghost"
+            id="refreshButton"
+            type="button"
+          >
+            Refresh
+          </button>
+
+        </div>
+
+
+        <div
+          class="admin-panel-body"
+          id="alterTableContainer"
+        >
+          <div class="admin-state">
+
+            <div class="admin-state-title">
+              Loading Alter Profiles
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data Alter Profile dari Google Spreadsheet.
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="admin-pagination">
+
+          <div
+            class="admin-pagination-info"
+            id="paginationInfo"
+          >
+            Menyiapkan pagination.
+          </div>
+
+
+          <div class="admin-pagination-actions">
+
+            <button
+              class="admin-button is-ghost"
+              id="previousPageButton"
+              type="button"
+              disabled
+            >
+              Sebelumnya
+            </button>
+
+
+            <button
+              class="admin-button is-ghost"
+              id="nextPageButton"
+              type="button"
+              disabled
+            >
+              Selanjutnya
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ===================================================
+       ALTER FORM DIALOG
+       =================================================== -->
+
+  <dialog
+    class="admin-dialog"
+    id="alterDialog"
+  >
+
+    <form
+      class="admin-dialog-shell"
+      id="alterForm"
+      novalidate
+    >
+
+      <!-- DIALOG HEADER -->
+
+      <header class="admin-dialog-header">
+
+        <div>
+          <div class="admin-dialog-kicker">
+            Alternative Profile Editor
+          </div>
+
+          <h2
+            class="admin-dialog-title"
+            id="alterDialogTitle"
+          >
+            Tambah Alter Profile
+          </h2>
+        </div>
+
+
+        <button
+          class="admin-dialog-close"
+          id="closeDialogButton"
+          type="button"
+          aria-label="Tutup form"
+        >
+          ×
+        </button>
+
+      </header>
+
+
+      <!-- DIALOG BODY -->
+
+      <div class="admin-dialog-body">
+
+        <!-- RELASI -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-header">
+
+            <div class="admin-form-section-title">
+              Relasi Member
+            </div>
+
+
+            <button
+              class="admin-button is-ghost"
+              id="copyBaseMemberButton"
+              type="button"
+            >
+              Salin Data Member
+            </button>
+
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterBaseId"
+              >
+                Base Member *
+              </label>
+
+              <select
+                class="admin-select"
+                id="alterBaseId"
+                name="baseId"
+                required
+              >
+                <option value="">
+                  Pilih member
+                </option>
+              </select>
+
+              <div class="admin-field-note">
+                Satu member hanya boleh memiliki satu Alter Profile.
+              </div>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterId"
+              >
+                ID Alter *
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterId"
+                name="id"
+                type="text"
+                maxlength="64"
+                placeholder="contoh: faisalalrico-alter"
+                required
+              >
+
+              <div class="admin-field-note">
+                ID tidak dapat diubah setelah Alter dibuat.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="admin-base-preview"
+            id="baseMemberPreview"
+          >
+            <div
+              class="admin-base-preview-name"
+              id="baseMemberPreviewName"
+            >
+              Member
+            </div>
+
+            <div
+              class="admin-base-preview-detail"
+              id="baseMemberPreviewDetail"
+            ></div>
+          </div>
+
+        </section>
+
+
+        <!-- DATA UTAMA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Data Utama Alter
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterName"
+              >
+                Nama Alter *
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterName"
+                name="name"
+                type="text"
+                maxlength="255"
+                required
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterTheme"
+              >
+                Theme *
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterTheme"
+                name="theme"
+                type="text"
+                maxlength="64"
+                placeholder="Contoh: aigis"
+                value="default"
+                required
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterRole"
+              >
+                Role
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterRole"
+                name="role"
+                type="text"
+                maxlength="128"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterMainRole"
+              >
+                Main Role
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterMainRole"
+                name="mainRole"
+                type="text"
+                maxlength="128"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterDivision"
+              >
+                Nama Divisi
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterDivision"
+                name="division"
+                type="text"
+                maxlength="64"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterDivisionKey"
+              >
+                Division Key
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterDivisionKey"
+                name="divisionKey"
+                type="text"
+                maxlength="32"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterStatus"
+              >
+                Status
+              </label>
+
+              <select
+                class="admin-select"
+                id="alterStatus"
+                name="status"
+              >
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+                <option value="Draft">
+                  Draft
+                </option>
+
+                <option value="Hidden">
+                  Hidden
+                </option>
+
+                <option value="Deleted">
+                  Deleted
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterJoinDate"
+              >
+                Join Date
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterJoinDate"
+                name="joinDate"
+                type="date"
+              >
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterTagline"
+              >
+                Tagline
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterTagline"
+                name="tagline"
+                type="text"
+                maxlength="255"
+              >
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterBio"
+              >
+                Bio
+              </label>
+
+              <textarea
+                class="admin-textarea"
+                id="alterBio"
+                name="bio"
+                maxlength="10000"
+              ></textarea>
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterSignature"
+              >
+                Signature
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterSignature"
+                name="signature"
+                type="text"
+                maxlength="255"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- STATISTIK -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Statistik Alter
+          </div>
+
+
+          <div class="admin-form-grid is-three">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterRank"
+              >
+                Rank
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterRank"
+                type="text"
+                maxlength="100"
+                placeholder="Contoh: S"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterLevel"
+              >
+                Level
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterLevel"
+                type="number"
+                min="0"
+                max="9999"
+                value="0"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="alterWinrate"
+              >
+                Success Rate
+              </label>
+
+              <input
+                class="admin-input"
+                id="alterWinrate"
+                type="number"
+                min="0"
+                max="100"
+                value="0"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- MEDIA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Media & Google Drive
+          </div>
+
+
+          <div class="admin-media-intro">
+            File baru akan diunggah setelah data Alter berhasil
+            disimpan. Tautan lama tetap dapat digunakan. Penggantian
+            media tidak langsung menghapus file lama dari Drive.
+          </div>
+
+
+          <div class="admin-media-grid">
+
+            <!-- FOTO PROFIL -->
+
+            <article class="admin-media-card">
+
+              <div class="admin-media-card-title">
+                Foto Alter
+
+                <span class="admin-media-card-badge">
+                  Maks. 5 MB
+                </span>
+              </div>
+
+
+              <div class="admin-media-preview">
+                <img
+                  class="admin-media-preview-image"
+                  id="alterPhotoPreview"
+                  src="./assets/img/placeholder.png"
+                  alt="Preview foto Alter Profile"
+                >
+
+                <div
+                  class="admin-media-preview-label"
+                  id="alterPhotoPreviewLabel"
+                >
+                  Belum ada foto
+                </div>
+              </div>
+
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="alterPhoto"
+                >
+                  Photo Path / URL
+                </label>
+
+                <input
+                  class="admin-input"
+                  id="alterPhoto"
+                  name="photo"
+                  type="text"
+                  maxlength="5000"
+                  placeholder="Path lama atau URL eksternal"
+                >
+              </div>
+
+
+              <div
+                class="admin-field"
+                style="margin-top:10px"
+              >
+                <label
+                  class="admin-label"
+                  for="alterPhotoFile"
+                >
+                  Upload Foto Baru
+                </label>
+
+                <input
+                  class="admin-file-input"
+                  id="alterPhotoFile"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                >
+
+                <div class="admin-field-note">
+                  JPG, PNG, atau WEBP. Upload dijalankan setelah
+                  tombol Simpan Alter ditekan.
+                </div>
+              </div>
+
+
+              <div class="admin-media-actions">
+
+                <a
+                  class="admin-media-link"
+                  id="openAlterPhotoLink"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  hidden
+                >
+                  Buka Foto
+                </a>
+
+
+                <button
+                  class="admin-button is-danger"
+                  id="clearAlterPhotoButton"
+                  type="button"
+                >
+                  Hapus Referensi
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <!-- VIDEO CV -->
+
+            <article class="admin-media-card">
+
+              <div class="admin-media-card-title">
+                Video CV
+
+                <span class="admin-media-card-badge">
+                  Maks. 20 MB
+                </span>
+              </div>
+
+
+              <div class="admin-media-preview is-video">
+                <div
+                  class="admin-media-preview-placeholder"
+                  id="alterVideoPreviewText"
+                >
+                  Belum ada Video CV
+                </div>
+
+                <div
+                  class="admin-media-preview-label"
+                  id="alterVideoPreviewLabel"
+                >
+                  URL / Drive
+                </div>
+              </div>
+
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="alterVideoCV"
+                >
+                  Video CV Path / URL
+                </label>
+
+                <input
+                  class="admin-input"
+                  id="alterVideoCV"
+                  name="videoCV"
+                  type="text"
+                  maxlength="5000"
+                  placeholder="URL YouTube, Drive, atau path lama"
+                >
+              </div>
+
+
+              <div
+                class="admin-field"
+                style="margin-top:10px"
+              >
+                <label
+                  class="admin-label"
+                  for="alterVideoFile"
+                >
+                  Upload Video Baru
+                </label>
+
+                <input
+                  class="admin-file-input"
+                  id="alterVideoFile"
+                  type="file"
+                  accept=".mp4,.webm,video/mp4,video/webm"
+                >
+
+                <div class="admin-field-note">
+                  MP4 atau WEBM. Untuk video besar, gunakan URL
+                  YouTube atau platform eksternal.
+                </div>
+              </div>
+
+
+              <div class="admin-media-actions">
+
+                <a
+                  class="admin-media-link"
+                  id="openAlterVideoLink"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  hidden
+                >
+                  Buka Video
+                </a>
+
+
+                <button
+                  class="admin-button is-danger"
+                  id="clearAlterVideoButton"
+                  type="button"
+                >
+                  Hapus Referensi
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <!-- GALLERY -->
+
+            <article class="admin-media-card is-full">
+
+              <div class="admin-media-card-title">
+                Gallery
+
+                <span class="admin-media-card-badge">
+                  Maks. 8 MB / gambar
+                </span>
+              </div>
+
+
+              <div class="admin-gallery-toolbar">
+
+                <div class="admin-field">
+                  <label
+                    class="admin-label"
+                    for="alterGalleryFiles"
+                  >
+                    Tambah Gambar Gallery
+                  </label>
+
+                  <input
+                    class="admin-file-input"
+                    id="alterGalleryFiles"
+                    type="file"
+                    multiple
+                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                  >
+                </div>
+
+
+                <button
+                  class="admin-button is-ghost"
+                  id="refreshGalleryPreviewButton"
+                  type="button"
+                >
+                  Sinkronkan Preview
+                </button>
+
+              </div>
+
+
+              <div
+                class="admin-gallery-grid"
+                id="alterGalleryPreview"
+              >
+                <div class="admin-gallery-empty">
+                  Gallery masih kosong.
+                </div>
+              </div>
+
+
+              <div class="admin-field-note">
+                Gambar yang dihapus dari preview akan dikeluarkan
+                dari Gallery JSON saat Alter disimpan. File Drive
+                tidak dipindahkan ke Trash secara otomatis.
+              </div>
+
+            </article>
+
+          </div>
+
+
+          <div
+            class="admin-media-status"
+            id="alterMediaStatus"
+          ></div>
+
+
+          <div
+            class="admin-media-progress"
+            id="alterMediaProgress"
+          >
+            <div class="admin-media-progress-track">
+              <div
+                class="admin-media-progress-bar"
+                id="alterMediaProgressBar"
+              ></div>
+            </div>
+
+            <div
+              class="admin-media-progress-text"
+              id="alterMediaProgressText"
+            >
+              Menyiapkan media.
+            </div>
+          </div>
+
+
+          <div
+            class="admin-media-disabled-note"
+            id="alterMediaDisabledNote"
+          >
+            Fungsi Media Drive tidak ditemukan pada admin-api.js.
+            Data URL masih dapat disimpan, tetapi upload file
+            langsung tidak tersedia.
+          </div>
+
+        </section>
+
+
+        <!-- JSON DATA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Data Lanjutan
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterSkills"
+              >
+                Skills JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="alterSkills"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="skillsJsonError"
+              ></div>
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterExpertise"
+              >
+                Expertise JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="alterExpertise"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="expertiseJsonError"
+              ></div>
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="alterGallery"
+              >
+                Gallery JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="alterGallery"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="galleryJsonError"
+              ></div>
+
+              <div class="admin-field-note">
+                Gunakan nilai <code>[]</code> ketika belum memiliki
+                media gallery.
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- DIALOG FOOTER -->
+
+      <footer class="admin-dialog-footer">
+
+        <button
+          class="admin-button is-ghost"
+          id="cancelAlterButton"
+          type="button"
+        >
+          Batal
+        </button>
+
+
+        <button
+          class="admin-button is-primary"
+          id="saveAlterButton"
+          type="submit"
+        >
+          Simpan Alter
+        </button>
+
+      </footer>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- ===================================================
+       TOAST
+       =================================================== -->
+
+  <div
+    class="admin-toast"
+    id="adminToast"
+    role="status"
+    aria-live="polite"
+  >
+
+    <div
+      class="admin-toast-title"
+      id="adminToastTitle"
+    >
+      System Message
+    </div>
+
+    <div
+      class="admin-toast-message"
+      id="adminToastMessage"
+    ></div>
+
+  </div>
+
+
+  <!-- ===================================================
+       JAVASCRIPT
+       =================================================== -->
+
+  <script src="./assets/js/config.js"></script>
+
+  <script src="./assets/js/admin-api.js"></script>
+
+
+  <!-- ===================================================
+       PAGE CONTROLLER
+       =================================================== -->
+
+  <script>
+    (function initializeAlterAdministration() {
+      "use strict";
+
+
+      /*
+      =====================================================
+      STATE
+      =====================================================
+      */
+
+      const state = {
+        initialized:
+          false,
+
+        authenticated:
+          false,
+
+        loading:
+          false,
+
+        saving:
+          false,
+
+        editingAlterId:
+          "",
+
+        alters:
+          [],
+
+        baseMembers:
+          [],
+
+        media: {
+          available:
+            false,
+
+          loadingAssets:
+            false,
+
+          assets:
+            [],
+
+          photoFile:
+            null,
+
+          videoFile:
+            null,
+
+          galleryFiles:
+            [],
+
+          removedAssetIds:
+            new Set(),
+
+          photoRemoveRequested:
+            false,
+
+          videoRemoveRequested:
+            false,
+
+          objectUrls:
+            []
+        },
+
+        pagination: {
+          page:
+            1,
+
+          pageSize:
+            50,
+
+          total:
+            0,
+
+          totalPages:
+            1,
+
+          hasPrevious:
+            false,
+
+          hasNext:
+            false
+        },
+
+        filters: {
+          search:
+            "",
+
+          status:
+            "",
+
+          theme:
+            "",
+
+          baseId:
+            "",
+
+          includeDeleted:
+            false
+        },
+
+        toastTimer:
+          null,
+
+        searchTimer:
+          null
+      };
+
+
+      /*
+      =====================================================
+      ELEMENTS
+      =====================================================
+      */
+
+      function getElement(id) {
+        return document.getElementById(id);
+      }
+
+
+      const elements = {
+        loadingBar:
+          getElement("loadingBar"),
+
+        addAlterButton:
+          getElement("addAlterButton"),
+
+        logoutButton:
+          getElement("logoutButton"),
+
+        refreshButton:
+          getElement("refreshButton"),
+
+        applyFilterButton:
+          getElement("applyFilterButton"),
+
+        resetFilterButton:
+          getElement("resetFilterButton"),
+
+        searchInput:
+          getElement("searchInput"),
+
+        statusFilter:
+          getElement("statusFilter"),
+
+        themeFilter:
+          getElement("themeFilter"),
+
+        baseMemberFilter:
+          getElement("baseMemberFilter"),
+
+        pageSizeFilter:
+          getElement("pageSizeFilter"),
+
+        includeDeletedFilter:
+          getElement("includeDeletedFilter"),
+
+        alterTableContainer:
+          getElement("alterTableContainer"),
+
+        tableSubtitle:
+          getElement("tableSubtitle"),
+
+        paginationInfo:
+          getElement("paginationInfo"),
+
+        previousPageButton:
+          getElement("previousPageButton"),
+
+        nextPageButton:
+          getElement("nextPageButton"),
+
+        summaryTotal:
+          getElement("summaryTotal"),
+
+        summaryDisplayed:
+          getElement("summaryDisplayed"),
+
+        summaryBaseMembers:
+          getElement("summaryBaseMembers"),
+
+        summaryPage:
+          getElement("summaryPage"),
+
+        alterDialog:
+          getElement("alterDialog"),
+
+        alterForm:
+          getElement("alterForm"),
+
+        alterDialogTitle:
+          getElement("alterDialogTitle"),
+
+        closeDialogButton:
+          getElement("closeDialogButton"),
+
+        cancelAlterButton:
+          getElement("cancelAlterButton"),
+
+        saveAlterButton:
+          getElement("saveAlterButton"),
+
+        copyBaseMemberButton:
+          getElement("copyBaseMemberButton"),
+
+        alterBaseId:
+          getElement("alterBaseId"),
+
+        alterId:
+          getElement("alterId"),
+
+        alterName:
+          getElement("alterName"),
+
+        alterTheme:
+          getElement("alterTheme"),
+
+        alterRole:
+          getElement("alterRole"),
+
+        alterMainRole:
+          getElement("alterMainRole"),
+
+        alterDivision:
+          getElement("alterDivision"),
+
+        alterDivisionKey:
+          getElement("alterDivisionKey"),
+
+        alterStatus:
+          getElement("alterStatus"),
+
+        alterJoinDate:
+          getElement("alterJoinDate"),
+
+        alterTagline:
+          getElement("alterTagline"),
+
+        alterBio:
+          getElement("alterBio"),
+
+        alterSignature:
+          getElement("alterSignature"),
+
+        alterRank:
+          getElement("alterRank"),
+
+        alterLevel:
+          getElement("alterLevel"),
+
+        alterWinrate:
+          getElement("alterWinrate"),
+
+        alterPhoto:
+          getElement("alterPhoto"),
+
+        alterVideoCV:
+          getElement("alterVideoCV"),
+
+        alterPhotoFile:
+          getElement("alterPhotoFile"),
+
+        alterVideoFile:
+          getElement("alterVideoFile"),
+
+        alterGalleryFiles:
+          getElement("alterGalleryFiles"),
+
+        alterPhotoPreview:
+          getElement("alterPhotoPreview"),
+
+        alterPhotoPreviewLabel:
+          getElement("alterPhotoPreviewLabel"),
+
+        alterVideoPreviewText:
+          getElement("alterVideoPreviewText"),
+
+        alterVideoPreviewLabel:
+          getElement("alterVideoPreviewLabel"),
+
+        openAlterPhotoLink:
+          getElement("openAlterPhotoLink"),
+
+        openAlterVideoLink:
+          getElement("openAlterVideoLink"),
+
+        clearAlterPhotoButton:
+          getElement("clearAlterPhotoButton"),
+
+        clearAlterVideoButton:
+          getElement("clearAlterVideoButton"),
+
+        refreshGalleryPreviewButton:
+          getElement("refreshGalleryPreviewButton"),
+
+        alterGalleryPreview:
+          getElement("alterGalleryPreview"),
+
+        alterMediaStatus:
+          getElement("alterMediaStatus"),
+
+        alterMediaProgress:
+          getElement("alterMediaProgress"),
+
+        alterMediaProgressBar:
+          getElement("alterMediaProgressBar"),
+
+        alterMediaProgressText:
+          getElement("alterMediaProgressText"),
+
+        alterMediaDisabledNote:
+          getElement("alterMediaDisabledNote"),
+
+        alterSkills:
+          getElement("alterSkills"),
+
+        alterExpertise:
+          getElement("alterExpertise"),
+
+        alterGallery:
+          getElement("alterGallery"),
+
+        skillsJsonError:
+          getElement("skillsJsonError"),
+
+        expertiseJsonError:
+          getElement("expertiseJsonError"),
+
+        galleryJsonError:
+          getElement("galleryJsonError"),
+
+        baseMemberPreview:
+          getElement("baseMemberPreview"),
+
+        baseMemberPreviewName:
+          getElement("baseMemberPreviewName"),
+
+        baseMemberPreviewDetail:
+          getElement("baseMemberPreviewDetail"),
+
+        adminToast:
+          getElement("adminToast"),
+
+        adminToastTitle:
+          getElement("adminToastTitle"),
+
+        adminToastMessage:
+          getElement("adminToastMessage")
+      };
+
+
+      /*
+      =====================================================
+      HELPERS
+      =====================================================
+      */
+
+      function asString(value) {
+        if (
+          value === null ||
+          value === undefined
+        ) {
+          return "";
+        }
+
+        return String(value).trim();
+      }
+
+
+      function asArray(value) {
+        return Array.isArray(value)
+          ? value
+          : [];
+      }
+
+
+      function isPlainObject(value) {
+        return (
+          value !== null &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        );
+      }
+
+
+      function escapeHTML(value) {
+        return String(
+          value === null ||
+          value === undefined
+            ? ""
+            : value
+        )
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+
+      function escapeAttribute(value) {
+        return escapeHTML(value);
+      }
+
+
+      function prettyJSON(value) {
+        return JSON.stringify(
+          value,
+          null,
+          2
+        );
+      }
+
+
+      function getResultCollection(
+        result,
+        keys
+      ) {
+        if (Array.isArray(result)) {
+          return result;
+        }
+
+        for (
+          const key
+          of keys
+        ) {
+          if (
+            result &&
+            Array.isArray(result[key])
+          ) {
+            return result[key];
+          }
+        }
+
+        return [];
+      }
+
+
+      function toNumber(
+        value,
+        fallback
+      ) {
+        const numericValue =
+          Number(value);
+
+        return Number.isFinite(
+          numericValue
+        )
+          ? numericValue
+          : fallback;
+      }
+
+
+      function normalizeDateInput(value) {
+        const text =
+          asString(value);
+
+        const match =
+          text.match(
+            /^\d{4}-\d{2}-\d{2}/
+          );
+
+        return match
+          ? match[0]
+          : "";
+      }
+
+
+      function slugify(value) {
+        return asString(value)
+          .toLowerCase()
+          .replace(/['’`]/g, "")
+          .replace(/[^a-z0-9_-]+/g, "-")
+          .replace(/-{2,}/g, "-")
+          .replace(/_{2,}/g, "_")
+          .replace(/^[-_]+|[-_]+$/g, "");
+      }
+
+
+      /*
+      =====================================================
+      MEDIA URL HELPERS
+      =====================================================
+      */
+
+      function getMediaUrl(source) {
+        const normalized = asString(source);
+
+        if (!normalized) {
+          return "./assets/img/placeholder.png";
+        }
+
+        if (
+          normalized.startsWith("http://") ||
+          normalized.startsWith("https://") ||
+          normalized.startsWith("data:") ||
+          normalized.startsWith("blob:")
+        ) {
+          return normalized;
+        }
+
+        const cleanPath = normalized.replace(/^\/+/, "");
+
+        if (
+          window.P3R_CONFIG &&
+          typeof window.P3R_CONFIG.resolveSiteUrl === "function"
+        ) {
+          return window.P3R_CONFIG.resolveSiteUrl(cleanPath);
+        }
+
+        return "./" + cleanPath;
+      }
+
+
+      function getAlterPublicUrl(alterId) {
+        if (
+          window.P3R_PAGE_URLS &&
+          typeof window.P3R_PAGE_URLS.alter === "function"
+        ) {
+          return window.P3R_PAGE_URLS.alter(alterId);
+        }
+
+        return (
+          "./alter.html?id=" +
+          encodeURIComponent(alterId)
+        );
+      }
+
+
+      function revokeMediaObjectUrls() {
+        state.media.objectUrls.forEach(
+          function revokeUrl(url) {
+            try {
+              URL.revokeObjectURL(url);
+            } catch (error) {
+              console.warn(
+                "[P3R ALTER] Object URL gagal dibersihkan.",
+                error
+              );
+            }
+          }
+        );
+
+        state.media.objectUrls = [];
+      }
+
+
+      function createMediaObjectUrl(file) {
+        const url = URL.createObjectURL(file);
+
+        state.media.objectUrls.push(url);
+
+        return url;
+      }
+
+
+      function normalizeGalleryItem(item) {
+        if (typeof item === "string") {
+          return {
+            src: asString(item),
+            caption: ""
+          };
+        }
+
+        if (isPlainObject(item)) {
+          return {
+            src: asString(
+              item.src ||
+              item.url ||
+              item.path
+            ),
+
+            caption: asString(
+              item.caption ||
+              item.title
+            )
+          };
+        }
+
+        return {
+          src: "",
+          caption: ""
+        };
+      }
+
+
+      function readGalleryFromTextarea(showError) {
+        const raw = elements.alterGallery.value.trim();
+
+        try {
+          const parsed = JSON.parse(raw || "[]");
+
+          if (!Array.isArray(parsed)) {
+            throw new Error(
+              "Gallery JSON harus berupa array."
+            );
+          }
+
+          const gallery = parsed
+            .map(normalizeGalleryItem)
+            .filter(
+              function filterGalleryItem(item) {
+                return Boolean(item.src);
+              }
+            );
+
+          if (showError !== false) {
+            elements.galleryJsonError.textContent = "";
+            elements.galleryJsonError.classList.remove(
+              "is-visible"
+            );
+          }
+
+          return gallery;
+        } catch (error) {
+          if (showError !== false) {
+            elements.galleryJsonError.textContent =
+              error.message;
+
+            elements.galleryJsonError.classList.add(
+              "is-visible"
+            );
+          }
+
+          return null;
+        }
+      }
+
+
+      function writeGalleryToTextarea(gallery) {
+        elements.alterGallery.value = prettyJSON(
+          asArray(gallery)
+            .map(normalizeGalleryItem)
+            .filter(
+              function filterGalleryItem(item) {
+                return Boolean(item.src);
+              }
+            )
+        );
+
+        elements.galleryJsonError.textContent = "";
+        elements.galleryJsonError.classList.remove(
+          "is-visible"
+        );
+      }
+
+
+      function normalizeMediaAsset(asset) {
+        if (!isPlainObject(asset)) {
+          return null;
+        }
+
+        return {
+          id: asString(asset.id),
+          ownerType: asString(
+            asset.ownerType ||
+            asset.owner_type
+          ).toLowerCase(),
+          ownerId: asString(
+            asset.ownerId ||
+            asset.owner_id
+          ).toLowerCase(),
+          assetType: asString(
+            asset.assetType ||
+            asset.asset_type
+          ).toLowerCase(),
+          field: asString(asset.field),
+          status: asString(asset.status).toLowerCase() || "active",
+          url: asString(
+            asset.url ||
+            asset.publicUrl ||
+            asset.public_url ||
+            asset.targetUrl ||
+            asset.target_url ||
+            asset.currentPath ||
+            asset.current_path ||
+            asset.previewUrl ||
+            asset.preview_url ||
+            asset.viewUrl ||
+            asset.view_url
+          ),
+          publicUrl: asString(
+            asset.publicUrl ||
+            asset.public_url
+          ),
+          previewUrl: asString(
+            asset.previewUrl ||
+            asset.preview_url
+          ),
+          viewUrl: asString(
+            asset.viewUrl ||
+            asset.view_url
+          ),
+          currentPath: asString(
+            asset.currentPath ||
+            asset.current_path
+          ),
+          targetUrl: asString(
+            asset.targetUrl ||
+            asset.target_url
+          ),
+          sourceUrl: asString(
+            asset.sourceUrl ||
+            asset.source_url
+          ),
+          caption: asString(asset.caption),
+          fileId: asString(
+            asset.fileId ||
+            asset.file_id
+          )
+        };
+      }
+
+
+      function getActiveMediaAssets() {
+        return state.media.assets.filter(
+          function filterActiveAsset(asset) {
+            return (
+              asset &&
+              asset.status === "active" &&
+              !state.media.removedAssetIds.has(
+                asset.id
+              )
+            );
+          }
+        );
+      }
+
+
+      function findActiveAssetByType(assetType) {
+        return getActiveMediaAssets().find(
+          function findAsset(asset) {
+            return asset.assetType === assetType;
+          }
+        ) || null;
+      }
+
+
+      function getAssetReferences(asset) {
+        return [
+          asset && asset.url,
+          asset && asset.publicUrl,
+          asset && asset.previewUrl,
+          asset && asset.viewUrl,
+          asset && asset.currentPath,
+          asset && asset.targetUrl,
+          asset && asset.sourceUrl
+        ]
+          .map(asString)
+          .filter(Boolean);
+      }
+
+
+      function findAssetByReference(reference) {
+        const target = asString(reference);
+
+        if (!target) {
+          return null;
+        }
+
+        return getActiveMediaAssets().find(
+          function findMatchingAsset(asset) {
+            return getAssetReferences(asset)
+              .includes(target);
+          }
+        ) || null;
+      }
+
+
+      function resetPendingMedia() {
+        revokeMediaObjectUrls();
+
+        state.media.assets = [];
+        state.media.photoFile = null;
+        state.media.videoFile = null;
+        state.media.galleryFiles = [];
+        state.media.removedAssetIds = new Set();
+        state.media.photoRemoveRequested = false;
+        state.media.videoRemoveRequested = false;
+        state.media.loadingAssets = false;
+
+        if (elements.alterPhotoFile) {
+          elements.alterPhotoFile.value = "";
+        }
+
+        if (elements.alterVideoFile) {
+          elements.alterVideoFile.value = "";
+        }
+
+        if (elements.alterGalleryFiles) {
+          elements.alterGalleryFiles.value = "";
+        }
+
+        setMediaStatus("", "", false);
+        setMediaProgress(false, 0, "");
+      }
+
+
+      /*
+      =====================================================
+      LOADING
+      =====================================================
+      */
+
+      function setLoading(loading) {
+        state.loading =
+          Boolean(loading);
+
+        if (elements.loadingBar) {
+          elements.loadingBar.classList.toggle(
+            "is-visible",
+            state.loading ||
+            state.saving
+          );
+        }
+
+        [
+          elements.addAlterButton,
+          elements.refreshButton,
+          elements.applyFilterButton,
+          elements.resetFilterButton
+        ].forEach(
+          function updateLoadingButton(button) {
+            if (button) {
+              button.disabled =
+                state.loading;
+            }
+          }
+        );
+
+        elements.previousPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasPrevious;
+
+        elements.nextPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasNext;
+      }
+
+
+      function setSaving(saving) {
+        state.saving =
+          Boolean(saving);
+
+        if (elements.loadingBar) {
+          elements.loadingBar.classList.toggle(
+            "is-visible",
+            state.loading ||
+            state.saving
+          );
+        }
+
+        elements.saveAlterButton.disabled =
+          state.saving;
+
+        elements.saveAlterButton.textContent =
+          state.saving
+            ? "Menyimpan..."
+            : "Simpan Alter";
+
+        [
+          elements.cancelAlterButton,
+          elements.closeDialogButton,
+          elements.copyBaseMemberButton,
+          elements.alterPhotoFile,
+          elements.alterVideoFile,
+          elements.alterGalleryFiles,
+          elements.clearAlterPhotoButton,
+          elements.clearAlterVideoButton,
+          elements.refreshGalleryPreviewButton
+        ].forEach(
+          function toggleControl(control) {
+            if (control) {
+              control.disabled =
+                state.saving;
+            }
+          }
+        );
+      }
+
+
+      /*
+      =====================================================
+      TOAST
+      =====================================================
+      */
+
+      function showToast(
+        type,
+        title,
+        message
+      ) {
+        if (state.toastTimer) {
+          window.clearTimeout(
+            state.toastTimer
+          );
+        }
+
+        elements.adminToast.classList.remove(
+          "is-success",
+          "is-error",
+          "is-warning"
+        );
+
+        elements.adminToast.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "warning"
+          )
+        );
+
+        elements.adminToastTitle.textContent =
+          title ||
+          "System Message";
+
+        elements.adminToastMessage.textContent =
+          message ||
+          "";
+
+        state.toastTimer =
+          window.setTimeout(
+            function hideToast() {
+              elements.adminToast.classList.remove(
+                "is-visible"
+              );
+            },
+            5000
+          );
+      }
+
+
+      /*
+      =====================================================
+      FRIENDLY ERROR
+      =====================================================
+      */
+
+      function getFriendlyError(error) {
+        const code =
+          asString(
+            error &&
+            error.code
+          );
+
+        switch (code) {
+          case "ADMIN_SESSION_INVALID":
+          case "ADMIN_SESSION_MISSING":
+          case "ADMIN_TOKEN_REQUIRED":
+          case "SESSION_NOT_FOUND":
+          case "SESSION_EXPIRED":
+          case "INVALID_SESSION":
+          case "AUTH_REQUIRED":
+          case "UNAUTHORIZED":
+            return (
+              "Session administrator sudah tidak berlaku."
+            );
+
+          case "ADMIN_ALTER_ALREADY_EXISTS":
+            return (
+              "ID Alter tersebut sudah digunakan."
+            );
+
+          case "ADMIN_ALTER_NOT_FOUND":
+          case "MEDIA_OWNER_NOT_FOUND":
+            return (
+              "Alter Profile tidak ditemukan."
+            );
+
+          case "ALTER_BASE_MEMBER_NOT_FOUND":
+            return (
+              "Base member yang dipilih tidak ditemukan."
+            );
+
+          case "ALTER_BASE_MEMBER_DELETED":
+            return (
+              "Base member sedang berstatus Deleted."
+            );
+
+          case "ADMIN_BASE_MEMBER_ALREADY_HAS_ALTER":
+            return (
+              "Base member tersebut sudah memiliki Alter Profile."
+            );
+
+          case "ALTER_FIELD_REQUIRED":
+          case "ALTER_ID_REQUIRED":
+          case "ALTER_BASE_ID_REQUIRED":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Data wajib belum diisi."
+            );
+
+          case "ALTER_JSON_INVALID":
+          case "ALTER_JSON_TYPE_INVALID":
+            return (
+              "Salah satu field JSON belum memiliki format yang valid."
+            );
+
+          case "ADMIN_ALTER_ALREADY_DELETED":
+            return (
+              "Alter Profile tersebut sudah berstatus Deleted."
+            );
+
+          case "ADMIN_ALTER_NOT_DELETED":
+            return (
+              "Alter Profile tersebut tidak sedang berstatus Deleted."
+            );
+
+          case "MEDIA_FILE_TOO_LARGE":
+          case "DRIVE_FILE_TOO_LARGE":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Ukuran media melewati batas upload."
+            );
+
+          case "MEDIA_FILE_EXTENSION_NOT_ALLOWED":
+          case "MEDIA_FILE_MIME_NOT_ALLOWED":
+          case "DRIVE_MIME_TYPE_NOT_ALLOWED":
+          case "DRIVE_FILE_EXTENSION_NOT_ALLOWED":
+          case "DRIVE_EXTENSION_MIME_MISMATCH":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Format media tidak diperbolehkan."
+            );
+
+          case "MEDIA_GALLERY_LIMIT_REACHED":
+            return (
+              "Jumlah gallery telah mencapai batas maksimum."
+            );
+
+          case "DRIVE_PUBLIC_SHARING_FAILED":
+            return (
+              "File berhasil dibuat, tetapi tidak dapat dibuka secara publik."
+            );
+
+          case "REQUEST_TIMEOUT":
+            return (
+              "Koneksi ke Apps Script melewati batas waktu."
+            );
+
+          case "NETWORK_ERROR":
+            return (
+              "Browser tidak dapat terhubung ke Apps Script."
+            );
+
+          default:
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Permintaan gagal diproses."
+            );
+        }
+      }
+
+
+      /*
+      =====================================================
+      AUTH
+      =====================================================
+      */
+
+      function redirectToLogin() {
+        if (
+          window.P3R_ADMIN_API &&
+          typeof window.P3R_ADMIN_API.redirectToLogin ===
+            "function"
+        ) {
+          window.P3R_ADMIN_API.redirectToLogin(
+            window.location.href
+          );
+
+          return;
+        }
+
+        window.location.replace(
+          "./admin-login.html"
+        );
+      }
+
+
+      async function initializeAuthentication() {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.requireSession !==
+            "function"
+        ) {
+          redirectToLogin();
+
+          return false;
+        }
+
+        try {
+          const session =
+            await window.P3R_ADMIN_API
+              .requireSession({
+                redirect:
+                  true,
+
+                verify:
+                  true,
+
+                returnUrl:
+                  window.location.href
+              });
+
+          if (!session) {
+            return false;
+          }
+
+          state.authenticated =
+            true;
+
+          state.media.available =
+            Boolean(
+              typeof window.P3R_ADMIN_API.uploadMediaFile ===
+                "function" &&
+              typeof window.P3R_ADMIN_API.listMedia ===
+                "function" &&
+              typeof window.P3R_ADMIN_API.deleteMedia ===
+                "function"
+            );
+
+          if (
+            elements.alterMediaDisabledNote
+          ) {
+            elements.alterMediaDisabledNote.classList.toggle(
+              "is-visible",
+              !state.media.available
+            );
+          }
+
+          return true;
+        } catch (error) {
+          redirectToLogin();
+
+          return false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      NORMALIZE MEMBER
+      =====================================================
+      */
+
+      function normalizeBaseMember(member) {
+        if (!isPlainObject(member)) {
+          return null;
+        }
+
+        return {
+          id:
+            asString(member.id),
+
+          name:
+            asString(member.name) ||
+            "Tanpa Nama",
+
+          role:
+            asString(member.role),
+
+          division:
+            asString(member.division),
+
+          divisionKey:
+            asString(
+              member.divisionKey ||
+              member.division_key
+            ),
+
+          mainRole:
+            asString(
+              member.mainRole ||
+              member.main_role
+            ),
+
+          status:
+            asString(member.status) ||
+            "Active",
+
+          joinDate:
+            asString(
+              member.joinDate ||
+              member.join_date
+            ),
+
+          alter:
+            isPlainObject(member.alter)
+              ? member.alter
+              : {
+                  enabled:
+                    false
+                }
+        };
+      }
+
+
+      /*
+      =====================================================
+      NORMALIZE ALTER
+      =====================================================
+      */
+
+      function normalizeAlter(alter) {
+        if (!isPlainObject(alter)) {
+          return null;
+        }
+
+        const baseMember =
+          isPlainObject(
+            alter.baseMember
+          )
+            ? normalizeBaseMember(
+                alter.baseMember
+              )
+            : null;
+
+        return {
+          id:
+            asString(alter.id),
+
+          baseId:
+            asString(
+              alter.baseId ||
+              alter.base_id
+            ),
+
+          name:
+            asString(alter.name) ||
+            "Tanpa Nama",
+
+          theme:
+            asString(alter.theme) ||
+            "default",
+
+          role:
+            asString(alter.role) ||
+            "—",
+
+          division:
+            asString(alter.division) ||
+            "—",
+
+          divisionKey:
+            asString(
+              alter.divisionKey ||
+              alter.division_key
+            ),
+
+          mainRole:
+            asString(
+              alter.mainRole ||
+              alter.main_role
+            ) ||
+            "—",
+
+          tagline:
+            asString(alter.tagline),
+
+          status:
+            asString(alter.status) ||
+            "Active",
+
+          photo:
+            asString(alter.photo),
+
+          updatedAt:
+            asString(
+              alter.updatedAt ||
+              alter.updated_at
+            ),
+
+          baseMember:
+            baseMember
+        };
+      }
+
+
+      /*
+      =====================================================
+      BASE MEMBER MAP
+      =====================================================
+      */
+
+      function findBaseMember(memberId) {
+        const normalizedId =
+          asString(memberId);
+
+        return (
+          state.baseMembers.find(
+            function findMember(member) {
+              return (
+                member.id ===
+                normalizedId
+              );
+            }
+          ) ||
+          null
+        );
+      }
+
+
+      /*
+      =====================================================
+      MEMBER SELECT OPTIONS
+      =====================================================
+      */
+
+      function createMemberOptions(
+        selectedValue,
+        includeEmpty
+      ) {
+        const selected =
+          asString(selectedValue);
+
+        const options = [];
+
+        if (includeEmpty !== false) {
+          options.push(
+            '<option value="">Semua member</option>'
+          );
+        }
+
+        state.baseMembers.forEach(
+          function createMemberOption(member) {
+            const selectedAttribute =
+              member.id === selected
+                ? " selected"
+                : "";
+
+            const label =
+              member.name +
+              " — " +
+              member.id;
+
+            options.push(
+              '<option value="' +
+              escapeHTML(member.id) +
+              '"' +
+              selectedAttribute +
+              ">" +
+              escapeHTML(label) +
+              "</option>"
+            );
+          }
+        );
+
+        if (
+          selected &&
+          !findBaseMember(selected)
+        ) {
+          options.push(
+            '<option value="' +
+            escapeHTML(selected) +
+            '" selected>' +
+            escapeHTML(
+              selected +
+              " — data member tidak ditemukan"
+            ) +
+            "</option>"
+          );
+        }
+
+        return options.join("");
+      }
+
+
+      function renderMemberSelectors() {
+        const filterValue =
+          elements.baseMemberFilter.value;
+
+        const formValue =
+          elements.alterBaseId.value;
+
+        elements.baseMemberFilter.innerHTML =
+          createMemberOptions(
+            filterValue,
+            true
+          );
+
+        elements.alterBaseId.innerHTML =
+          '<option value="">Pilih member</option>' +
+          createMemberOptions(
+            formValue,
+            false
+          );
+      }
+
+
+      /*
+      =====================================================
+      LOAD BASE MEMBERS
+      =====================================================
+      */
+
+      async function loadBaseMembers() {
+        const allMembers = [];
+        let page = 1;
+        let hasNext = true;
+
+        while (hasNext) {
+          const result =
+            await window.P3R_ADMIN_API
+              .listMembers({
+                page:
+                  page,
+
+                pageSize:
+                  200,
+
+                includeDeleted:
+                  false
+              });
+
+          const pageMembers =
+            getResultCollection(
+              result,
+              [
+                "members",
+                "items",
+                "data"
+              ]
+            );
+
+          allMembers.push(
+            ...pageMembers
+          );
+
+          const pagination =
+            result &&
+            isPlainObject(
+              result.pagination
+            )
+              ? result.pagination
+              : {};
+
+          hasNext =
+            pagination.hasNext ===
+              true ||
+            pagination.has_next ===
+              true;
+
+          page += 1;
+
+          if (
+            page > 100
+          ) {
+            hasNext =
+              false;
+          }
+        }
+
+        state.baseMembers =
+          allMembers
+            .map(normalizeBaseMember)
+            .filter(Boolean)
+            .filter(
+              function filterDeletedMember(member) {
+                return (
+                  member.status
+                    .toLowerCase() !==
+                  "deleted"
+                );
+              }
+            )
+            .sort(
+              function sortMembers(
+                first,
+                second
+              ) {
+                return first.name.localeCompare(
+                  second.name,
+                  "id"
+                );
+              }
+            );
+
+        renderMemberSelectors();
+
+        elements.summaryBaseMembers.textContent =
+          String(
+            state.baseMembers.length
+          );
+      }
+
+
+      /*
+      =====================================================
+      FILTER
+      =====================================================
+      */
+
+      function readFilters() {
+        state.filters.search =
+          asString(
+            elements.searchInput.value
+          );
+
+        state.filters.status =
+          asString(
+            elements.statusFilter.value
+          );
+
+        state.filters.theme =
+          asString(
+            elements.themeFilter.value
+          );
+
+        state.filters.baseId =
+          asString(
+            elements.baseMemberFilter.value
+          );
+
+        state.filters.includeDeleted =
+          elements.includeDeletedFilter.checked;
+
+        state.pagination.pageSize =
+          Math.max(
+            1,
+            Number(
+              elements.pageSizeFilter.value
+            ) || 50
+          );
+      }
+
+
+      function resetFilters() {
+        elements.searchInput.value =
+          "";
+
+        elements.statusFilter.value =
+          "";
+
+        elements.themeFilter.value =
+          "";
+
+        elements.baseMemberFilter.value =
+          "";
+
+        elements.pageSizeFilter.value =
+          "50";
+
+        elements.includeDeletedFilter.checked =
+          false;
+
+        state.pagination.page =
+          1;
+
+        readFilters();
+
+        loadAlters({
+          force:
+            true
+        });
+      }
+
+
+      /*
+      =====================================================
+      STATUS CLASS
+      =====================================================
+      */
+
+      function getStatusClass(status) {
+        const normalized =
+          asString(status)
+            .toLowerCase();
+
+        const allowed = [
+          "active",
+          "inactive",
+          "draft",
+          "hidden",
+          "deleted"
+        ];
+
+        return allowed.includes(normalized)
+          ? "is-" + normalized
+          : "";
+      }
+
+
+      /*
+      =====================================================
+      SUMMARY
+      =====================================================
+      */
+
+      function renderSummary() {
+        elements.summaryTotal.textContent =
+          String(
+            state.pagination.total
+          );
+
+        elements.summaryDisplayed.textContent =
+          String(
+            state.alters.length
+          );
+
+        elements.summaryBaseMembers.textContent =
+          String(
+            state.baseMembers.length
+          );
+
+        elements.summaryPage.textContent =
+          (
+            state.pagination.page +
+            "/" +
+            state.pagination.totalPages
+          );
+      }
+
+
+      /*
+      =====================================================
+      PAGINATION
+      =====================================================
+      */
+
+      function renderPagination() {
+        const start =
+          state.pagination.total === 0
+            ? 0
+            : (
+                (
+                  state.pagination.page -
+                  1
+                ) *
+                state.pagination.pageSize
+              ) + 1;
+
+        const end =
+          state.pagination.total === 0
+            ? 0
+            : Math.min(
+                state.pagination.total,
+                start +
+                  state.alters.length -
+                  1
+              );
+
+        elements.paginationInfo.innerHTML =
+          "Menampilkan <strong>" +
+          start +
+          "–" +
+          end +
+          "</strong> dari <strong>" +
+          state.pagination.total +
+          "</strong> data.";
+
+        elements.previousPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasPrevious;
+
+        elements.nextPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasNext;
+      }
+
+
+      /*
+      =====================================================
+      RENDER TABLE
+      =====================================================
+      */
+
+      function renderAlterTable() {
+        if (!state.alters.length) {
+          elements.alterTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Data Tidak Ditemukan
+              </div>
+
+              <div class="admin-state-message">
+                Tidak ada Alter Profile yang sesuai dengan
+                pencarian atau filter yang dipilih.
+              </div>
+
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.alterTableContainer.innerHTML = `
+          <div class="admin-table-wrap">
+
+            <table class="admin-table">
+
+              <thead>
+                <tr>
+                  <th>Alter Profile</th>
+                  <th>Base Member</th>
+                  <th>Theme</th>
+                  <th>Role</th>
+                  <th>Divisi</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${state.alters
+                  .map(
+                    function createAlterRow(alter) {
+                      const deleted =
+                        alter.status
+                          .toLowerCase() ===
+                        "deleted";
+
+                      const baseMember =
+                        alter.baseMember ||
+                        findBaseMember(
+                          alter.baseId
+                        );
+
+                      const baseName =
+                        baseMember
+                          ? baseMember.name
+                          : "Member tidak ditemukan";
+
+                      return `
+                        <tr>
+
+                          <td>
+                            <div class="admin-alter-cell">
+
+                              <img
+                                class="admin-alter-photo"
+                                src="${escapeHTML(
+                                  getMediaUrl(
+                                    alter.photo
+                                  )
+                                )}"
+                                alt="${escapeHTML(
+                                  alter.name
+                                )}"
+                                loading="lazy"
+                                decoding="async"
+                                onerror="
+                                  this.onerror=null;
+                                  this.src='./assets/img/placeholder.png';
+                                "
+                              >
+
+                              <div>
+
+                                <div class="admin-alter-name">
+                                  ${escapeHTML(
+                                    alter.name
+                                  )}
+                                </div>
+
+                                <div class="admin-alter-id">
+                                  ${escapeHTML(
+                                    alter.id
+                                  )}
+                                </div>
+
+                              </div>
+
+                            </div>
+                          </td>
+
+
+                          <td>
+                            <div class="admin-base-member">
+
+                              <div class="admin-base-member-name">
+                                ${escapeHTML(
+                                  baseName
+                                )}
+                              </div>
+
+                              <div class="admin-alter-id">
+                                ${escapeHTML(
+                                  alter.baseId
+                                )}
+                              </div>
+
+                            </div>
+                          </td>
+
+
+                          <td>
+                            <span class="admin-theme-badge">
+                              ${escapeHTML(
+                                alter.theme
+                              )}
+                            </span>
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              alter.role
+                            )}
+
+                            ${
+                              alter.mainRole &&
+                              alter.mainRole !== "—"
+                                ? `
+                                  <div class="admin-alter-id">
+                                    ${escapeHTML(
+                                      alter.mainRole
+                                    )}
+                                  </div>
+                                `
+                                : ""
+                            }
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              alter.division
+                            )}
+
+                            ${
+                              alter.divisionKey
+                                ? `
+                                  <div class="admin-alter-id">
+                                    ${escapeHTML(
+                                      alter.divisionKey
+                                    )}
+                                  </div>
+                                `
+                                : ""
+                            }
+                          </td>
+
+
+                          <td>
+                            <span class="admin-status-badge ${getStatusClass(
+                              alter.status
+                            )}">
+                              ${escapeHTML(
+                                alter.status
+                              )}
+                            </span>
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              alter.updatedAt ||
+                              "—"
+                            )}
+                          </td>
+
+
+                          <td>
+                            <div class="admin-actions">
+
+                              ${
+                                !deleted
+                                  ? `
+                                    <a
+                                      class="admin-action-button"
+                                      href="${escapeHTML(
+                                        getAlterPublicUrl(
+                                          alter.id
+                                        )
+                                      )}"
+                                      target="_blank"
+                                      rel="noopener"
+                                    >
+                                      View
+                                    </a>
+                                  `
+                                  : ""
+                              }
+
+                              <button
+                                class="admin-action-button"
+                                type="button"
+                                data-action="edit"
+                                data-alter-id="${escapeHTML(
+                                  alter.id
+                                )}"
+                              >
+                                Edit
+                              </button>
+
+                              ${
+                                deleted
+                                  ? `
+                                    <button
+                                      class="admin-action-button is-restore"
+                                      type="button"
+                                      data-action="restore"
+                                      data-alter-id="${escapeHTML(
+                                        alter.id
+                                      )}"
+                                    >
+                                      Restore
+                                    </button>
+                                  `
+                                  : `
+                                    <button
+                                      class="admin-action-button is-danger"
+                                      type="button"
+                                      data-action="delete"
+                                      data-alter-id="${escapeHTML(
+                                        alter.id
+                                      )}"
+                                    >
+                                      Delete
+                                    </button>
+                                  `
+                              }
+
+                            </div>
+                          </td>
+
+                        </tr>
+                      `;
+                    }
+                  )
+                  .join("")}
+              </tbody>
+
+            </table>
+
+          </div>
+        `;
+      }
+
+
+      /*
+      =====================================================
+      LOAD ALTERS
+      =====================================================
+      */
+
+      async function loadAlters(options) {
+        const settings =
+          isPlainObject(options)
+            ? options
+            : {};
+
+        if (
+          (
+            state.loading &&
+            settings.force !== true
+          ) ||
+          !state.authenticated
+        ) {
+          return;
+        }
+
+        setLoading(true);
+
+        elements.tableSubtitle.textContent =
+          "Mengambil data Alter Profile";
+
+        elements.alterTableContainer.innerHTML = `
+          <div class="admin-state">
+
+            <div class="admin-state-title">
+              Loading Alter Profiles
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data dari Google Spreadsheet.
+            </div>
+
+          </div>
+        `;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .listAlters({
+                search:
+                  state.filters.search,
+
+                status:
+                  state.filters.status,
+
+                theme:
+                  state.filters.theme,
+
+                baseId:
+                  state.filters.baseId,
+
+                includeDeleted:
+                  state.filters.includeDeleted,
+
+                page:
+                  state.pagination.page,
+
+                pageSize:
+                  state.pagination.pageSize
+              });
+
+          state.alters =
+            getResultCollection(
+              result,
+              [
+                "alters",
+                "items",
+                "data"
+              ]
+            )
+              .map(normalizeAlter)
+              .filter(Boolean);
+
+          const pagination =
+            result &&
+            isPlainObject(
+              result.pagination
+            )
+              ? result.pagination
+              : {};
+
+          state.pagination = {
+            page:
+              Math.max(
+                1,
+                Number(
+                  pagination.page
+                ) ||
+                state.pagination.page
+              ),
+
+            pageSize:
+              Math.max(
+                1,
+                Number(
+                  pagination.pageSize ||
+                  pagination.page_size
+                ) ||
+                state.pagination.pageSize
+              ),
+
+            total:
+              Math.max(
+                0,
+                Number(
+                  pagination.total
+                ) ||
+                0
+              ),
+
+            totalPages:
+              Math.max(
+                1,
+                Number(
+                  pagination.totalPages ||
+                  pagination.total_pages
+                ) ||
+                1
+              ),
+
+            hasPrevious:
+              pagination.hasPrevious ===
+                true ||
+              pagination.has_previous ===
+                true,
+
+            hasNext:
+              pagination.hasNext ===
+                true ||
+              pagination.has_next ===
+                true
+          };
+
+          elements.tableSubtitle.textContent =
+            state.pagination.total +
+            " Alter Profile ditemukan";
+
+          renderSummary();
+          renderAlterTable();
+          renderPagination();
+        } catch (error) {
+          const code =
+            asString(
+              error &&
+              error.code
+            );
+
+          if (
+            [
+              "ADMIN_SESSION_INVALID",
+              "ADMIN_SESSION_MISSING",
+              "ADMIN_TOKEN_REQUIRED",
+              "SESSION_NOT_FOUND",
+              "SESSION_EXPIRED",
+              "AUTH_REQUIRED",
+              "UNAUTHORIZED"
+            ].includes(code)
+          ) {
+            redirectToLogin();
+
+            return;
+          }
+
+          elements.tableSubtitle.textContent =
+            "Gagal memuat data";
+
+          elements.alterTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Alter Data Unavailable
+              </div>
+
+              <div class="admin-state-message">
+                ${escapeHTML(
+                  getFriendlyError(error)
+                )}
+              </div>
+
+              <button
+                class="admin-button is-primary"
+                id="retryLoadButton"
+                type="button"
+                style="margin-top:16px"
+              >
+                Coba Lagi
+              </button>
+
+            </div>
+          `;
+
+          const retryButton =
+            getElement(
+              "retryLoadButton"
+            );
+
+          if (retryButton) {
+            retryButton.addEventListener(
+              "click",
+              function retryAlterLoad() {
+                loadAlters({
+                  force:
+                    true
+                });
+              }
+            );
+          }
+
+          showToast(
+            "error",
+            "Load Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      LOAD INITIAL DATA
+      =====================================================
+      */
+
+      async function loadInitialData() {
+        if (
+          state.loading ||
+          !state.authenticated
+        ) {
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          await loadBaseMembers();
+        } catch (error) {
+          showToast(
+            "error",
+            "Member Load Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        readFilters();
+
+        await loadAlters({
+          force:
+            true
+        });
+      }
+
+
+      /*
+      =====================================================
+      JSON
+      =====================================================
+      */
+
+      function clearJsonErrors() {
+        [
+          elements.skillsJsonError,
+          elements.expertiseJsonError,
+          elements.galleryJsonError
+        ].forEach(
+          function clearJsonError(element) {
+            element.textContent =
+              "";
+
+            element.classList.remove(
+              "is-visible"
+            );
+          }
+        );
+      }
+
+
+      function parseJsonField(
+        textarea,
+        errorElement,
+        expectedType
+      ) {
+        const rawValue =
+          textarea.value.trim();
+
+        try {
+          const parsed =
+            JSON.parse(
+              rawValue ||
+              (
+                expectedType === "array"
+                  ? "[]"
+                  : "{}"
+              )
+            );
+
+          const validType =
+            expectedType === "array"
+              ? Array.isArray(parsed)
+              : isPlainObject(parsed);
+
+          if (!validType) {
+            throw new Error(
+              expectedType === "array"
+                ? "Nilai harus berupa array JSON."
+                : "Nilai harus berupa object JSON."
+            );
+          }
+
+          errorElement.textContent =
+            "";
+
+          errorElement.classList.remove(
+            "is-visible"
+          );
+
+          return {
+            valid:
+              true,
+
+            value:
+              parsed
+          };
+        } catch (error) {
+          errorElement.textContent =
+            error.message;
+
+          errorElement.classList.add(
+            "is-visible"
+          );
+
+          return {
+            valid:
+              false,
+
+            value:
+              null
+          };
+        }
+      }
+
+
+      /*
+      =====================================================
+      DEFAULT ALTER DATA
+      =====================================================
+      */
+
+      function getDefaultAlterData() {
+        return {
+          id:
+            "",
+
+          baseId:
+            "",
+
+          name:
+            "",
+
+          theme:
+            "default",
+
+          role:
+            "",
+
+          mainRole:
+            "",
+
+          division:
+            "",
+
+          divisionKey:
+            "",
+
+          status:
+            "Active",
+
+          joinDate:
+            "",
+
+          tagline:
+            "",
+
+          bio:
+            "",
+
+          signature:
+            "",
+
+          photo:
+            "",
+
+          videoCV:
+            "",
+
+          stats: {
+            rank:
+              "",
+
+            level:
+              0,
+
+            winrate:
+              0
+          },
+
+          skills:
+            [],
+
+          expertise: {
+            playstyle:
+              "",
+
+            strength:
+              [],
+
+            rolePool:
+              [],
+
+            mains:
+              [],
+
+            achievement:
+              ""
+          },
+
+          gallery:
+            []
+        };
+      }
+
+
+      /*
+      =====================================================
+      BASE MEMBER PREVIEW
+      =====================================================
+      */
+
+      function updateBaseMemberPreview() {
+        const member =
+          findBaseMember(
+            elements.alterBaseId.value
+          );
+
+        if (!member) {
+          elements.baseMemberPreview.classList.remove(
+            "is-visible"
+          );
+
+          elements.baseMemberPreviewName.textContent =
+            "";
+
+          elements.baseMemberPreviewDetail.textContent =
+            "";
+
+          return;
+        }
+
+        elements.baseMemberPreview.classList.add(
+          "is-visible"
+        );
+
+        elements.baseMemberPreviewName.textContent =
+          member.name;
+
+        elements.baseMemberPreviewDetail.textContent =
+          [
+            member.id,
+            member.role || "Tanpa role",
+            member.mainRole || "Tanpa main role",
+            member.division || "Tanpa divisi",
+            member.status
+          ].join(" • ");
+      }
+
+
+      /*
+      =====================================================
+      COPY BASE MEMBER
+      =====================================================
+      */
+
+      function copyBaseMemberData() {
+        const member =
+          findBaseMember(
+            elements.alterBaseId.value
+          );
+
+        if (!member) {
+          showToast(
+            "warning",
+            "Base Member Required",
+            "Pilih base member terlebih dahulu."
+          );
+
+          return;
+        }
+
+        if (!asString(elements.alterName.value)) {
+          elements.alterName.value =
+            member.name +
+            " Alter";
+        }
+
+        elements.alterRole.value =
+          member.role;
+
+        elements.alterMainRole.value =
+          member.mainRole;
+
+        elements.alterDivision.value =
+          member.division;
+
+        elements.alterDivisionKey.value =
+          member.divisionKey;
+
+        elements.alterJoinDate.value =
+          normalizeDateInput(
+            member.joinDate
+          );
+
+        showToast(
+          "success",
+          "Member Data Copied",
+          "Role, divisi, main role, dan join date berhasil disalin."
+        );
+      }
+
+
+      /*
+      =====================================================
+      BASE MEMBER CHANGE
+      =====================================================
+      */
+
+      function handleBaseMemberChange() {
+        const member =
+          findBaseMember(
+            elements.alterBaseId.value
+          );
+
+        updateBaseMemberPreview();
+
+        if (
+          !member ||
+          state.editingAlterId
+        ) {
+          return;
+        }
+
+        if (!asString(elements.alterId.value)) {
+          elements.alterId.value =
+            slugify(
+              member.id +
+              "-alter"
+            );
+        }
+
+        if (!asString(elements.alterName.value)) {
+          elements.alterName.value =
+            member.name +
+            " Alter";
+        }
+      }
+
+
+      /*
+      =====================================================
+      FILL FORM
+      =====================================================
+      */
+
+      function fillAlterForm(alter) {
+        const data =
+          Object.assign(
+            getDefaultAlterData(),
+            alter || {}
+          );
+
+        const stats =
+          isPlainObject(data.stats)
+            ? data.stats
+            : {};
+
+        renderMemberSelectors();
+
+        elements.alterBaseId.value =
+          asString(
+            data.baseId ||
+            data.base_id
+          );
+
+        if (
+          elements.alterBaseId.value !==
+          asString(
+            data.baseId ||
+            data.base_id
+          )
+        ) {
+          renderMemberSelectors();
+
+          elements.alterBaseId.value =
+            asString(
+              data.baseId ||
+              data.base_id
+            );
+        }
+
+        elements.alterId.value =
+          asString(data.id);
+
+        elements.alterName.value =
+          asString(data.name);
+
+        elements.alterTheme.value =
+          asString(data.theme) ||
+          "default";
+
+        elements.alterRole.value =
+          asString(data.role);
+
+        elements.alterMainRole.value =
+          asString(
+            data.mainRole ||
+            data.main_role
+          );
+
+        elements.alterDivision.value =
+          asString(data.division);
+
+        elements.alterDivisionKey.value =
+          asString(
+            data.divisionKey ||
+            data.division_key
+          );
+
+        elements.alterStatus.value =
+          asString(data.status) ||
+          "Active";
+
+        elements.alterJoinDate.value =
+          normalizeDateInput(
+            data.joinDate ||
+            data.join_date
+          );
+
+        elements.alterTagline.value =
+          asString(data.tagline);
+
+        elements.alterBio.value =
+          asString(data.bio);
+
+        elements.alterSignature.value =
+          asString(data.signature);
+
+        elements.alterRank.value =
+          asString(stats.rank);
+
+        elements.alterLevel.value =
+          String(
+            toNumber(
+              stats.level,
+              0
+            )
+          );
+
+        elements.alterWinrate.value =
+          String(
+            toNumber(
+              stats.winrate,
+              0
+            )
+          );
+
+        elements.alterPhoto.value =
+          asString(data.photo);
+
+        elements.alterVideoCV.value =
+          asString(
+            data.videoCV ||
+            data.video_cv
+          );
+
+        elements.alterSkills.value =
+          prettyJSON(
+            asArray(data.skills)
+          );
+
+        elements.alterExpertise.value =
+          prettyJSON(
+            isPlainObject(
+              data.expertise
+            )
+              ? data.expertise
+              : {}
+          );
+
+        writeGalleryToTextarea(
+          asArray(data.gallery)
+        );
+
+        updateBaseMemberPreview();
+        renderAllMediaPreviews();
+      }
+
+
+      /*
+      =====================================================
+      MEDIA PREVIEW
+      =====================================================
+      */
+
+      function setMediaStatus(
+        type,
+        message,
+        visible
+      ) {
+        if (!elements.alterMediaStatus) {
+          return;
+        }
+
+        elements.alterMediaStatus.classList.remove(
+          "is-info",
+          "is-success",
+          "is-warning",
+          "is-error"
+        );
+
+        if (
+          visible === false ||
+          !message
+        ) {
+          elements.alterMediaStatus.textContent = "";
+          elements.alterMediaStatus.classList.remove(
+            "is-visible"
+          );
+
+          return;
+        }
+
+        elements.alterMediaStatus.textContent =
+          message;
+
+        elements.alterMediaStatus.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "info"
+          )
+        );
+      }
+
+
+      function setMediaProgress(
+        visible,
+        percent,
+        message
+      ) {
+        if (
+          !elements.alterMediaProgress ||
+          !elements.alterMediaProgressBar ||
+          !elements.alterMediaProgressText
+        ) {
+          return;
+        }
+
+        const safePercent = Math.max(
+          0,
+          Math.min(
+            100,
+            Number(percent) || 0
+          )
+        );
+
+        elements.alterMediaProgress.classList.toggle(
+          "is-visible",
+          visible === true
+        );
+
+        elements.alterMediaProgressBar.style.width =
+          safePercent + "%";
+
+        elements.alterMediaProgressText.textContent =
+          message ||
+          "Menyiapkan media.";
+      }
+
+
+      function renderPhotoPreview() {
+        let source =
+          asString(
+            elements.alterPhoto.value
+          );
+
+        let label =
+          source
+            ? "URL saat ini"
+            : "Belum ada foto";
+
+        if (state.media.photoFile) {
+          source = createMediaObjectUrl(
+            state.media.photoFile
+          );
+
+          label = "File baru dipilih";
+        }
+
+        elements.alterPhotoPreview.src =
+          getMediaUrl(source);
+
+        elements.alterPhotoPreviewLabel.textContent =
+          label;
+
+        elements.openAlterPhotoLink.hidden =
+          !source;
+
+        if (source) {
+          elements.openAlterPhotoLink.href =
+            getMediaUrl(source);
+        } else {
+          elements.openAlterPhotoLink.removeAttribute(
+            "href"
+          );
+        }
+      }
+
+
+      function renderVideoPreview() {
+        const currentUrl =
+          asString(
+            elements.alterVideoCV.value
+          );
+
+        let text =
+          currentUrl
+            ? "Video CV tersedia melalui URL."
+            : "Belum ada Video CV";
+
+        let label =
+          currentUrl
+            ? "URL saat ini"
+            : "URL / Drive";
+
+        if (state.media.videoFile) {
+          text =
+            state.media.videoFile.name +
+            " — " +
+            (
+              window.P3R_ADMIN_API &&
+              typeof window.P3R_ADMIN_API.formatMediaFileSize === "function"
+                ? window.P3R_ADMIN_API.formatMediaFileSize(
+                    state.media.videoFile.size
+                  )
+                : state.media.videoFile.size + " byte"
+            );
+
+          label = "File baru dipilih";
+        }
+
+        elements.alterVideoPreviewText.textContent =
+          text;
+
+        elements.alterVideoPreviewLabel.textContent =
+          label;
+
+        elements.openAlterVideoLink.hidden =
+          !currentUrl;
+
+        if (currentUrl) {
+          elements.openAlterVideoLink.href =
+            getMediaUrl(currentUrl);
+        } else {
+          elements.openAlterVideoLink.removeAttribute(
+            "href"
+          );
+        }
+      }
+
+
+      function createExistingGalleryCard(
+        item,
+        index
+      ) {
+        return `
+          <article
+            class="admin-gallery-item"
+            data-gallery-kind="existing"
+            data-gallery-index="${index}"
+          >
+            <div class="admin-gallery-thumb-wrap">
+              <img
+                class="admin-gallery-thumb"
+                src="${escapeAttribute(
+                  getMediaUrl(
+                    item.src
+                  )
+                )}"
+                alt="${escapeAttribute(
+                  item.caption ||
+                  "Gallery " + (
+                    index + 1
+                  )
+                )}"
+                loading="lazy"
+                onerror="
+                  this.onerror=null;
+                  this.src='./assets/img/placeholder.png';
+                "
+              >
+
+              <div class="admin-gallery-type">
+                Tersimpan
+              </div>
+            </div>
+
+            <div class="admin-gallery-body">
+              <input
+                class="admin-gallery-caption"
+                type="text"
+                maxlength="500"
+                value="${escapeAttribute(
+                  item.caption
+                )}"
+                placeholder="Caption gallery"
+                data-gallery-caption-index="${index}"
+              >
+
+              <div class="admin-gallery-item-actions">
+                <button
+                  class="admin-gallery-remove"
+                  type="button"
+                  data-remove-existing-gallery="${index}"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+
+      function createPendingGalleryCard(
+        item,
+        index
+      ) {
+        return `
+          <article
+            class="admin-gallery-item"
+            data-gallery-kind="pending"
+            data-gallery-pending-index="${index}"
+          >
+            <div class="admin-gallery-thumb-wrap">
+              <img
+                class="admin-gallery-thumb"
+                src="${escapeAttribute(
+                  item.previewUrl
+                )}"
+                alt="${escapeAttribute(
+                  item.file.name
+                )}"
+              >
+
+              <div class="admin-gallery-type">
+                Akan diupload
+              </div>
+            </div>
+
+            <div class="admin-gallery-body">
+              <input
+                class="admin-gallery-caption"
+                type="text"
+                maxlength="500"
+                value="${escapeAttribute(
+                  item.caption
+                )}"
+                placeholder="Caption gallery"
+                data-pending-gallery-caption-index="${index}"
+              >
+
+              <div class="admin-field-note">
+                ${escapeHTML(
+                  item.file.name
+                )}
+              </div>
+
+              <div class="admin-gallery-item-actions">
+                <button
+                  class="admin-gallery-remove"
+                  type="button"
+                  data-remove-pending-gallery="${index}"
+                >
+                  Batal Upload
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+
+      function renderGalleryPreview() {
+        const gallery =
+          readGalleryFromTextarea(false) ||
+          [];
+
+        const existingCards =
+          gallery.map(
+            createExistingGalleryCard
+          );
+
+        const pendingCards =
+          state.media.galleryFiles.map(
+            createPendingGalleryCard
+          );
+
+        const cards =
+          existingCards.concat(
+            pendingCards
+          );
+
+        elements.alterGalleryPreview.innerHTML =
+          cards.length
+            ? cards.join("")
+            : `
+              <div class="admin-gallery-empty">
+                Gallery masih kosong. Pilih satu atau beberapa
+                gambar untuk menambah gallery.
+              </div>
+            `;
+      }
+
+
+      function renderAllMediaPreviews() {
+        revokeMediaObjectUrls();
+
+        if (state.media.photoFile) {
+          state.media.photoFile.__previewUrl =
+            createMediaObjectUrl(
+              state.media.photoFile
+            );
+        }
+
+        state.media.galleryFiles.forEach(
+          function refreshPendingPreview(item) {
+            item.previewUrl =
+              createMediaObjectUrl(
+                item.file
+              );
+          }
+        );
+
+        let photoSource =
+          asString(
+            elements.alterPhoto.value
+          );
+
+        let photoLabel =
+          photoSource
+            ? "URL saat ini"
+            : "Belum ada foto";
+
+        if (state.media.photoFile) {
+          photoSource =
+            state.media.photoFile.__previewUrl;
+
+          photoLabel =
+            "File baru dipilih";
+        }
+
+        elements.alterPhotoPreview.src =
+          getMediaUrl(
+            photoSource
+          );
+
+        elements.alterPhotoPreviewLabel.textContent =
+          photoLabel;
+
+        elements.openAlterPhotoLink.hidden =
+          !photoSource;
+
+        if (photoSource) {
+          elements.openAlterPhotoLink.href =
+            getMediaUrl(
+              photoSource
+            );
+        }
+
+        renderVideoPreview();
+        renderGalleryPreview();
+      }
+
+
+      function queueAssetDeletion(asset) {
+        if (
+          asset &&
+          asset.id
+        ) {
+          state.media.removedAssetIds.add(
+            asset.id
+          );
+        }
+      }
+
+
+      function handlePhotoFileChange() {
+        const file =
+          elements.alterPhotoFile.files &&
+          elements.alterPhotoFile.files[0];
+
+        if (!file) {
+          state.media.photoFile = null;
+          renderAllMediaPreviews();
+
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.alterPhotoFile.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload file belum tersedia. Gunakan Photo Path / URL."
+          );
+
+          return;
+        }
+
+        try {
+          window.P3R_ADMIN_API.validateMediaFile(
+            file,
+            "profile"
+          );
+
+          state.media.photoFile = file;
+          state.media.photoRemoveRequested = false;
+
+          setMediaStatus(
+            "info",
+            "Foto baru dipilih dan akan diunggah setelah Alter disimpan.",
+            true
+          );
+
+          renderAllMediaPreviews();
+        } catch (error) {
+          elements.alterPhotoFile.value = "";
+          state.media.photoFile = null;
+
+          showToast(
+            "error",
+            "Invalid Photo",
+            getFriendlyError(error)
+          );
+
+          renderAllMediaPreviews();
+        }
+      }
+
+
+      function handleVideoFileChange() {
+        const file =
+          elements.alterVideoFile.files &&
+          elements.alterVideoFile.files[0];
+
+        if (!file) {
+          state.media.videoFile = null;
+          renderVideoPreview();
+
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.alterVideoFile.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload file belum tersedia. Gunakan Video CV Path / URL."
+          );
+
+          return;
+        }
+
+        try {
+          window.P3R_ADMIN_API.validateMediaFile(
+            file,
+            "video"
+          );
+
+          state.media.videoFile = file;
+          state.media.videoRemoveRequested = false;
+
+          setMediaStatus(
+            "info",
+            "Video baru dipilih dan akan diunggah setelah Alter disimpan.",
+            true
+          );
+
+          renderVideoPreview();
+        } catch (error) {
+          elements.alterVideoFile.value = "";
+          state.media.videoFile = null;
+
+          showToast(
+            "error",
+            "Invalid Video",
+            getFriendlyError(error)
+          );
+
+          renderVideoPreview();
+        }
+      }
+
+
+      function handleGalleryFilesChange() {
+        const files = Array.from(
+          elements.alterGalleryFiles.files ||
+          []
+        );
+
+        if (!files.length) {
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.alterGalleryFiles.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload gallery belum tersedia."
+          );
+
+          return;
+        }
+
+        const currentGallery =
+          readGalleryFromTextarea(false) ||
+          [];
+
+        const maximumGalleryItems = 30;
+        const availableSlots = Math.max(
+          0,
+          maximumGalleryItems -
+          currentGallery.length -
+          state.media.galleryFiles.length
+        );
+
+        if (availableSlots < 1) {
+          elements.alterGalleryFiles.value = "";
+
+          showToast(
+            "warning",
+            "Gallery Full",
+            "Jumlah gallery telah mencapai batas 30 gambar."
+          );
+
+          return;
+        }
+
+        const accepted = [];
+        const rejected = [];
+
+        files
+          .slice(
+            0,
+            availableSlots
+          )
+          .forEach(
+            function validateGalleryFile(file) {
+              try {
+                window.P3R_ADMIN_API.validateMediaFile(
+                  file,
+                  "gallery"
+                );
+
+                accepted.push({
+                  file: file,
+                  caption: "",
+                  previewUrl: ""
+                });
+              } catch (error) {
+                rejected.push({
+                  file: file,
+                  error: error
+                });
+              }
+            }
+          );
+
+        state.media.galleryFiles.push(
+          ...accepted
+        );
+
+        elements.alterGalleryFiles.value = "";
+
+        renderAllMediaPreviews();
+
+        if (accepted.length) {
+          setMediaStatus(
+            "info",
+            accepted.length +
+            " gambar gallery akan diunggah setelah Alter disimpan.",
+            true
+          );
+        }
+
+        if (rejected.length) {
+          showToast(
+            "warning",
+            "Some Files Rejected",
+            rejected.length +
+            " gambar ditolak karena format atau ukurannya tidak sesuai."
+          );
+        }
+
+        if (
+          files.length >
+          availableSlots
+        ) {
+          showToast(
+            "warning",
+            "Gallery Limit",
+            "Sebagian gambar tidak ditambahkan karena batas gallery adalah 30 item."
+          );
+        }
+      }
+
+
+      function clearPhotoReference() {
+        const activeAsset =
+          findActiveAssetByType(
+            "profile"
+          );
+
+        queueAssetDeletion(
+          activeAsset
+        );
+
+        state.media.photoFile = null;
+        state.media.photoRemoveRequested = true;
+
+        elements.alterPhoto.value = "";
+        elements.alterPhotoFile.value = "";
+
+        setMediaStatus(
+          "warning",
+          "Referensi foto akan dihapus saat Alter disimpan. File lama tidak dipindahkan ke Trash.",
+          true
+        );
+
+        renderAllMediaPreviews();
+      }
+
+
+      function clearVideoReference() {
+        const activeAsset =
+          findActiveAssetByType(
+            "video"
+          );
+
+        queueAssetDeletion(
+          activeAsset
+        );
+
+        state.media.videoFile = null;
+        state.media.videoRemoveRequested = true;
+
+        elements.alterVideoCV.value = "";
+        elements.alterVideoFile.value = "";
+
+        setMediaStatus(
+          "warning",
+          "Referensi video akan dihapus saat Alter disimpan. File lama tidak dipindahkan ke Trash.",
+          true
+        );
+
+        renderVideoPreview();
+      }
+
+
+      function handleGalleryPreviewClick(event) {
+        const removeExistingButton =
+          event.target.closest(
+            "[data-remove-existing-gallery]"
+          );
+
+        if (removeExistingButton) {
+          const index = Number(
+            removeExistingButton.dataset
+              .removeExistingGallery
+          );
+
+          const gallery =
+            readGalleryFromTextarea(true);
+
+          if (
+            !gallery ||
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >= gallery.length
+          ) {
+            return;
+          }
+
+          const item = gallery[index];
+          const asset =
+            findAssetByReference(
+              item.src
+            );
+
+          queueAssetDeletion(asset);
+
+          gallery.splice(
+            index,
+            1
+          );
+
+          writeGalleryToTextarea(
+            gallery
+          );
+
+          setMediaStatus(
+            "warning",
+            "Gambar gallery dikeluarkan dari profil. Perubahan berlaku setelah Alter disimpan.",
+            true
+          );
+
+          renderGalleryPreview();
+
+          return;
+        }
+
+        const removePendingButton =
+          event.target.closest(
+            "[data-remove-pending-gallery]"
+          );
+
+        if (removePendingButton) {
+          const index = Number(
+            removePendingButton.dataset
+              .removePendingGallery
+          );
+
+          if (
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >=
+              state.media.galleryFiles.length
+          ) {
+            return;
+          }
+
+          state.media.galleryFiles.splice(
+            index,
+            1
+          );
+
+          renderAllMediaPreviews();
+        }
+      }
+
+
+      function handleGalleryPreviewInput(event) {
+        const existingCaption =
+          event.target.closest(
+            "[data-gallery-caption-index]"
+          );
+
+        if (existingCaption) {
+          const index = Number(
+            existingCaption.dataset
+              .galleryCaptionIndex
+          );
+
+          const gallery =
+            readGalleryFromTextarea(false);
+
+          if (
+            !gallery ||
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >= gallery.length
+          ) {
+            return;
+          }
+
+          gallery[index].caption =
+            asString(
+              existingCaption.value
+            );
+
+          writeGalleryToTextarea(
+            gallery
+          );
+
+          return;
+        }
+
+        const pendingCaption =
+          event.target.closest(
+            "[data-pending-gallery-caption-index]"
+          );
+
+        if (pendingCaption) {
+          const index = Number(
+            pendingCaption.dataset
+              .pendingGalleryCaptionIndex
+          );
+
+          if (
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >=
+              state.media.galleryFiles.length
+          ) {
+            return;
+          }
+
+          state.media.galleryFiles[index].caption =
+            asString(
+              pendingCaption.value
+            );
+        }
+      }
+
+
+      async function loadAlterMediaAssets(alterId) {
+        state.media.assets = [];
+
+        if (
+          !state.media.available ||
+          !alterId
+        ) {
+          return;
+        }
+
+        state.media.loadingAssets = true;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.listMedia({
+              ownerType: "alter",
+              ownerId: alterId,
+              includeDeleted: false,
+              page: 1,
+              pageSize: 200
+            });
+
+          state.media.assets =
+            getResultCollection(
+              result,
+              [
+                "assets",
+                "items",
+                "media"
+              ]
+            )
+              .map(normalizeMediaAsset)
+              .filter(Boolean);
+        } catch (error) {
+          setMediaStatus(
+            "warning",
+            "Data profil tetap dapat diedit, tetapi daftar Asset_Map tidak dapat dimuat: " +
+            getFriendlyError(error),
+            true
+          );
+        } finally {
+          state.media.loadingAssets = false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      OPEN CREATE
+      =====================================================
+      */
+
+      function openCreateDialog() {
+        state.editingAlterId =
+          "";
+
+        resetPendingMedia();
+        clearJsonErrors();
+
+        elements.alterDialogTitle.textContent =
+          "Tambah Alter Profile";
+
+        elements.alterId.disabled =
+          false;
+
+        elements.alterBaseId.disabled =
+          false;
+
+        fillAlterForm(
+          getDefaultAlterData()
+        );
+
+        setMediaStatus(
+          "info",
+          "Buat Alter Profile terlebih dahulu. File yang dipilih akan diunggah otomatis setelah data dasar berhasil disimpan.",
+          true
+        );
+
+        elements.alterDialog.showModal();
+
+        window.setTimeout(
+          function focusBaseMember() {
+            elements.alterBaseId.focus();
+          },
+          50
+        );
+      }
+
+
+      /*
+      =====================================================
+      OPEN EDIT
+      =====================================================
+      */
+
+      async function openEditDialog(alterId) {
+        if (
+          state.loading ||
+          state.saving
+        ) {
+          return;
+        }
+
+        setLoading(true);
+        resetPendingMedia();
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .getAlter(
+                alterId
+              );
+
+          const alter =
+            result &&
+            result.alter
+              ? result.alter
+              : result;
+
+          if (
+            !alter ||
+            !isPlainObject(alter)
+          ) {
+            throw new Error(
+              "Data Alter Profile tidak ditemukan."
+            );
+          }
+
+          state.editingAlterId =
+            alterId;
+
+          clearJsonErrors();
+
+          elements.alterDialogTitle.textContent =
+            "Edit Alter Profile";
+
+          elements.alterId.disabled =
+            true;
+
+          elements.alterBaseId.disabled =
+            false;
+
+          fillAlterForm(alter);
+
+          elements.alterDialog.showModal();
+
+          await loadAlterMediaAssets(
+            alterId
+          );
+
+          renderAllMediaPreviews();
+        } catch (error) {
+          showToast(
+            "error",
+            "Edit Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      CLOSE DIALOG
+      =====================================================
+      */
+
+      function closeAlterDialog(options) {
+        const settings =
+          isPlainObject(options)
+            ? options
+            : {};
+
+        if (
+          state.saving &&
+          settings.force !== true
+        ) {
+          return;
+        }
+
+        if (
+          elements.alterDialog.open
+        ) {
+          elements.alterDialog.close();
+        }
+
+        state.editingAlterId =
+          "";
+
+        elements.alterForm.reset();
+
+        resetPendingMedia();
+        clearJsonErrors();
+
+        elements.baseMemberPreview.classList.remove(
+          "is-visible"
+        );
+      }
+
+
+      /*
+      =====================================================
+      COLLECT FORM
+      =====================================================
+      */
+
+      function collectAlterForm() {
+        clearJsonErrors();
+
+        const baseId =
+          asString(
+            elements.alterBaseId.value
+          );
+
+        const alterId =
+          asString(
+            elements.alterId.value
+          );
+
+        const alterName =
+          asString(
+            elements.alterName.value
+          );
+
+        const theme =
+          asString(
+            elements.alterTheme.value
+          );
+
+        if (!baseId) {
+          elements.alterBaseId.focus();
+
+          showToast(
+            "warning",
+            "Base Member Required",
+            "Base member wajib dipilih."
+          );
+
+          return null;
+        }
+
+        if (!alterId) {
+          elements.alterId.focus();
+
+          showToast(
+            "warning",
+            "Alter ID Required",
+            "ID Alter Profile wajib diisi."
+          );
+
+          return null;
+        }
+
+        if (!alterName) {
+          elements.alterName.focus();
+
+          showToast(
+            "warning",
+            "Name Required",
+            "Nama Alter Profile wajib diisi."
+          );
+
+          return null;
+        }
+
+        if (!theme) {
+          elements.alterTheme.focus();
+
+          showToast(
+            "warning",
+            "Theme Required",
+            "Theme Alter Profile wajib diisi."
+          );
+
+          return null;
+        }
+
+        const skills =
+          parseJsonField(
+            elements.alterSkills,
+            elements.skillsJsonError,
+            "array"
+          );
+
+        const expertise =
+          parseJsonField(
+            elements.alterExpertise,
+            elements.expertiseJsonError,
+            "object"
+          );
+
+        const gallery =
+          parseJsonField(
+            elements.alterGallery,
+            elements.galleryJsonError,
+            "array"
+          );
+
+        if (
+          !skills.valid ||
+          !expertise.valid ||
+          !gallery.valid
+        ) {
+          showToast(
+            "warning",
+            "Invalid JSON",
+            "Periksa kembali field JSON yang ditandai."
+          );
+
+          return null;
+        }
+
+        return {
+          id:
+            alterId,
+
+          baseId:
+            baseId,
+
+          name:
+            alterName,
+
+          theme:
+            theme,
+
+          role:
+            asString(
+              elements.alterRole.value
+            ),
+
+          mainRole:
+            asString(
+              elements.alterMainRole.value
+            ),
+
+          division:
+            asString(
+              elements.alterDivision.value
+            ),
+
+          divisionKey:
+            asString(
+              elements.alterDivisionKey.value
+            ),
+
+          status:
+            asString(
+              elements.alterStatus.value
+            ) ||
+            "Active",
+
+          joinDate:
+            asString(
+              elements.alterJoinDate.value
+            ),
+
+          tagline:
+            asString(
+              elements.alterTagline.value
+            ),
+
+          bio:
+            asString(
+              elements.alterBio.value
+            ),
+
+          signature:
+            asString(
+              elements.alterSignature.value
+            ),
+
+          photo:
+            asString(
+              elements.alterPhoto.value
+            ),
+
+          videoCV:
+            asString(
+              elements.alterVideoCV.value
+            ),
+
+          stats: {
+            rank:
+              asString(
+                elements.alterRank.value
+              ),
+
+            level:
+              Math.max(
+                0,
+                toNumber(
+                  elements.alterLevel.value,
+                  0
+                )
+              ),
+
+            winrate:
+              Math.max(
+                0,
+                Math.min(
+                  100,
+                  toNumber(
+                    elements.alterWinrate.value,
+                    0
+                  )
+                )
+              )
+          },
+
+          skills:
+            skills.value,
+
+          expertise:
+            expertise.value,
+
+          gallery:
+            gallery.value
+        };
+      }
+
+
+      /*
+      =====================================================
+      MEDIA OPERATIONS AFTER SAVE
+      =====================================================
+      */
+
+      function getPendingMediaOperationCount() {
+        return (
+          state.media.removedAssetIds.size +
+          (
+            state.media.photoFile
+              ? 1
+              : 0
+          ) +
+          (
+            state.media.videoFile
+              ? 1
+              : 0
+          ) +
+          state.media.galleryFiles.length
+        );
+      }
+
+
+      async function processPendingMedia(alterId) {
+        const totalOperations =
+          getPendingMediaOperationCount();
+
+        if (
+          !state.media.available ||
+          totalOperations < 1
+        ) {
+          return {
+            total: totalOperations,
+            success: 0,
+            failed: 0,
+            errors: []
+          };
+        }
+
+        const errors = [];
+        let completed = 0;
+        let successful = 0;
+
+        function updateProgress(message) {
+          completed++;
+
+          const percent = Math.round(
+            completed /
+            totalOperations *
+            100
+          );
+
+          setMediaProgress(
+            true,
+            percent,
+            message
+          );
+        }
+
+        setMediaProgress(
+          true,
+          0,
+          "Menyiapkan operasi media."
+        );
+
+        for (
+          const assetId
+          of state.media.removedAssetIds
+        ) {
+          try {
+            await window.P3R_ADMIN_API.deleteMedia(
+              assetId,
+              {
+                removeReference: false,
+                trashFile: false
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Referensi media lama berhasil dinonaktifkan."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "delete",
+              assetId: assetId,
+              error: error
+            });
+
+            updateProgress(
+              "Sebagian referensi media gagal dinonaktifkan."
+            );
+          }
+        }
+
+        if (state.media.photoFile) {
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "alter",
+              alterId,
+              "profile",
+              state.media.photoFile,
+              {
+                caption: "Foto profil " +
+                  asString(
+                    elements.alterName.value
+                  ),
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Foto profil berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "photo-upload",
+              error: error
+            });
+
+            updateProgress(
+              "Upload foto profil gagal."
+            );
+          }
+        }
+
+        if (state.media.videoFile) {
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "alter",
+              alterId,
+              "video",
+              state.media.videoFile,
+              {
+                caption: "Video CV " +
+                  asString(
+                    elements.alterName.value
+                  ),
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Video CV berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "video-upload",
+              error: error
+            });
+
+            updateProgress(
+              "Upload Video CV gagal."
+            );
+          }
+        }
+
+        for (
+          let index = 0;
+          index <
+            state.media.galleryFiles.length;
+          index++
+        ) {
+          const item =
+            state.media.galleryFiles[index];
+
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "alter",
+              alterId,
+              "gallery",
+              item.file,
+              {
+                caption: item.caption,
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Gallery " +
+              (
+                index + 1
+              ) +
+              " berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "gallery-upload",
+              fileName: item.file.name,
+              error: error
+            });
+
+            updateProgress(
+              "Sebagian gallery gagal diunggah."
+            );
+          }
+        }
+
+        return {
+          total: totalOperations,
+          success: successful,
+          failed: errors.length,
+          errors: errors
+        };
+      }
+
+
+      /*
+      =====================================================
+      SAVE ALTER
+      =====================================================
+      */
+
+      async function saveAlter(event) {
+        event.preventDefault();
+
+        if (state.saving) {
+          return;
+        }
+
+        const alterData =
+          collectAlterForm();
+
+        if (!alterData) {
+          return;
+        }
+
+        const wasEditing =
+          Boolean(
+            state.editingAlterId
+          );
+
+        const targetAlterId =
+          wasEditing
+            ? state.editingAlterId
+            : alterData.id;
+
+        setSaving(true);
+
+        let baseResult =
+          null;
+
+        let mediaResult = {
+          total:
+            0,
+
+          success:
+            0,
+
+          failed:
+            0,
+
+          errors:
+            []
+        };
+
+        try {
+          if (wasEditing) {
+            baseResult =
+              await window.P3R_ADMIN_API
+                .updateAlter(
+                  targetAlterId,
+                  alterData
+                );
+          } else {
+            baseResult =
+              await window.P3R_ADMIN_API
+                .createAlter(
+                  alterData
+                );
+          }
+
+          mediaResult =
+            await processPendingMedia(
+              targetAlterId
+            );
+
+          setSaving(false);
+
+          closeAlterDialog({
+            force:
+              true
+          });
+
+          if (
+            mediaResult.failed > 0
+          ) {
+            showToast(
+              "warning",
+              wasEditing
+                ? "Alter Updated"
+                : "Alter Created",
+              "Data Alter tersimpan. " +
+              mediaResult.success +
+              " operasi media berhasil dan " +
+              mediaResult.failed +
+              " gagal."
+            );
+          } else {
+            showToast(
+              "success",
+              wasEditing
+                ? "Alter Updated"
+                : "Alter Created",
+              asString(
+                baseResult &&
+                baseResult.message
+              ) ||
+              (
+                mediaResult.total > 0
+                  ? "Data Alter dan media berhasil disimpan."
+                  : "Alter Profile berhasil disimpan."
+              )
+            );
+          }
+
+          state.pagination.page =
+            1;
+
+          try {
+            await loadBaseMembers();
+          } catch (memberError) {
+            showToast(
+              "warning",
+              "Member Refresh Warning",
+              getFriendlyError(
+                memberError
+              )
+            );
+          }
+
+          readFilters();
+
+          await loadAlters({
+            force:
+              true
+          });
+        } catch (error) {
+          showToast(
+            "error",
+            "Save Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setSaving(false);
+          setMediaProgress(
+            false,
+            0,
+            ""
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      DELETE ALTER
+      =====================================================
+      */
+
+      async function deleteAlter(alterId) {
+        const alter =
+          state.alters.find(
+            function findAlter(item) {
+              return item.id ===
+                alterId;
+            }
+          );
+
+        const alterName =
+          alter
+            ? alter.name
+            : alterId;
+
+        const confirmed =
+          window.confirm(
+            "Hapus sementara Alter Profile \"" +
+            alterName +
+            "\"?\n\n" +
+            "Relasi pada member akan dinonaktifkan, tetapi data masih dapat dipulihkan."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        setLoading(true);
+        let shouldReload =
+          false;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .deleteAlter(
+                alterId
+              );
+
+          showToast(
+            "success",
+            "Alter Deleted",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Alter Profile dipindahkan ke status Deleted."
+          );
+
+          shouldReload =
+            true;
+        } catch (error) {
+          showToast(
+            "error",
+            "Delete Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        if (shouldReload) {
+          try {
+            await loadBaseMembers();
+          } catch (memberError) {
+            showToast(
+              "warning",
+              "Member Refresh Warning",
+              getFriendlyError(
+                memberError
+              )
+            );
+          }
+
+          await loadAlters({
+            force:
+              true
+          });
+        }
+      }
+
+
+      /*
+      =====================================================
+      RESTORE ALTER
+      =====================================================
+      */
+
+      async function restoreAlter(alterId) {
+        const confirmed =
+          window.confirm(
+            "Pulihkan Alter Profile \"" +
+            alterId +
+            "\" menjadi Active?\n\n" +
+            "Relasi Alter pada base member akan diaktifkan kembali."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        setLoading(true);
+        let shouldReload =
+          false;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .restoreAlter(
+                alterId
+              );
+
+          showToast(
+            "success",
+            "Alter Restored",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Alter Profile berhasil dipulihkan."
+          );
+
+          shouldReload =
+            true;
+        } catch (error) {
+          showToast(
+            "error",
+            "Restore Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        if (shouldReload) {
+          try {
+            await loadBaseMembers();
+          } catch (memberError) {
+            showToast(
+              "warning",
+              "Member Refresh Warning",
+              getFriendlyError(
+                memberError
+              )
+            );
+          }
+
+          await loadAlters({
+            force:
+              true
+          });
+        }
+      }
+
+
+      /*
+      =====================================================
+      TABLE ACTION
+      =====================================================
+      */
+
+      function handleTableClick(event) {
+        const button =
+          event.target.closest(
+            "[data-action][data-alter-id]"
+          );
+
+        if (!button) {
+          return;
+        }
+
+        const action =
+          asString(
+            button.dataset.action
+          );
+
+        const alterId =
+          asString(
+            button.dataset.alterId
+          );
+
+        if (!alterId) {
+          return;
+        }
+
+        if (action === "edit") {
+          openEditDialog(alterId);
+        }
+
+        if (action === "delete") {
+          deleteAlter(alterId);
+        }
+
+        if (action === "restore") {
+          restoreAlter(alterId);
+        }
+      }
+
+
+      /*
+      =====================================================
+      FILTER ACTION
+      =====================================================
+      */
+
+      function applyFilters() {
+        readFilters();
+
+        state.pagination.page =
+          1;
+
+        loadAlters({
+          force:
+            true
+        });
+      }
+
+
+      function handleSearchInput() {
+        if (state.searchTimer) {
+          window.clearTimeout(
+            state.searchTimer
+          );
+        }
+
+        state.searchTimer =
+          window.setTimeout(
+            applyFilters,
+            450
+          );
+      }
+
+
+      /*
+      =====================================================
+      PAGINATION ACTION
+      =====================================================
+      */
+
+      function goToPreviousPage() {
+        if (
+          state.pagination.hasPrevious &&
+          !state.loading
+        ) {
+          state.pagination.page -=
+            1;
+
+          loadAlters({
+          force:
+            true
+        });
+        }
+      }
+
+
+      function goToNextPage() {
+        if (
+          state.pagination.hasNext &&
+          !state.loading
+        ) {
+          state.pagination.page +=
+            1;
+
+          loadAlters({
+          force:
+            true
+        });
+        }
+      }
+
+
+      /*
+      =====================================================
+      REFRESH
+      =====================================================
+      */
+
+      async function refreshAllData() {
+        if (state.loading) {
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          await loadBaseMembers();
+        } catch (error) {
+          showToast(
+            "error",
+            "Member Refresh Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        await loadAlters({
+          force:
+            true
+        });
+      }
+
+
+      /*
+      =====================================================
+      LOGOUT
+      =====================================================
+      */
+
+      async function logoutAdmin() {
+        elements.logoutButton.disabled =
+          true;
+
+        try {
+          await window.P3R_ADMIN_API.logout();
+        } finally {
+          window.location.replace(
+            "./admin-login.html"
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      LISTENERS
+      =====================================================
+      */
+
+      function setupListeners() {
+        elements.addAlterButton.addEventListener(
+          "click",
+          openCreateDialog
+        );
+
+        elements.refreshButton.addEventListener(
+          "click",
+          refreshAllData
+        );
+
+        elements.applyFilterButton.addEventListener(
+          "click",
+          applyFilters
+        );
+
+        elements.resetFilterButton.addEventListener(
+          "click",
+          resetFilters
+        );
+
+        elements.searchInput.addEventListener(
+          "input",
+          handleSearchInput
+        );
+
+        elements.searchInput.addEventListener(
+          "keydown",
+          function handleSearchEnter(event) {
+            if (
+              event.key ===
+              "Enter"
+            ) {
+              event.preventDefault();
+
+              applyFilters();
+            }
+          }
+        );
+
+        elements.statusFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.themeFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.baseMemberFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.pageSizeFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.includeDeletedFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.previousPageButton.addEventListener(
+          "click",
+          goToPreviousPage
+        );
+
+        elements.nextPageButton.addEventListener(
+          "click",
+          goToNextPage
+        );
+
+        elements.alterTableContainer.addEventListener(
+          "click",
+          handleTableClick
+        );
+
+        elements.closeDialogButton.addEventListener(
+          "click",
+          closeAlterDialog
+        );
+
+        elements.cancelAlterButton.addEventListener(
+          "click",
+          closeAlterDialog
+        );
+
+        elements.copyBaseMemberButton.addEventListener(
+          "click",
+          copyBaseMemberData
+        );
+
+        elements.alterBaseId.addEventListener(
+          "change",
+          handleBaseMemberChange
+        );
+
+        elements.alterForm.addEventListener(
+          "submit",
+          saveAlter
+        );
+
+        elements.logoutButton.addEventListener(
+          "click",
+          logoutAdmin
+        );
+
+        elements.alterPhoto.addEventListener(
+          "input",
+          function updatePhotoFromUrl() {
+            state.media.photoRemoveRequested =
+              false;
+
+            renderAllMediaPreviews();
+          }
+        );
+
+        elements.alterVideoCV.addEventListener(
+          "input",
+          function updateVideoFromUrl() {
+            state.media.videoRemoveRequested =
+              false;
+
+            renderVideoPreview();
+          }
+        );
+
+        elements.alterPhotoFile.addEventListener(
+          "change",
+          handlePhotoFileChange
+        );
+
+        elements.alterVideoFile.addEventListener(
+          "change",
+          handleVideoFileChange
+        );
+
+        elements.alterGalleryFiles.addEventListener(
+          "change",
+          handleGalleryFilesChange
+        );
+
+        elements.clearAlterPhotoButton.addEventListener(
+          "click",
+          clearPhotoReference
+        );
+
+        elements.clearAlterVideoButton.addEventListener(
+          "click",
+          clearVideoReference
+        );
+
+        elements.refreshGalleryPreviewButton.addEventListener(
+          "click",
+          function refreshGalleryPreview() {
+            const gallery =
+              readGalleryFromTextarea(
+                true
+              );
+
+            if (!gallery) {
+              showToast(
+                "warning",
+                "Invalid Gallery JSON",
+                "Periksa format Gallery JSON terlebih dahulu."
+              );
+
+              return;
+            }
+
+            writeGalleryToTextarea(
+              gallery
+            );
+
+            renderGalleryPreview();
+          }
+        );
+
+        elements.alterGalleryPreview.addEventListener(
+          "click",
+          handleGalleryPreviewClick
+        );
+
+        elements.alterGalleryPreview.addEventListener(
+          "input",
+          handleGalleryPreviewInput
+        );
+
+        elements.alterGallery.addEventListener(
+          "blur",
+          function syncGalleryOnBlur() {
+            const gallery =
+              readGalleryFromTextarea(
+                false
+              );
+
+            if (gallery) {
+              writeGalleryToTextarea(
+                gallery
+              );
+
+              renderGalleryPreview();
+            }
+          }
+        );
+
+        elements.alterDialog.addEventListener(
+          "cancel",
+          function handleDialogCancel(event) {
+            if (state.saving) {
+              event.preventDefault();
+
+              return;
+            }
+
+            resetPendingMedia();
+
+            state.editingAlterId =
+              "";
+          }
+        );
+
+        window.addEventListener(
+          "p3r:admin-logout",
+          redirectToLogin
+        );
+
+        window.addEventListener(
+          "beforeunload",
+          revokeMediaObjectUrls
+        );
+      }
+
+
+      /*
+      =====================================================
+      INIT
+      =====================================================
+      */
+
+      async function init() {
+        if (state.initialized) {
+          return;
+        }
+
+        state.initialized =
+          true;
+
+        setupListeners();
+
+        setLoading(true);
+
+        const authenticated =
+          await initializeAuthentication();
+
+        setLoading(false);
+
+        if (!authenticated) {
+          return;
+        }
+
+        await loadInitialData();
+      }
+
+
+      if (
+        document.readyState ===
+        "loading"
+      ) {
+        document.addEventListener(
+          "DOMContentLoaded",
+          init,
+          {
+            once: true
+          }
+        );
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4776 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Pengelolaan divisi Website Profile Magang PUSDATIN X BOC UBP Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#06152d"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    Kelola Divisions — PUSDATIN X BOC
+  </title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Oxanium:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+  <style>
+    :root {
+      --admin-bg: #020611;
+      --admin-bg-soft: #07152d;
+      --admin-panel: rgba(5, 20, 46, 0.96);
+      --admin-panel-light: rgba(8, 34, 74, 0.92);
+
+      --admin-blue: #0877ff;
+      --admin-blue-light: #55bcff;
+      --admin-cyan: #32e3ff;
+      --admin-green: #3ff2a4;
+      --admin-yellow: #ffd45b;
+      --admin-red: #ff536b;
+      --admin-purple: #a783ff;
+
+      --admin-white: #f4f9ff;
+      --admin-text: #c5d9ef;
+      --admin-muted: #7793b6;
+
+      --admin-border: rgba(117, 185, 255, 0.22);
+      --admin-border-strong: rgba(117, 203, 255, 0.5);
+    }
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      min-height: 100%;
+      background: var(--admin-bg);
+    }
+
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--admin-white);
+      background:
+        radial-gradient(
+          circle at 92% 2%,
+          rgba(8, 119, 255, 0.18),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 5% 98%,
+          rgba(50, 227, 255, 0.08),
+          transparent 30%
+        ),
+        var(--admin-bg);
+      font-family: "Oxanium", sans-serif;
+    }
+
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+
+    button {
+      border-radius: 0;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    /*
+    =====================================================
+    BACKGROUND
+    =====================================================
+    */
+
+    .admin-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+
+    .admin-background-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.075;
+      background-image:
+        linear-gradient(
+          rgba(87, 178, 255, 0.3) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(87, 178, 255, 0.3) 1px,
+          transparent 1px
+        );
+      background-size: 48px 48px;
+    }
+
+
+    .admin-background-lines {
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent 0,
+          transparent 28px,
+          rgba(255, 255, 255, 0.3) 29px,
+          transparent 30px
+        );
+    }
+
+
+    .admin-background-orb {
+      position: absolute;
+      width: min(70vw, 880px);
+      aspect-ratio: 1;
+      top: -420px;
+      right: -290px;
+      border: 85px solid rgba(67, 179, 255, 0.025);
+      border-radius: 50%;
+      box-shadow:
+        0 0 190px rgba(0, 105, 255, 0.1),
+        inset 0 0 150px rgba(0, 105, 255, 0.055);
+    }
+
+
+    /*
+    =====================================================
+    PAGE
+    =====================================================
+    */
+
+    .admin-page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+
+    /*
+    =====================================================
+    LOADING BAR
+    =====================================================
+    */
+
+    .admin-loading-bar {
+      position: fixed;
+      z-index: 900;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(37, 89, 153, 0.32);
+      transition: opacity 150ms ease;
+    }
+
+
+    .admin-loading-bar.is-visible {
+      opacity: 1;
+    }
+
+
+    .admin-loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 36%;
+      height: 100%;
+      left: -36%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--admin-cyan),
+          transparent
+        );
+      animation: adminLoading 1s linear infinite;
+    }
+
+
+    @keyframes adminLoading {
+      to {
+        transform: translateX(380%);
+      }
+    }
+
+
+    /*
+    =====================================================
+    TOPBAR
+    =====================================================
+    */
+
+    .admin-topbar {
+      position: sticky;
+      z-index: 70;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 28px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(2, 8, 22, 0.93);
+      backdrop-filter: blur(18px);
+    }
+
+
+    .admin-topbar-left {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+    .admin-logo {
+      width: 48px;
+      height: 48px;
+      padding: 5px;
+      object-fit: contain;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      background: #ffffff;
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-heading-kicker {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-heading-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+
+    /*
+    =====================================================
+    BUTTON
+    =====================================================
+    */
+
+    .admin-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border: 1px solid var(--admin-border);
+      color: #dcecff;
+      background: rgba(5, 24, 54, 0.84);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        border-color 150ms ease,
+        color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+    }
+
+
+    .admin-button:hover:not(:disabled),
+    .admin-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(12, 67, 127, 0.78);
+      outline: none;
+    }
+
+
+    .admin-button.is-primary {
+      color: #ffffff;
+      border-color: var(--admin-blue-light);
+      background:
+        linear-gradient(
+          100deg,
+          #005ce6,
+          #0d83ff
+        );
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-button.is-success {
+      color: #dffff0;
+      border-color: rgba(63, 242, 164, 0.44);
+      background: rgba(12, 105, 69, 0.5);
+    }
+
+
+    .admin-button.is-danger {
+      color: #ffd1d8;
+      border-color: rgba(255, 83, 107, 0.4);
+      background: rgba(126, 17, 38, 0.42);
+    }
+
+
+    .admin-button.is-ghost {
+      background: transparent;
+    }
+
+
+    .admin-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+
+    /*
+    =====================================================
+    CONTENT
+    =====================================================
+    */
+
+    .admin-content {
+      width: 100%;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+
+    .admin-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-breadcrumb a {
+      color: var(--admin-blue-light);
+      text-decoration: none;
+    }
+
+
+    .admin-breadcrumb a:hover,
+    .admin-breadcrumb a:focus-visible {
+      color: #ffffff;
+      text-decoration: underline;
+      outline: none;
+    }
+
+
+    /*
+    =====================================================
+    PAGE HEADER
+    =====================================================
+    */
+
+    .admin-page-header {
+      position: relative;
+      min-height: 210px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 35px 40px;
+      border: 1px solid rgba(81, 190, 255, 0.4);
+      background:
+        linear-gradient(
+          115deg,
+          rgba(0, 95, 221, 0.92),
+          rgba(4, 52, 119, 0.94) 52%,
+          rgba(4, 17, 40, 0.98)
+        );
+      box-shadow: 0 22px 65px rgba(0, 0, 0, 0.24);
+      clip-path: polygon(
+        0 0,
+        calc(100% - 32px) 0,
+        100% 32px,
+        100% 100%,
+        32px 100%,
+        0 calc(100% - 32px)
+      );
+    }
+
+
+    .admin-page-header::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -110px;
+      bottom: -260px;
+      border: 70px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+    }
+
+
+    .admin-page-header::after {
+      content: "DIVISION";
+      position: absolute;
+      right: -10px;
+      bottom: -26px;
+      color: rgba(255, 255, 255, 0.045);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(80px, 12vw, 155px);
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -4px;
+      pointer-events: none;
+    }
+
+
+    .admin-page-header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 770px;
+    }
+
+
+    .admin-page-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #c9edff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-kicker::before {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background: var(--admin-cyan);
+    }
+
+
+    .admin-page-title {
+      margin: 11px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 0.86;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-description {
+      max-width: 710px;
+      margin: 17px 0 0;
+      color: rgba(226, 243, 255, 0.8);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+
+    /*
+    =====================================================
+    SUMMARY
+    =====================================================
+    */
+
+    .admin-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+
+    .admin-summary {
+      position: relative;
+      min-height: 116px;
+      overflow: hidden;
+      padding: 18px 20px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 28, 62, 0.95),
+          rgba(3, 14, 34, 0.97)
+        );
+    }
+
+
+    .admin-summary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 68px;
+      height: 4px;
+      background: var(--accent, var(--admin-blue));
+    }
+
+
+    .admin-summary-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-summary-value {
+      margin-top: 9px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 39px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+
+    .admin-summary-note {
+      margin-top: 7px;
+      color: #8ea9c8;
+      font-size: 9px;
+    }
+
+
+    /*
+    =====================================================
+    PANEL
+    =====================================================
+    */
+
+    .admin-panel {
+      margin-top: 20px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(6, 24, 55, 0.96),
+          rgba(2, 12, 30, 0.98)
+        );
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .admin-panel-header {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(9, 35, 75, 0.62);
+    }
+
+
+    .admin-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-title::before {
+      content: "";
+      width: 5px;
+      height: 24px;
+      background: var(--admin-cyan);
+    }
+
+
+    .admin-panel-subtitle {
+      margin-top: 3px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-body {
+      padding: 18px;
+    }
+
+
+    /*
+    =====================================================
+    FORM FIELDS
+    =====================================================
+    */
+
+    .admin-field {
+      min-width: 0;
+    }
+
+
+    .admin-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #b8d1ea;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-input,
+    .admin-select,
+    .admin-textarea {
+      width: 100%;
+      border: 1px solid rgba(129, 190, 255, 0.28);
+      border-radius: 0;
+      outline: none;
+      color: #ffffff;
+      background: rgba(0, 10, 27, 0.88);
+      font-family: "Oxanium", sans-serif;
+      font-size: 12px;
+      transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background 150ms ease;
+    }
+
+
+    .admin-input,
+    .admin-select {
+      min-height: 45px;
+      padding: 10px 13px;
+    }
+
+
+    .admin-textarea {
+      min-height: 118px;
+      padding: 12px 13px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+
+    .admin-input:focus,
+    .admin-select:focus,
+    .admin-textarea:focus {
+      border-color: var(--admin-blue-light);
+      background: rgba(4, 19, 43, 0.98);
+      box-shadow:
+        0 0 0 3px rgba(59, 171, 255, 0.13),
+        inset 4px 0 0 var(--admin-cyan);
+    }
+
+
+    .admin-input:disabled,
+    .admin-select:disabled,
+    .admin-textarea:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+
+    .admin-input::placeholder,
+    .admin-textarea::placeholder {
+      color: rgba(146, 173, 207, 0.48);
+    }
+
+
+    .admin-field-note {
+      margin-top: 6px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    /*
+    =====================================================
+    FILTER
+    =====================================================
+    */
+
+    .admin-filter-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(250px, 1fr)
+        minmax(160px, 220px)
+        auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+
+    .admin-filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+
+    /*
+    =====================================================
+    TABLE
+    =====================================================
+    */
+
+    .admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+
+    .admin-table {
+      width: 100%;
+      min-width: 1080px;
+      border-collapse: collapse;
+    }
+
+
+    .admin-table th {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--admin-border);
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-table td {
+      padding: 13px 12px;
+      border-bottom: 1px solid rgba(117, 185, 255, 0.1);
+      color: #c5d8ec;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+
+    .admin-table tbody tr {
+      transition: background 140ms ease;
+    }
+
+
+    .admin-table tbody tr:hover {
+      background: rgba(17, 89, 169, 0.12);
+    }
+
+
+    .admin-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+
+    .admin-division-cell {
+      min-width: 220px;
+    }
+
+
+    .admin-division-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.45px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-division-key {
+      margin-top: 3px;
+      color: var(--admin-blue-light);
+      font-size: 9px;
+    }
+
+
+    .admin-division-sub {
+      max-width: 320px;
+      color: #adc5df;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    .admin-code-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      max-width: 220px;
+      overflow: hidden;
+      padding: 4px 8px;
+      border: 1px solid var(--admin-border);
+      color: #bcd7f0;
+      background: rgba(3, 20, 45, 0.72);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+
+    .admin-sort-badge {
+      width: 36px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--admin-border);
+      color: #ffffff;
+      background: rgba(6, 31, 69, 0.8);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+
+    .admin-usage-group {
+      min-width: 160px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+
+    .admin-usage-badge {
+      min-height: 25px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border: 1px solid var(--admin-border);
+      background: rgba(4, 24, 54, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-usage-badge.is-member {
+      color: #a8d9ff;
+      border-color: rgba(85, 188, 255, 0.28);
+    }
+
+
+    .admin-usage-badge.is-alter {
+      color: #ddcdff;
+      border-color: rgba(167, 131, 255, 0.3);
+    }
+
+
+    .admin-usage-badge.is-empty {
+      color: #9cb1c9;
+    }
+
+
+    .admin-actions {
+      min-width: 150px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+
+    .admin-action-button {
+      min-height: 31px;
+      padding: 6px 10px;
+      border: 1px solid var(--admin-border);
+      color: #bcd7f1;
+      background: rgba(6, 30, 65, 0.82);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-action-button:hover:not(:disabled),
+    .admin-action-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(11, 73, 143, 0.78);
+      outline: none;
+    }
+
+
+    .admin-action-button.is-danger {
+      color: #ffc4ce;
+      border-color: rgba(255, 83, 107, 0.3);
+      background: rgba(113, 15, 34, 0.3);
+    }
+
+
+    .admin-action-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+
+    /*
+    =====================================================
+    STATES
+    =====================================================
+    */
+
+    .admin-state {
+      padding: 50px 20px;
+      color: var(--admin-muted);
+      text-align: center;
+    }
+
+
+    .admin-state-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-state-message {
+      max-width: 540px;
+      margin: 8px auto 0;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+
+    /*
+    =====================================================
+    PAGINATION
+    =====================================================
+    */
+
+    .admin-pagination {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(4, 19, 44, 0.7);
+    }
+
+
+    .admin-pagination-info {
+      color: var(--admin-muted);
+      font-size: 10px;
+    }
+
+
+    .admin-pagination-info strong {
+      color: #ffffff;
+    }
+
+
+    .admin-pagination-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+
+    /*
+    =====================================================
+    DIALOG
+    =====================================================
+    */
+
+    .admin-dialog {
+      width: min(760px, calc(100vw - 26px));
+      max-height: calc(100vh - 26px);
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--admin-border-strong);
+      color: var(--admin-white);
+      background: #031027;
+      box-shadow: 0 35px 110px rgba(0, 0, 0, 0.76);
+    }
+
+
+    .admin-dialog.is-small {
+      width: min(650px, calc(100vw - 26px));
+    }
+
+
+    .admin-dialog::backdrop {
+      background: rgba(0, 4, 13, 0.84);
+      backdrop-filter: blur(5px);
+    }
+
+
+    .admin-dialog-shell {
+      max-height: calc(100vh - 28px);
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .admin-dialog-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 21px;
+      border-bottom: 1px solid var(--admin-border-strong);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(0, 98, 220, 0.94),
+          rgba(4, 40, 96, 0.98)
+        );
+    }
+
+
+    .admin-dialog-header.is-danger {
+      border-bottom-color: rgba(255, 83, 107, 0.45);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(142, 21, 43, 0.96),
+          rgba(55, 12, 29, 0.98)
+        );
+    }
+
+
+    .admin-dialog-kicker {
+      color: #c9edff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-close {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 22px;
+    }
+
+
+    .admin-dialog-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+
+    .admin-dialog-footer {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      padding: 15px 20px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(2, 10, 25, 0.96);
+    }
+
+
+    /*
+    =====================================================
+    FORM
+    =====================================================
+    */
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .admin-form-grid .is-full {
+      grid-column: 1 / -1;
+    }
+
+
+    .admin-form-section {
+      padding: 17px;
+      border: 1px solid var(--admin-border);
+      background: rgba(5, 23, 51, 0.75);
+    }
+
+
+    .admin-form-section + .admin-form-section {
+      margin-top: 15px;
+    }
+
+
+    .admin-form-section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 15px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-form-section-title::before {
+      content: "";
+      width: 5px;
+      height: 21px;
+      background: var(--admin-cyan);
+    }
+
+
+    /*
+    =====================================================
+    DELETE DIALOG
+    =====================================================
+    */
+
+    .admin-delete-warning {
+      padding: 14px 15px;
+      border: 1px solid rgba(255, 83, 107, 0.3);
+      border-left: 5px solid var(--admin-red);
+      color: #ffc8d0;
+      background: rgba(123, 17, 37, 0.2);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+
+    .admin-delete-name {
+      margin-top: 18px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-delete-key {
+      margin-top: 4px;
+      color: var(--admin-blue-light);
+      font-size: 10px;
+    }
+
+
+    .admin-delete-usage {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+
+    .admin-delete-usage-card {
+      padding: 13px;
+      border: 1px solid var(--admin-border);
+      background: rgba(4, 21, 47, 0.72);
+    }
+
+
+    .admin-delete-usage-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-delete-usage-value {
+      margin-top: 6px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+
+    .admin-delete-options {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--admin-border);
+      background: rgba(4, 20, 45, 0.75);
+    }
+
+
+    .admin-delete-option-title {
+      margin-bottom: 12px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 13px;
+      color: #b9cee5;
+      font-size: 10px;
+      line-height: 1.55;
+      cursor: pointer;
+    }
+
+
+    .admin-checkbox input {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      margin: 0;
+      accent-color: var(--admin-red);
+    }
+
+
+    /*
+    =====================================================
+    TOAST
+    =====================================================
+    */
+
+    .admin-toast {
+      position: fixed;
+      z-index: 1000;
+      right: 22px;
+      bottom: 22px;
+      width: min(390px, calc(100vw - 28px));
+      display: none;
+      padding: 14px 16px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      background: rgba(3, 15, 36, 0.98);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+    }
+
+
+    .admin-toast.is-visible {
+      display: block;
+    }
+
+
+    .admin-toast.is-success {
+      border-left-color: var(--admin-green);
+    }
+
+
+    .admin-toast.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-toast.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-toast-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-toast-message {
+      margin-top: 4px;
+      color: #a9c0db;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    /*
+    =====================================================
+    RESPONSIVE
+    =====================================================
+    */
+
+    @media (max-width: 991.98px) {
+      .admin-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-topbar {
+        padding-right: 17px;
+        padding-left: 17px;
+      }
+
+
+      .admin-content {
+        padding: 22px 17px;
+      }
+    }
+
+
+    @media (max-width: 767.98px) {
+      .admin-topbar-actions .admin-button span {
+        display: none;
+      }
+
+
+      .admin-topbar-actions .admin-button {
+        width: 43px;
+        padding: 8px;
+      }
+
+
+      .admin-page-header {
+        min-height: 235px;
+        padding: 30px 25px;
+      }
+
+
+      .admin-filter-grid,
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-form-grid .is-full {
+        grid-column: auto;
+      }
+
+
+      .admin-filter-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+
+      .admin-filter-actions .admin-button {
+        width: 100%;
+      }
+
+
+      .admin-delete-usage {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+
+    @media (max-width: 575.98px) {
+      .admin-content {
+        padding: 15px 11px 30px;
+      }
+
+
+      .admin-logo {
+        display: none;
+      }
+
+
+      .admin-heading-title {
+        font-size: 21px;
+      }
+
+
+      .admin-heading-kicker {
+        display: none;
+      }
+
+
+      .admin-page-header {
+        padding: 26px 21px;
+        clip-path: none;
+      }
+
+
+      .admin-page-title {
+        font-size: 48px;
+      }
+
+
+      .admin-summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-panel-body {
+        padding: 13px;
+      }
+
+
+      .admin-dialog-body {
+        padding: 13px;
+      }
+
+
+      .admin-dialog-footer {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+
+
+      .admin-dialog-footer .admin-button {
+        width: 100%;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div
+    class="admin-background"
+    aria-hidden="true"
+  >
+    <div class="admin-background-grid"></div>
+    <div class="admin-background-lines"></div>
+    <div class="admin-background-orb"></div>
+  </div>
+
+
+  <div
+    class="admin-loading-bar"
+    id="loadingBar"
+    aria-hidden="true"
+  ></div>
+
+
+  <noscript>
+    <div
+      style="
+        position:relative;
+        z-index:9999;
+        padding:20px;
+        color:white;
+        background:#8e1830;
+      "
+    >
+      Halaman administrator membutuhkan JavaScript.
+    </div>
+  </noscript>
+
+
+  <div class="admin-page">
+
+    <!-- =================================================
+         TOPBAR
+         ================================================= -->
+
+    <header class="admin-topbar">
+
+      <div class="admin-topbar-left">
+
+        <img
+          class="admin-logo"
+          src="./assets/img/logo.png"
+          alt="Logo PUSDATIN X BOC"
+          onerror="
+            this.onerror=null;
+            this.src='./assets/img/placeholder.png';
+          "
+        >
+
+        <div>
+
+          <div class="admin-heading-kicker">
+            Profile Management System
+          </div>
+
+          <h1 class="admin-heading-title">
+            Division Administration
+          </h1>
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-topbar-actions">
+
+        <a
+          class="admin-button is-ghost"
+          href="./admin.html"
+          title="Kembali ke dashboard"
+        >
+          ←
+
+          <span>
+            Dashboard
+          </span>
+        </a>
+
+
+        <a
+          class="admin-button"
+          href="./admin-members.html"
+          title="Kelola member"
+        >
+          MB
+
+          <span>
+            Members
+          </span>
+        </a>
+
+
+        <a
+          class="admin-button"
+          href="./admin-alters.html"
+          title="Kelola Alter Profile"
+        >
+          AL
+
+          <span>
+            Alters
+          </span>
+        </a>
+
+
+        <button
+          class="admin-button is-primary"
+          id="addDivisionButton"
+          type="button"
+          title="Tambah divisi"
+        >
+          +
+
+          <span>
+            Tambah Divisi
+          </span>
+        </button>
+
+
+        <button
+          class="admin-button is-danger"
+          id="logoutButton"
+          type="button"
+          title="Logout"
+        >
+          ×
+
+          <span>
+            Logout
+          </span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- =================================================
+         CONTENT
+         ================================================= -->
+
+    <main class="admin-content">
+
+      <div class="admin-breadcrumb">
+
+        <a href="./admin.html">
+          Dashboard
+        </a>
+
+        <span>/</span>
+
+        <span>
+          Divisions
+        </span>
+
+      </div>
+
+
+      <!-- PAGE HEADER -->
+
+      <section class="admin-page-header">
+
+        <div class="admin-page-header-content">
+
+          <div class="admin-page-kicker">
+            Organizational Structure
+          </div>
+
+          <h2 class="admin-page-title">
+            Manage
+            <br>
+            Divisions
+          </h2>
+
+          <p class="admin-page-description">
+            Kelola nama divisi, keterangan, class CSS,
+            dan urutan tampilannya. Pemakaian divisi pada
+            Member dan Alter Profile akan dihitung secara otomatis.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <section class="admin-summary-grid">
+
+        <article
+          class="admin-summary"
+          style="--accent:var(--admin-blue-light)"
+        >
+
+          <div class="admin-summary-label">
+            Total Divisions
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryDivisions"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Divisi sesuai hasil pencarian.
+          </div>
+
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent:var(--admin-cyan)"
+        >
+
+          <div class="admin-summary-label">
+            Member References
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryMemberReferences"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Member yang memakai divisi.
+          </div>
+
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent:var(--admin-purple)"
+        >
+
+          <div class="admin-summary-label">
+            Alter References
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryAlterReferences"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Alter yang memakai divisi.
+          </div>
+
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent:var(--admin-green)"
+        >
+
+          <div class="admin-summary-label">
+            Total References
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryTotalReferences"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Seluruh relasi Member dan Alter.
+          </div>
+
+        </article>
+
+      </section>
+
+
+      <!-- FILTER -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+
+          <div>
+
+            <div class="admin-panel-title">
+              Search Divisions
+            </div>
+
+            <div class="admin-panel-subtitle">
+              Cari berdasarkan key, nama, sub, atau CSS
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="admin-panel-body">
+
+          <div class="admin-filter-grid">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="searchInput"
+              >
+                Pencarian
+              </label>
+
+              <input
+                class="admin-input"
+                id="searchInput"
+                type="search"
+                placeholder="Cari nama atau key divisi..."
+                autocomplete="off"
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="pageSizeFilter"
+              >
+                Per Halaman
+              </label>
+
+              <select
+                class="admin-select"
+                id="pageSizeFilter"
+              >
+                <option value="10">
+                  10 data
+                </option>
+
+                <option value="20">
+                  20 data
+                </option>
+
+                <option value="50" selected>
+                  50 data
+                </option>
+
+                <option value="100">
+                  100 data
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="admin-filter-actions">
+
+              <button
+                class="admin-button is-primary"
+                id="applyFilterButton"
+                type="button"
+              >
+                Terapkan
+              </button>
+
+
+              <button
+                class="admin-button is-ghost"
+                id="resetFilterButton"
+                type="button"
+              >
+                Reset
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- TABLE -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+
+          <div>
+
+            <div class="admin-panel-title">
+              Division Database
+            </div>
+
+            <div
+              class="admin-panel-subtitle"
+              id="tableSubtitle"
+            >
+              Menyiapkan data
+            </div>
+
+          </div>
+
+
+          <button
+            class="admin-button is-ghost"
+            id="refreshButton"
+            type="button"
+          >
+            Refresh
+          </button>
+
+        </div>
+
+
+        <div
+          class="admin-panel-body"
+          id="divisionTableContainer"
+        >
+
+          <div class="admin-state">
+
+            <div class="admin-state-title">
+              Loading Divisions
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data divisi dari Google Spreadsheet.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="admin-pagination">
+
+          <div
+            class="admin-pagination-info"
+            id="paginationInfo"
+          >
+            Menyiapkan pagination.
+          </div>
+
+
+          <div class="admin-pagination-actions">
+
+            <button
+              class="admin-button is-ghost"
+              id="previousPageButton"
+              type="button"
+              disabled
+            >
+              Sebelumnya
+            </button>
+
+
+            <button
+              class="admin-button is-ghost"
+              id="nextPageButton"
+              type="button"
+              disabled
+            >
+              Selanjutnya
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ===================================================
+       FORM DIALOG
+       =================================================== -->
+
+  <dialog
+    class="admin-dialog"
+    id="divisionDialog"
+  >
+
+    <form
+      class="admin-dialog-shell"
+      id="divisionForm"
+      novalidate
+    >
+
+      <header class="admin-dialog-header">
+
+        <div>
+
+          <div class="admin-dialog-kicker">
+            Division Editor
+          </div>
+
+          <h2
+            class="admin-dialog-title"
+            id="divisionDialogTitle"
+          >
+            Tambah Divisi
+          </h2>
+
+        </div>
+
+
+        <button
+          class="admin-dialog-close"
+          id="closeDivisionDialogButton"
+          type="button"
+          aria-label="Tutup form"
+        >
+          ×
+        </button>
+
+      </header>
+
+
+      <div class="admin-dialog-body">
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Identitas Divisi
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="divisionKey"
+              >
+                Key Divisi *
+              </label>
+
+              <input
+                class="admin-input"
+                id="divisionKey"
+                type="text"
+                maxlength="64"
+                placeholder="contoh: creative-media"
+                required
+              >
+
+              <div class="admin-field-note">
+                Key tidak dapat diubah setelah divisi dibuat.
+              </div>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="divisionName"
+              >
+                Nama Divisi *
+              </label>
+
+              <input
+                class="admin-input"
+                id="divisionName"
+                type="text"
+                maxlength="150"
+                placeholder="Contoh: Creative Media"
+                required
+              >
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="divisionSortOrder"
+              >
+                Sort Order
+              </label>
+
+              <input
+                class="admin-input"
+                id="divisionSortOrder"
+                type="number"
+                min="0"
+                max="999999"
+                value="0"
+              >
+
+              <div class="admin-field-note">
+                Angka lebih kecil ditampilkan lebih dahulu.
+              </div>
+
+            </div>
+
+
+            <div class="admin-field">
+
+              <label
+                class="admin-label"
+                for="divisionCss"
+              >
+                CSS Class
+              </label>
+
+              <input
+                class="admin-input"
+                id="divisionCss"
+                type="text"
+                maxlength="255"
+                placeholder="contoh: division-creative"
+              >
+
+              <div class="admin-field-note">
+                Digunakan untuk variasi tampilan pada halaman publik.
+              </div>
+
+            </div>
+
+
+            <div class="admin-field is-full">
+
+              <label
+                class="admin-label"
+                for="divisionSub"
+              >
+                Sub / Keterangan
+              </label>
+
+              <textarea
+                class="admin-textarea"
+                id="divisionSub"
+                maxlength="255"
+                placeholder="Keterangan singkat mengenai divisi..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <footer class="admin-dialog-footer">
+
+        <button
+          class="admin-button is-ghost"
+          id="cancelDivisionButton"
+          type="button"
+        >
+          Batal
+        </button>
+
+
+        <button
+          class="admin-button is-primary"
+          id="saveDivisionButton"
+          type="submit"
+        >
+          Simpan Divisi
+        </button>
+
+      </footer>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- ===================================================
+       DELETE DIALOG
+       =================================================== -->
+
+  <dialog
+    class="admin-dialog is-small"
+    id="deleteDialog"
+  >
+
+    <div class="admin-dialog-shell">
+
+      <header class="admin-dialog-header is-danger">
+
+        <div>
+
+          <div class="admin-dialog-kicker">
+            Permanent Deletion
+          </div>
+
+          <h2 class="admin-dialog-title">
+            Hapus Divisi
+          </h2>
+
+        </div>
+
+
+        <button
+          class="admin-dialog-close"
+          id="closeDeleteDialogButton"
+          type="button"
+          aria-label="Tutup dialog"
+        >
+          ×
+        </button>
+
+      </header>
+
+
+      <div class="admin-dialog-body">
+
+        <div class="admin-delete-warning">
+          Data divisi akan dihapus permanen karena sheet Divisions
+          tidak memiliki fitur soft delete atau restore.
+        </div>
+
+
+        <div
+          class="admin-delete-name"
+          id="deleteDivisionName"
+        >
+          Division
+        </div>
+
+        <div
+          class="admin-delete-key"
+          id="deleteDivisionKey"
+        >
+          key
+        </div>
+
+
+        <div class="admin-delete-usage">
+
+          <div class="admin-delete-usage-card">
+
+            <div class="admin-delete-usage-label">
+              Members
+            </div>
+
+            <div
+              class="admin-delete-usage-value"
+              id="deleteMemberCount"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="admin-delete-usage-card">
+
+            <div class="admin-delete-usage-label">
+              Alters
+            </div>
+
+            <div
+              class="admin-delete-usage-value"
+              id="deleteAlterCount"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="admin-delete-usage-card">
+
+            <div class="admin-delete-usage-label">
+              Total Relasi
+            </div>
+
+            <div
+              class="admin-delete-usage-value"
+              id="deleteTotalCount"
+            >
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="admin-delete-options"
+          id="deleteOptionsPanel"
+        >
+
+          <div class="admin-delete-option-title">
+            Penanganan Relasi
+          </div>
+
+
+          <div class="admin-field">
+
+            <label
+              class="admin-label"
+              for="replacementDivision"
+            >
+              Pindahkan ke Divisi
+            </label>
+
+            <select
+              class="admin-select"
+              id="replacementDivision"
+            >
+              <option value="">
+                Jangan pindahkan
+              </option>
+            </select>
+
+            <div class="admin-field-note">
+              Seluruh Member dan Alter akan dipindahkan ke divisi
+              yang dipilih sebelum divisi lama dihapus.
+            </div>
+
+          </div>
+
+
+          <label
+            class="admin-checkbox"
+            for="forceDeleteCheckbox"
+          >
+
+            <input
+              id="forceDeleteCheckbox"
+              type="checkbox"
+            >
+
+            <span>
+              Hapus paksa dan kosongkan nilai
+              <strong>division</strong> serta
+              <strong>division_key</strong> pada seluruh relasi.
+              Gunakan hanya ketika relasi memang tidak perlu dipindahkan.
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <footer class="admin-dialog-footer">
+
+        <button
+          class="admin-button is-ghost"
+          id="cancelDeleteButton"
+          type="button"
+        >
+          Batal
+        </button>
+
+
+        <button
+          class="admin-button is-danger"
+          id="confirmDeleteButton"
+          type="button"
+        >
+          Hapus Permanen
+        </button>
+
+      </footer>
+
+    </div>
+
+  </dialog>
+
+
+  <!-- ===================================================
+       TOAST
+       =================================================== -->
+
+  <div
+    class="admin-toast"
+    id="adminToast"
+    role="status"
+    aria-live="polite"
+  >
+
+    <div
+      class="admin-toast-title"
+      id="adminToastTitle"
+    >
+      System Message
+    </div>
+
+    <div
+      class="admin-toast-message"
+      id="adminToastMessage"
+    ></div>
+
+  </div>
+
+
+  <!-- ===================================================
+       JAVASCRIPT
+       =================================================== -->
+
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/admin-api.js"></script>
+
+
+  <script>
+    (function initializeDivisionAdministration() {
+      "use strict";
+
+
+      /*
+      =====================================================
+      STATE
+      =====================================================
+      */
+
+      const state = {
+        initialized:
+          false,
+
+        authenticated:
+          false,
+
+        loading:
+          false,
+
+        saving:
+          false,
+
+        deleting:
+          false,
+
+        editingDivisionKey:
+          "",
+
+        pendingDeleteDivision:
+          null,
+
+        divisions:
+          [],
+
+        allDivisions:
+          [],
+
+        pagination: {
+          page:
+            1,
+
+          pageSize:
+            50,
+
+          total:
+            0,
+
+          totalPages:
+            1,
+
+          hasPrevious:
+            false,
+
+          hasNext:
+            false
+        },
+
+        summary: {
+          totalDivisions:
+            0,
+
+          totalMemberUsage:
+            0,
+
+          totalAlterUsage:
+            0,
+
+          totalReferences:
+            0
+        },
+
+        filters: {
+          search:
+            ""
+        },
+
+        searchTimer:
+          null,
+
+        toastTimer:
+          null
+      };
+
+
+      /*
+      =====================================================
+      ELEMENTS
+      =====================================================
+      */
+
+      function getElement(id) {
+        return document.getElementById(id);
+      }
+
+
+      const elements = {
+        loadingBar:
+          getElement("loadingBar"),
+
+        addDivisionButton:
+          getElement("addDivisionButton"),
+
+        logoutButton:
+          getElement("logoutButton"),
+
+        refreshButton:
+          getElement("refreshButton"),
+
+        applyFilterButton:
+          getElement("applyFilterButton"),
+
+        resetFilterButton:
+          getElement("resetFilterButton"),
+
+        searchInput:
+          getElement("searchInput"),
+
+        pageSizeFilter:
+          getElement("pageSizeFilter"),
+
+        divisionTableContainer:
+          getElement("divisionTableContainer"),
+
+        tableSubtitle:
+          getElement("tableSubtitle"),
+
+        paginationInfo:
+          getElement("paginationInfo"),
+
+        previousPageButton:
+          getElement("previousPageButton"),
+
+        nextPageButton:
+          getElement("nextPageButton"),
+
+        summaryDivisions:
+          getElement("summaryDivisions"),
+
+        summaryMemberReferences:
+          getElement("summaryMemberReferences"),
+
+        summaryAlterReferences:
+          getElement("summaryAlterReferences"),
+
+        summaryTotalReferences:
+          getElement("summaryTotalReferences"),
+
+        divisionDialog:
+          getElement("divisionDialog"),
+
+        divisionForm:
+          getElement("divisionForm"),
+
+        divisionDialogTitle:
+          getElement("divisionDialogTitle"),
+
+        closeDivisionDialogButton:
+          getElement("closeDivisionDialogButton"),
+
+        cancelDivisionButton:
+          getElement("cancelDivisionButton"),
+
+        saveDivisionButton:
+          getElement("saveDivisionButton"),
+
+        divisionKey:
+          getElement("divisionKey"),
+
+        divisionName:
+          getElement("divisionName"),
+
+        divisionSub:
+          getElement("divisionSub"),
+
+        divisionCss:
+          getElement("divisionCss"),
+
+        divisionSortOrder:
+          getElement("divisionSortOrder"),
+
+        deleteDialog:
+          getElement("deleteDialog"),
+
+        closeDeleteDialogButton:
+          getElement("closeDeleteDialogButton"),
+
+        cancelDeleteButton:
+          getElement("cancelDeleteButton"),
+
+        confirmDeleteButton:
+          getElement("confirmDeleteButton"),
+
+        deleteDivisionName:
+          getElement("deleteDivisionName"),
+
+        deleteDivisionKey:
+          getElement("deleteDivisionKey"),
+
+        deleteMemberCount:
+          getElement("deleteMemberCount"),
+
+        deleteAlterCount:
+          getElement("deleteAlterCount"),
+
+        deleteTotalCount:
+          getElement("deleteTotalCount"),
+
+        deleteOptionsPanel:
+          getElement("deleteOptionsPanel"),
+
+        replacementDivision:
+          getElement("replacementDivision"),
+
+        forceDeleteCheckbox:
+          getElement("forceDeleteCheckbox"),
+
+        adminToast:
+          getElement("adminToast"),
+
+        adminToastTitle:
+          getElement("adminToastTitle"),
+
+        adminToastMessage:
+          getElement("adminToastMessage")
+      };
+
+
+      /*
+      =====================================================
+      HELPERS
+      =====================================================
+      */
+
+      function asString(value) {
+        if (
+          value === null ||
+          value === undefined
+        ) {
+          return "";
+        }
+
+        return String(value).trim();
+      }
+
+
+      function asArray(value) {
+        return Array.isArray(value)
+          ? value
+          : [];
+      }
+
+
+      function isPlainObject(value) {
+        return (
+          value !== null &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        );
+      }
+
+
+      function asNumber(
+        value,
+        fallback
+      ) {
+        const numericValue =
+          Number(value);
+
+        return Number.isFinite(
+          numericValue
+        )
+          ? numericValue
+          : fallback;
+      }
+
+
+      function escapeHTML(value) {
+        return String(
+          value === null ||
+          value === undefined
+            ? ""
+            : value
+        )
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+
+      function slugify(value) {
+        return asString(value)
+          .toLowerCase()
+          .replace(/['’`]/g, "")
+          .replace(/[^a-z0-9_-]+/g, "-")
+          .replace(/-{2,}/g, "-")
+          .replace(/_{2,}/g, "_")
+          .replace(/^[-_]+|[-_]+$/g, "");
+      }
+
+
+      /*
+      =====================================================
+      TOAST
+      =====================================================
+      */
+
+      function showToast(
+        type,
+        title,
+        message
+      ) {
+        if (state.toastTimer) {
+          window.clearTimeout(
+            state.toastTimer
+          );
+        }
+
+        elements.adminToast.classList.remove(
+          "is-success",
+          "is-error",
+          "is-warning"
+        );
+
+        elements.adminToast.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "warning"
+          )
+        );
+
+        elements.adminToastTitle.textContent =
+          title ||
+          "System Message";
+
+        elements.adminToastMessage.textContent =
+          message ||
+          "";
+
+        state.toastTimer =
+          window.setTimeout(
+            function hideToast() {
+              elements.adminToast.classList.remove(
+                "is-visible"
+              );
+            },
+            5000
+          );
+      }
+
+
+      /*
+      =====================================================
+      ERROR
+      =====================================================
+      */
+
+      function isSessionError(error) {
+        return [
+          "ADMIN_SESSION_INVALID",
+          "ADMIN_SESSION_MISSING",
+          "ADMIN_TOKEN_REQUIRED",
+          "SESSION_NOT_FOUND",
+          "SESSION_EXPIRED",
+          "INVALID_SESSION",
+          "AUTH_REQUIRED",
+          "UNAUTHORIZED"
+        ].includes(
+          asString(
+            error &&
+            error.code
+          )
+        );
+      }
+
+
+      function getFriendlyError(error) {
+        const code =
+          asString(
+            error &&
+            error.code
+          );
+
+        switch (code) {
+          case "ADMIN_DIVISION_ALREADY_EXISTS":
+            return (
+              "Key divisi tersebut sudah digunakan."
+            );
+
+          case "ADMIN_DIVISION_NOT_FOUND":
+            return (
+              "Divisi tidak ditemukan."
+            );
+
+          case "ADMIN_DIVISION_IN_USE":
+            return (
+              "Divisi masih digunakan. Pilih divisi pengganti atau gunakan penghapusan paksa."
+            );
+
+          case "DIVISION_REPLACEMENT_NOT_FOUND":
+            return (
+              "Divisi pengganti tidak ditemukan."
+            );
+
+          case "DIVISION_REPLACEMENT_SAME":
+            return (
+              "Divisi pengganti tidak boleh sama dengan divisi yang dihapus."
+            );
+
+          case "DIVISION_KEY_IMMUTABLE":
+            return (
+              "Key divisi tidak dapat diubah setelah dibuat."
+            );
+
+          case "DIVISION_KEY_REQUIRED":
+          case "DIVISION_FIELD_REQUIRED":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Data wajib belum diisi."
+            );
+
+          case "REQUEST_TIMEOUT":
+            return (
+              "Koneksi ke Google Apps Script melewati batas waktu."
+            );
+
+          case "NETWORK_ERROR":
+            return (
+              "Browser tidak dapat terhubung ke Google Apps Script."
+            );
+
+          default:
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Permintaan gagal diproses."
+            );
+        }
+      }
+
+
+      /*
+      =====================================================
+      LOADING
+      =====================================================
+      */
+
+      function updateLoadingBar() {
+        elements.loadingBar.classList.toggle(
+          "is-visible",
+          state.loading ||
+          state.saving ||
+          state.deleting
+        );
+      }
+
+
+      function setLoading(loading) {
+        state.loading =
+          Boolean(loading);
+
+        updateLoadingBar();
+
+        elements.addDivisionButton.disabled =
+          state.loading;
+
+        elements.refreshButton.disabled =
+          state.loading;
+
+        elements.applyFilterButton.disabled =
+          state.loading;
+
+        elements.resetFilterButton.disabled =
+          state.loading;
+
+        elements.previousPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasPrevious;
+
+        elements.nextPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasNext;
+      }
+
+
+      function setSaving(saving) {
+        state.saving =
+          Boolean(saving);
+
+        updateLoadingBar();
+
+        elements.saveDivisionButton.disabled =
+          state.saving;
+
+        elements.cancelDivisionButton.disabled =
+          state.saving;
+
+        elements.closeDivisionDialogButton.disabled =
+          state.saving;
+
+        elements.saveDivisionButton.textContent =
+          state.saving
+            ? "Menyimpan..."
+            : "Simpan Divisi";
+      }
+
+
+      function setDeleting(deleting) {
+        state.deleting =
+          Boolean(deleting);
+
+        updateLoadingBar();
+        updateDeleteButtonState();
+
+        elements.cancelDeleteButton.disabled =
+          state.deleting;
+
+        elements.closeDeleteDialogButton.disabled =
+          state.deleting;
+
+        elements.confirmDeleteButton.textContent =
+          state.deleting
+            ? "Menghapus..."
+            : "Hapus Permanen";
+      }
+
+
+      /*
+      =====================================================
+      AUTH
+      =====================================================
+      */
+
+      function redirectToLogin() {
+        if (
+          window.P3R_ADMIN_API &&
+          typeof window.P3R_ADMIN_API.redirectToLogin ===
+            "function"
+        ) {
+          window.P3R_ADMIN_API.redirectToLogin(
+            window.location.href
+          );
+
+          return;
+        }
+
+        window.location.replace(
+          "./admin-login.html"
+        );
+      }
+
+
+      async function initializeAuthentication() {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.requireSession !==
+            "function"
+        ) {
+          redirectToLogin();
+
+          return false;
+        }
+
+        try {
+          const session =
+            await window.P3R_ADMIN_API
+              .requireSession({
+                redirect:
+                  true,
+
+                verify:
+                  true,
+
+                returnUrl:
+                  window.location.href
+              });
+
+          if (!session) {
+            return false;
+          }
+
+          state.authenticated =
+            true;
+
+          return true;
+        } catch (error) {
+          redirectToLogin();
+
+          return false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      NORMALIZE DIVISION
+      =====================================================
+      */
+
+      function normalizeDivision(division) {
+        if (!isPlainObject(division)) {
+          return null;
+        }
+
+        const usage =
+          isPlainObject(
+            division.usage
+          )
+            ? division.usage
+            : {};
+
+        return {
+          key:
+            asString(
+              division.key
+            ),
+
+          name:
+            asString(
+              division.name
+            ) ||
+            "Tanpa Nama",
+
+          sub:
+            asString(
+              division.sub
+            ),
+
+          css:
+            asString(
+              division.css
+            ),
+
+          sortOrder:
+            Math.max(
+              0,
+              Math.floor(
+                asNumber(
+                  division.sortOrder ||
+                  division.sort_order,
+                  0
+                )
+              )
+            ),
+
+          createdAt:
+            asString(
+              division.createdAt ||
+              division.created_at
+            ),
+
+          updatedAt:
+            asString(
+              division.updatedAt ||
+              division.updated_at
+            ),
+
+          usage: {
+            memberCount:
+              Math.max(
+                0,
+                Math.floor(
+                  asNumber(
+                    usage.memberCount,
+                    0
+                  )
+                )
+              ),
+
+            alterCount:
+              Math.max(
+                0,
+                Math.floor(
+                  asNumber(
+                    usage.alterCount,
+                    0
+                  )
+                )
+              ),
+
+            total:
+              Math.max(
+                0,
+                Math.floor(
+                  asNumber(
+                    usage.total,
+                    0
+                  )
+                )
+              ),
+
+            memberIds:
+              asArray(
+                usage.memberIds
+              ),
+
+            alterIds:
+              asArray(
+                usage.alterIds
+              )
+          }
+        };
+      }
+
+
+      function findDivision(divisionKey) {
+        const normalizedKey =
+          asString(divisionKey);
+
+        return (
+          state.allDivisions.find(
+            function findDivisionItem(
+              division
+            ) {
+              return (
+                division.key ===
+                normalizedKey
+              );
+            }
+          ) ||
+          state.divisions.find(
+            function findVisibleDivision(
+              division
+            ) {
+              return (
+                division.key ===
+                normalizedKey
+              );
+            }
+          ) ||
+          null
+        );
+      }
+
+
+      /*
+      =====================================================
+      FILTER
+      =====================================================
+      */
+
+      function readFilters() {
+        state.filters.search =
+          asString(
+            elements.searchInput.value
+          );
+
+        state.pagination.pageSize =
+          Math.max(
+            1,
+            Number(
+              elements.pageSizeFilter.value
+            ) || 50
+          );
+      }
+
+
+      function applyFilters() {
+        readFilters();
+
+        state.pagination.page =
+          1;
+
+        loadDivisions();
+      }
+
+
+      function resetFilters() {
+        elements.searchInput.value =
+          "";
+
+        elements.pageSizeFilter.value =
+          "50";
+
+        state.pagination.page =
+          1;
+
+        readFilters();
+
+        loadDivisions();
+      }
+
+
+      /*
+      =====================================================
+      SUMMARY
+      =====================================================
+      */
+
+      function renderSummary() {
+        elements.summaryDivisions.textContent =
+          String(
+            state.summary.totalDivisions
+          );
+
+        elements.summaryMemberReferences.textContent =
+          String(
+            state.summary.totalMemberUsage
+          );
+
+        elements.summaryAlterReferences.textContent =
+          String(
+            state.summary.totalAlterUsage
+          );
+
+        elements.summaryTotalReferences.textContent =
+          String(
+            state.summary.totalReferences
+          );
+      }
+
+
+      /*
+      =====================================================
+      PAGINATION
+      =====================================================
+      */
+
+      function renderPagination() {
+        const total =
+          state.pagination.total;
+
+        const start =
+          total === 0
+            ? 0
+            : (
+                (
+                  state.pagination.page -
+                  1
+                ) *
+                state.pagination.pageSize
+              ) + 1;
+
+        const end =
+          total === 0
+            ? 0
+            : Math.min(
+                total,
+                start +
+                  state.divisions.length -
+                  1
+              );
+
+        elements.paginationInfo.innerHTML =
+          "Menampilkan <strong>" +
+          start +
+          "–" +
+          end +
+          "</strong> dari <strong>" +
+          total +
+          "</strong> divisi.";
+
+        elements.previousPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasPrevious;
+
+        elements.nextPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasNext;
+      }
+
+
+      /*
+      =====================================================
+      RENDER TABLE
+      =====================================================
+      */
+
+      function renderDivisionTable() {
+        if (!state.divisions.length) {
+          elements.divisionTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Data Tidak Ditemukan
+              </div>
+
+              <div class="admin-state-message">
+                Tidak ada divisi yang sesuai dengan pencarian.
+              </div>
+
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.divisionTableContainer.innerHTML = `
+          <div class="admin-table-wrap">
+
+            <table class="admin-table">
+
+              <thead>
+                <tr>
+                  <th>Urutan</th>
+                  <th>Divisi</th>
+                  <th>Keterangan</th>
+                  <th>CSS Class</th>
+                  <th>Penggunaan</th>
+                  <th>Updated</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${state.divisions
+                  .map(
+                    function createDivisionRow(
+                      division
+                    ) {
+                      const usage =
+                        division.usage;
+
+                      const emptyUsage =
+                        usage.total === 0;
+
+                      return `
+                        <tr>
+
+                          <td>
+                            <div class="admin-sort-badge">
+                              ${escapeHTML(
+                                division.sortOrder
+                              )}
+                            </div>
+                          </td>
+
+
+                          <td>
+                            <div class="admin-division-cell">
+
+                              <div class="admin-division-name">
+                                ${escapeHTML(
+                                  division.name
+                                )}
+                              </div>
+
+                              <div class="admin-division-key">
+                                ${escapeHTML(
+                                  division.key
+                                )}
+                              </div>
+
+                            </div>
+                          </td>
+
+
+                          <td>
+                            <div class="admin-division-sub">
+                              ${escapeHTML(
+                                division.sub ||
+                                "—"
+                              )}
+                            </div>
+                          </td>
+
+
+                          <td>
+                            ${
+                              division.css
+                                ? `
+                                  <span
+                                    class="admin-code-badge"
+                                    title="${escapeHTML(
+                                      division.css
+                                    )}"
+                                  >
+                                    ${escapeHTML(
+                                      division.css
+                                    )}
+                                  </span>
+                                `
+                                : "—"
+                            }
+                          </td>
+
+
+                          <td>
+                            <div class="admin-usage-group">
+
+                              <span class="admin-usage-badge is-member">
+                                Member
+                                ${escapeHTML(
+                                  usage.memberCount
+                                )}
+                              </span>
+
+                              <span class="admin-usage-badge is-alter">
+                                Alter
+                                ${escapeHTML(
+                                  usage.alterCount
+                                )}
+                              </span>
+
+                              ${
+                                emptyUsage
+                                  ? `
+                                    <span class="admin-usage-badge is-empty">
+                                      Tidak digunakan
+                                    </span>
+                                  `
+                                  : ""
+                              }
+
+                            </div>
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              division.updatedAt ||
+                              "—"
+                            )}
+                          </td>
+
+
+                          <td>
+                            <div class="admin-actions">
+
+                              <button
+                                class="admin-action-button"
+                                type="button"
+                                data-action="edit"
+                                data-division-key="${escapeHTML(
+                                  division.key
+                                )}"
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                class="admin-action-button is-danger"
+                                type="button"
+                                data-action="delete"
+                                data-division-key="${escapeHTML(
+                                  division.key
+                                )}"
+                              >
+                                Delete
+                              </button>
+
+                            </div>
+                          </td>
+
+                        </tr>
+                      `;
+                    }
+                  )
+                  .join("")}
+              </tbody>
+
+            </table>
+
+          </div>
+        `;
+      }
+
+
+      /*
+      =====================================================
+      LOAD ALL DIVISIONS
+      =====================================================
+      */
+
+      async function loadAllDivisionsForOptions() {
+        const result =
+          await window.P3R_ADMIN_API
+            .listDivisions({
+              page:
+                1,
+
+              pageSize:
+                200,
+
+              search:
+                ""
+            });
+
+        state.allDivisions =
+          asArray(
+            result &&
+            result.divisions
+          )
+            .map(normalizeDivision)
+            .filter(Boolean)
+            .sort(
+              function sortAllDivisions(
+                first,
+                second
+              ) {
+                if (
+                  first.sortOrder !==
+                  second.sortOrder
+                ) {
+                  return (
+                    first.sortOrder -
+                    second.sortOrder
+                  );
+                }
+
+                return first.name.localeCompare(
+                  second.name,
+                  "id"
+                );
+              }
+            );
+      }
+
+
+      /*
+      =====================================================
+      LOAD DIVISIONS
+      =====================================================
+      */
+
+      async function loadDivisions() {
+        if (
+          state.loading ||
+          !state.authenticated
+        ) {
+          return;
+        }
+
+        setLoading(true);
+
+        elements.tableSubtitle.textContent =
+          "Mengambil data divisi";
+
+        elements.divisionTableContainer.innerHTML = `
+          <div class="admin-state">
+
+            <div class="admin-state-title">
+              Loading Divisions
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data dari Google Spreadsheet.
+            </div>
+
+          </div>
+        `;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .listDivisions({
+                search:
+                  state.filters.search,
+
+                page:
+                  state.pagination.page,
+
+                pageSize:
+                  state.pagination.pageSize
+              });
+
+          state.divisions =
+            asArray(
+              result &&
+              result.divisions
+            )
+              .map(normalizeDivision)
+              .filter(Boolean);
+
+          state.pagination =
+            Object.assign(
+              {},
+              state.pagination,
+              result &&
+              result.pagination
+                ? result.pagination
+                : {}
+            );
+
+          state.summary =
+            Object.assign(
+              {},
+              state.summary,
+              result &&
+              result.summary
+                ? result.summary
+                : {}
+            );
+
+          if (
+            !state.filters.search
+          ) {
+            state.allDivisions =
+              state.divisions.slice();
+          }
+
+          elements.tableSubtitle.textContent =
+            state.pagination.total +
+            " divisi ditemukan";
+
+          renderSummary();
+          renderDivisionTable();
+          renderPagination();
+        } catch (error) {
+          if (isSessionError(error)) {
+            redirectToLogin();
+
+            return;
+          }
+
+          elements.tableSubtitle.textContent =
+            "Gagal memuat data";
+
+          elements.divisionTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Division Data Unavailable
+              </div>
+
+              <div class="admin-state-message">
+                ${escapeHTML(
+                  getFriendlyError(error)
+                )}
+              </div>
+
+              <button
+                class="admin-button is-primary"
+                id="retryLoadButton"
+                type="button"
+                style="margin-top:16px"
+              >
+                Coba Lagi
+              </button>
+
+            </div>
+          `;
+
+          const retryButton =
+            getElement("retryLoadButton");
+
+          if (retryButton) {
+            retryButton.addEventListener(
+              "click",
+              loadDivisions
+            );
+          }
+
+          showToast(
+            "error",
+            "Load Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      REFRESH
+      =====================================================
+      */
+
+      async function refreshAllData() {
+        if (state.loading) {
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          await loadAllDivisionsForOptions();
+        } catch (error) {
+          showToast(
+            "error",
+            "Refresh Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        await loadDivisions();
+      }
+
+
+      /*
+      =====================================================
+      FORM
+      =====================================================
+      */
+
+      function getDefaultDivision() {
+        const highestSortOrder =
+          state.allDivisions.reduce(
+            function findHighestOrder(
+              highest,
+              division
+            ) {
+              return Math.max(
+                highest,
+                division.sortOrder
+              );
+            },
+            0
+          );
+
+        return {
+          key:
+            "",
+
+          name:
+            "",
+
+          sub:
+            "",
+
+          css:
+            "",
+
+          sortOrder:
+            highestSortOrder + 1
+        };
+      }
+
+
+      function fillDivisionForm(division) {
+        const data =
+          Object.assign(
+            getDefaultDivision(),
+            division || {}
+          );
+
+        elements.divisionKey.value =
+          asString(data.key);
+
+        elements.divisionName.value =
+          asString(data.name);
+
+        elements.divisionSub.value =
+          asString(data.sub);
+
+        elements.divisionCss.value =
+          asString(data.css);
+
+        elements.divisionSortOrder.value =
+          String(
+            Math.max(
+              0,
+              Math.floor(
+                asNumber(
+                  data.sortOrder ||
+                  data.sort_order,
+                  0
+                )
+              )
+            )
+          );
+      }
+
+
+      function openCreateDialog() {
+        state.editingDivisionKey =
+          "";
+
+        elements.divisionDialogTitle.textContent =
+          "Tambah Divisi";
+
+        elements.divisionKey.disabled =
+          false;
+
+        fillDivisionForm(
+          getDefaultDivision()
+        );
+
+        elements.divisionDialog.showModal();
+
+        window.setTimeout(
+          function focusDivisionName() {
+            elements.divisionName.focus();
+          },
+          50
+        );
+      }
+
+
+      async function openEditDialog(
+        divisionKey
+      ) {
+        if (state.loading) {
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .getDivision(
+                divisionKey
+              );
+
+          const division =
+            result &&
+            result.division
+              ? normalizeDivision(
+                  result.division
+                )
+              : null;
+
+          if (!division) {
+            throw new Error(
+              "Data divisi tidak ditemukan."
+            );
+          }
+
+          state.editingDivisionKey =
+            division.key;
+
+          elements.divisionDialogTitle.textContent =
+            "Edit Divisi";
+
+          elements.divisionKey.disabled =
+            true;
+
+          fillDivisionForm(
+            division
+          );
+
+          elements.divisionDialog.showModal();
+        } catch (error) {
+          showToast(
+            "error",
+            "Edit Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      function closeDivisionDialog() {
+        if (state.saving) {
+          return;
+        }
+
+        if (
+          elements.divisionDialog.open
+        ) {
+          elements.divisionDialog.close();
+        }
+
+        state.editingDivisionKey =
+          "";
+
+        elements.divisionForm.reset();
+      }
+
+
+      function collectDivisionForm() {
+        const key =
+          slugify(
+            elements.divisionKey.value
+          );
+
+        const name =
+          asString(
+            elements.divisionName.value
+          );
+
+        if (!key) {
+          elements.divisionKey.focus();
+
+          showToast(
+            "warning",
+            "Key Required",
+            "Key divisi wajib diisi."
+          );
+
+          return null;
+        }
+
+        if (!name) {
+          elements.divisionName.focus();
+
+          showToast(
+            "warning",
+            "Name Required",
+            "Nama divisi wajib diisi."
+          );
+
+          return null;
+        }
+
+        return {
+          key:
+            key,
+
+          name:
+            name,
+
+          sub:
+            asString(
+              elements.divisionSub.value
+            ),
+
+          css:
+            asString(
+              elements.divisionCss.value
+            ),
+
+          sortOrder:
+            Math.max(
+              0,
+              Math.floor(
+                asNumber(
+                  elements
+                    .divisionSortOrder
+                    .value,
+                  0
+                )
+              )
+            )
+        };
+      }
+
+
+      async function saveDivision(event) {
+        event.preventDefault();
+
+        if (state.saving) {
+          return;
+        }
+
+        const payload =
+          collectDivisionForm();
+
+        if (!payload) {
+          return;
+        }
+
+        const editing =
+          Boolean(
+            state.editingDivisionKey
+          );
+
+        const editingKey =
+          state.editingDivisionKey;
+
+        setSaving(true);
+
+        try {
+          let result;
+
+          if (editing) {
+            result =
+              await window.P3R_ADMIN_API
+                .updateDivision(
+                  editingKey,
+                  payload
+                );
+          } else {
+            result =
+              await window.P3R_ADMIN_API
+                .createDivision(
+                  payload
+                );
+          }
+
+          closeDivisionDialog();
+
+          showToast(
+            "success",
+            editing
+              ? "Division Updated"
+              : "Division Created",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Divisi berhasil disimpan."
+          );
+
+          state.pagination.page =
+            1;
+
+          await loadAllDivisionsForOptions();
+
+          readFilters();
+
+          await loadDivisions();
+        } catch (error) {
+          showToast(
+            "error",
+            "Save Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setSaving(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      AUTO KEY
+      =====================================================
+      */
+
+      function handleDivisionNameInput() {
+        if (
+          state.editingDivisionKey ||
+          asString(
+            elements.divisionKey.value
+          )
+        ) {
+          return;
+        }
+
+        elements.divisionKey.value =
+          slugify(
+            elements.divisionName.value
+          );
+      }
+
+
+      /*
+      =====================================================
+      DELETE OPTIONS
+      =====================================================
+      */
+
+      function renderReplacementOptions(
+        currentDivisionKey
+      ) {
+        const options = [
+          '<option value="">Jangan pindahkan</option>'
+        ];
+
+        state.allDivisions.forEach(
+          function createReplacementOption(
+            division
+          ) {
+            if (
+              division.key ===
+              currentDivisionKey
+            ) {
+              return;
+            }
+
+            options.push(
+              '<option value="' +
+              escapeHTML(
+                division.key
+              ) +
+              '">' +
+              escapeHTML(
+                division.name +
+                " — " +
+                division.key
+              ) +
+              "</option>"
+            );
+          }
+        );
+
+        elements.replacementDivision.innerHTML =
+          options.join("");
+      }
+
+
+      function updateDeleteButtonState() {
+        const division =
+          state.pendingDeleteDivision;
+
+        if (!division) {
+          elements.confirmDeleteButton.disabled =
+            true;
+
+          return;
+        }
+
+        const hasReferences =
+          division.usage.total > 0;
+
+        const replacementKey =
+          asString(
+            elements.replacementDivision.value
+          );
+
+        const force =
+          elements.forceDeleteCheckbox.checked;
+
+        elements.forceDeleteCheckbox.disabled =
+          Boolean(replacementKey);
+
+        if (replacementKey) {
+          elements.forceDeleteCheckbox.checked =
+            false;
+        }
+
+        elements.replacementDivision.disabled =
+          force ||
+          state.deleting;
+
+        if (force) {
+          elements.replacementDivision.value =
+            "";
+        }
+
+        const resolutionAvailable =
+          !hasReferences ||
+          Boolean(replacementKey) ||
+          force;
+
+        elements.confirmDeleteButton.disabled =
+          state.deleting ||
+          !resolutionAvailable;
+      }
+
+
+      function openDeleteDialog(
+        divisionKey
+      ) {
+        const division =
+          findDivision(
+            divisionKey
+          );
+
+        if (!division) {
+          showToast(
+            "error",
+            "Division Not Found",
+            "Data divisi tidak ditemukan."
+          );
+
+          return;
+        }
+
+        state.pendingDeleteDivision =
+          division;
+
+        elements.deleteDivisionName.textContent =
+          division.name;
+
+        elements.deleteDivisionKey.textContent =
+          division.key;
+
+        elements.deleteMemberCount.textContent =
+          String(
+            division.usage.memberCount
+          );
+
+        elements.deleteAlterCount.textContent =
+          String(
+            division.usage.alterCount
+          );
+
+        elements.deleteTotalCount.textContent =
+          String(
+            division.usage.total
+          );
+
+        renderReplacementOptions(
+          division.key
+        );
+
+        elements.replacementDivision.value =
+          "";
+
+        elements.forceDeleteCheckbox.checked =
+          false;
+
+        elements.deleteOptionsPanel.style.display =
+          division.usage.total > 0
+            ? ""
+            : "none";
+
+        updateDeleteButtonState();
+
+        elements.deleteDialog.showModal();
+      }
+
+
+      function closeDeleteDialog() {
+        if (state.deleting) {
+          return;
+        }
+
+        if (
+          elements.deleteDialog.open
+        ) {
+          elements.deleteDialog.close();
+        }
+
+        state.pendingDeleteDivision =
+          null;
+
+        elements.replacementDivision.value =
+          "";
+
+        elements.forceDeleteCheckbox.checked =
+          false;
+      }
+
+
+      async function confirmDeleteDivision() {
+        const division =
+          state.pendingDeleteDivision;
+
+        if (
+          !division ||
+          state.deleting
+        ) {
+          return;
+        }
+
+        const replacementKey =
+          asString(
+            elements.replacementDivision.value
+          );
+
+        const force =
+          elements.forceDeleteCheckbox.checked;
+
+        if (
+          division.usage.total > 0 &&
+          !replacementKey &&
+          !force
+        ) {
+          showToast(
+            "warning",
+            "Resolution Required",
+            "Pilih divisi pengganti atau aktifkan penghapusan paksa."
+          );
+
+          return;
+        }
+
+        let confirmationMessage =
+          "Hapus divisi \"" +
+          division.name +
+          "\" secara permanen?";
+
+        if (replacementKey) {
+          const replacement =
+            findDivision(
+              replacementKey
+            );
+
+          confirmationMessage +=
+            "\n\nSeluruh relasi akan dipindahkan ke \"" +
+            (
+              replacement
+                ? replacement.name
+                : replacementKey
+            ) +
+            "\".";
+        } else if (force) {
+          confirmationMessage +=
+            "\n\nNilai division dan division_key pada seluruh relasi akan dikosongkan.";
+        }
+
+        const confirmed =
+          window.confirm(
+            confirmationMessage
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        setDeleting(true);
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .deleteDivision(
+                division.key,
+                {
+                  replacementKey:
+                    replacementKey,
+
+                  force:
+                    force
+                }
+              );
+
+          closeDeleteDialog();
+
+          showToast(
+            "success",
+            "Division Deleted",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Divisi berhasil dihapus."
+          );
+
+          state.pagination.page =
+            1;
+
+          await loadAllDivisionsForOptions();
+
+          await loadDivisions();
+        } catch (error) {
+          showToast(
+            "error",
+            "Delete Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setDeleting(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      TABLE ACTION
+      =====================================================
+      */
+
+      function handleTableClick(event) {
+        const button =
+          event.target.closest(
+            "[data-action][data-division-key]"
+          );
+
+        if (!button) {
+          return;
+        }
+
+        const action =
+          asString(
+            button.dataset.action
+          );
+
+        const divisionKey =
+          asString(
+            button.dataset.divisionKey
+          );
+
+        if (!divisionKey) {
+          return;
+        }
+
+        if (action === "edit") {
+          openEditDialog(
+            divisionKey
+          );
+        }
+
+        if (action === "delete") {
+          openDeleteDialog(
+            divisionKey
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      PAGINATION
+      =====================================================
+      */
+
+      function goToPreviousPage() {
+        if (
+          state.pagination.hasPrevious &&
+          !state.loading
+        ) {
+          state.pagination.page -=
+            1;
+
+          loadDivisions();
+        }
+      }
+
+
+      function goToNextPage() {
+        if (
+          state.pagination.hasNext &&
+          !state.loading
+        ) {
+          state.pagination.page +=
+            1;
+
+          loadDivisions();
+        }
+      }
+
+
+      /*
+      =====================================================
+      SEARCH
+      =====================================================
+      */
+
+      function handleSearchInput() {
+        if (state.searchTimer) {
+          window.clearTimeout(
+            state.searchTimer
+          );
+        }
+
+        state.searchTimer =
+          window.setTimeout(
+            applyFilters,
+            450
+          );
+      }
+
+
+      /*
+      =====================================================
+      LOGOUT
+      =====================================================
+      */
+
+      async function logoutAdmin() {
+        elements.logoutButton.disabled =
+          true;
+
+        try {
+          await window.P3R_ADMIN_API
+            .logout();
+        } finally {
+          window.location.replace(
+            "./admin-login.html"
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      LISTENERS
+      =====================================================
+      */
+
+      function setupListeners() {
+        elements.addDivisionButton.addEventListener(
+          "click",
+          openCreateDialog
+        );
+
+
+        elements.refreshButton.addEventListener(
+          "click",
+          refreshAllData
+        );
+
+
+        elements.applyFilterButton.addEventListener(
+          "click",
+          applyFilters
+        );
+
+
+        elements.resetFilterButton.addEventListener(
+          "click",
+          resetFilters
+        );
+
+
+        elements.searchInput.addEventListener(
+          "input",
+          handleSearchInput
+        );
+
+
+        elements.searchInput.addEventListener(
+          "keydown",
+          function handleSearchEnter(event) {
+            if (event.key === "Enter") {
+              event.preventDefault();
+
+              applyFilters();
+            }
+          }
+        );
+
+
+        elements.pageSizeFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+
+        elements.previousPageButton.addEventListener(
+          "click",
+          goToPreviousPage
+        );
+
+
+        elements.nextPageButton.addEventListener(
+          "click",
+          goToNextPage
+        );
+
+
+        elements.divisionTableContainer.addEventListener(
+          "click",
+          handleTableClick
+        );
+
+
+        elements.closeDivisionDialogButton.addEventListener(
+          "click",
+          closeDivisionDialog
+        );
+
+
+        elements.cancelDivisionButton.addEventListener(
+          "click",
+          closeDivisionDialog
+        );
+
+
+        elements.divisionForm.addEventListener(
+          "submit",
+          saveDivision
+        );
+
+
+        elements.divisionName.addEventListener(
+          "input",
+          handleDivisionNameInput
+        );
+
+
+        elements.closeDeleteDialogButton.addEventListener(
+          "click",
+          closeDeleteDialog
+        );
+
+
+        elements.cancelDeleteButton.addEventListener(
+          "click",
+          closeDeleteDialog
+        );
+
+
+        elements.confirmDeleteButton.addEventListener(
+          "click",
+          confirmDeleteDivision
+        );
+
+
+        elements.replacementDivision.addEventListener(
+          "change",
+          updateDeleteButtonState
+        );
+
+
+        elements.forceDeleteCheckbox.addEventListener(
+          "change",
+          updateDeleteButtonState
+        );
+
+
+        elements.logoutButton.addEventListener(
+          "click",
+          logoutAdmin
+        );
+
+
+        elements.divisionDialog.addEventListener(
+          "cancel",
+          function handleDivisionDialogCancel(
+            event
+          ) {
+            if (state.saving) {
+              event.preventDefault();
+
+              return;
+            }
+
+            state.editingDivisionKey =
+              "";
+          }
+        );
+
+
+        elements.deleteDialog.addEventListener(
+          "cancel",
+          function handleDeleteDialogCancel(
+            event
+          ) {
+            if (state.deleting) {
+              event.preventDefault();
+
+              return;
+            }
+
+            state.pendingDeleteDivision =
+              null;
+          }
+        );
+
+
+        window.addEventListener(
+          "p3r:admin-logout",
+          redirectToLogin
+        );
+      }
+
+
+      /*
+      =====================================================
+      INITIAL DATA
+      =====================================================
+      */
+
+      async function loadInitialData() {
+        setLoading(true);
+
+        try {
+          await loadAllDivisionsForOptions();
+        } catch (error) {
+          if (isSessionError(error)) {
+            redirectToLogin();
+
+            return;
+          }
+
+          showToast(
+            "error",
+            "Division Load Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        readFilters();
+
+        await loadDivisions();
+      }
+
+
+      /*
+      =====================================================
+      INIT
+      =====================================================
+      */
+
+      async function init() {
+        if (state.initialized) {
+          return;
+        }
+
+        state.initialized =
+          true;
+
+        setupListeners();
+
+        setLoading(true);
+
+        const authenticated =
+          await initializeAuthentication();
+
+        setLoading(false);
+
+        if (!authenticated) {
+          return;
+        }
+
+        await loadInitialData();
+      }
+
+
+      if (
+        document.readyState ===
+        "loading"
+      ) {
+        document.addEventListener(
+          "DOMContentLoaded",
+          init,
+          {
+            once: true
+          }
+        );
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4565 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Dashboard administrator Website Profile Magang PUSDATIN X BOC UBP Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#031127"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    Admin Dashboard — PUSDATIN X BOC
+  </title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Oxanium:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+  <style>
+    :root {
+      --admin-bg: #020611;
+      --admin-sidebar: #031027;
+      --admin-panel: rgba(5, 20, 46, 0.96);
+      --admin-panel-soft: rgba(9, 35, 74, 0.86);
+
+      --admin-blue: #0877ff;
+      --admin-blue-light: #55bcff;
+      --admin-cyan: #32e3ff;
+      --admin-green: #3ff2a4;
+      --admin-yellow: #ffd45b;
+      --admin-red: #ff536b;
+      --admin-purple: #a783ff;
+
+      --admin-white: #f4f9ff;
+      --admin-text: #c5d9ef;
+      --admin-muted: #7793b6;
+
+      --admin-border: rgba(117, 185, 255, 0.22);
+      --admin-border-strong: rgba(117, 203, 255, 0.5);
+
+      --sidebar-width: 274px;
+      --topbar-height: 76px;
+    }
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      min-height: 100%;
+      background: var(--admin-bg);
+    }
+
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--admin-white);
+      background:
+        radial-gradient(
+          circle at 95% 0,
+          rgba(8, 119, 255, 0.19),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 28% 100%,
+          rgba(167, 131, 255, 0.08),
+          transparent 34%
+        ),
+        var(--admin-bg);
+      font-family: "Oxanium", sans-serif;
+    }
+
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+
+    button {
+      border-radius: 0;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    /*
+    =====================================================
+    BACKGROUND
+    =====================================================
+    */
+
+    .admin-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+
+    .admin-background-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.075;
+      background-image:
+        linear-gradient(
+          rgba(87, 178, 255, 0.3) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(87, 178, 255, 0.3) 1px,
+          transparent 1px
+        );
+      background-size: 48px 48px;
+    }
+
+
+    .admin-background-lines {
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent 0,
+          transparent 28px,
+          rgba(255, 255, 255, 0.3) 29px,
+          transparent 30px
+        );
+    }
+
+
+    .admin-background-orb {
+      position: absolute;
+      width: min(70vw, 900px);
+      aspect-ratio: 1;
+      top: -440px;
+      right: -300px;
+      border: 85px solid rgba(67, 179, 255, 0.025);
+      border-radius: 50%;
+      box-shadow:
+        0 0 190px rgba(0, 105, 255, 0.1),
+        inset 0 0 150px rgba(0, 105, 255, 0.055);
+    }
+
+
+    /*
+    =====================================================
+    APP
+    =====================================================
+    */
+
+    .admin-app {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+
+    /*
+    =====================================================
+    LOADING BAR
+    =====================================================
+    */
+
+    .admin-loading-bar {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      height: 3px;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(37, 89, 153, 0.32);
+      transition: opacity 150ms ease;
+    }
+
+
+    .admin-loading-bar.is-visible {
+      opacity: 1;
+    }
+
+
+    .admin-loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 36%;
+      height: 100%;
+      left: -36%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--admin-cyan),
+          var(--admin-purple),
+          transparent
+        );
+      animation: adminLoading 1s linear infinite;
+    }
+
+
+    @keyframes adminLoading {
+      to {
+        transform: translateX(380%);
+      }
+    }
+
+
+    /*
+    =====================================================
+    SIDEBAR
+    =====================================================
+    */
+
+    .admin-sidebar {
+      position: fixed;
+      z-index: 80;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      border-right: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(4, 18, 43, 0.99),
+          rgba(2, 9, 23, 0.99)
+        );
+      box-shadow: 18px 0 60px rgba(0, 0, 0, 0.32);
+      transition: transform 220ms ease;
+    }
+
+
+    .admin-sidebar-header {
+      min-height: var(--topbar-height);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--admin-border);
+    }
+
+
+    .admin-logo {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      padding: 5px;
+      object-fit: contain;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      background: #ffffff;
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-brand {
+      min-width: 0;
+    }
+
+
+    .admin-brand-small {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-brand-name {
+      margin-top: 4px;
+      overflow: hidden;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.4px;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-sidebar-content {
+      flex: 1;
+      padding: 22px 14px;
+    }
+
+
+    .admin-nav-label {
+      margin: 0 9px 10px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-nav {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 25px;
+    }
+
+
+    .admin-nav-link {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      color: #9db7d5;
+      background: transparent;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        color 150ms ease,
+        border-color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+    }
+
+
+    .admin-nav-link:hover,
+    .admin-nav-link:focus-visible {
+      color: #ffffff;
+      border-color: rgba(79, 177, 255, 0.25);
+      background: rgba(19, 95, 180, 0.16);
+      outline: none;
+      transform: translateX(3px);
+    }
+
+
+    .admin-nav-link.is-active {
+      color: #ffffff;
+      border-color: rgba(70, 180, 255, 0.38);
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 111, 255, 0.34),
+          rgba(0, 111, 255, 0.07)
+        );
+      box-shadow: inset 4px 0 0 var(--admin-cyan);
+    }
+
+
+    .admin-nav-link.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.46;
+      pointer-events: none;
+    }
+
+
+    .admin-nav-icon {
+      width: 31px;
+      height: 31px;
+      flex: 0 0 31px;
+      display: grid;
+      place-items: center;
+      color: var(--admin-blue-light);
+      border: 1px solid rgba(93, 188, 255, 0.25);
+      background: rgba(3, 25, 57, 0.72);
+      font-size: 10px;
+    }
+
+
+    .admin-nav-badge {
+      margin-left: auto;
+      padding: 3px 7px;
+      border: 1px solid rgba(63, 242, 164, 0.27);
+      color: var(--admin-green);
+      background: rgba(63, 242, 164, 0.08);
+      font-size: 9px;
+      letter-spacing: 0.8px;
+    }
+
+
+    .admin-nav-badge.is-pending {
+      color: var(--admin-yellow);
+      border-color: rgba(255, 212, 91, 0.25);
+      background: rgba(255, 212, 91, 0.08);
+    }
+
+
+    .admin-sidebar-footer {
+      padding: 15px;
+      border-top: 1px solid var(--admin-border);
+    }
+
+
+    .admin-user-box {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px;
+      border: 1px solid var(--admin-border);
+      background: rgba(2, 13, 32, 0.7);
+    }
+
+
+    .admin-user-avatar {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background:
+        linear-gradient(
+          135deg,
+          var(--admin-blue),
+          #063f98
+        );
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+
+    .admin-user-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+
+    .admin-user-name {
+      overflow: hidden;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-user-role {
+      margin-top: 2px;
+      overflow: hidden;
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    /*
+    =====================================================
+    MAIN
+    =====================================================
+    */
+
+    .admin-main {
+      min-height: 100vh;
+      margin-left: var(--sidebar-width);
+    }
+
+
+    /*
+    =====================================================
+    TOPBAR
+    =====================================================
+    */
+
+    .admin-topbar {
+      position: sticky;
+      z-index: 60;
+      top: 0;
+      min-height: var(--topbar-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 28px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(2, 9, 23, 0.93);
+      backdrop-filter: blur(18px);
+    }
+
+
+    .admin-topbar-left {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+
+    .admin-sidebar-toggle {
+      width: 43px;
+      height: 43px;
+      display: none;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--admin-border);
+      color: #ffffff;
+      background: rgba(5, 25, 56, 0.86);
+    }
+
+
+    .admin-sidebar-toggle span,
+    .admin-sidebar-toggle span::before,
+    .admin-sidebar-toggle span::after {
+      width: 18px;
+      height: 2px;
+      display: block;
+      background: currentColor;
+    }
+
+
+    .admin-sidebar-toggle span {
+      position: relative;
+    }
+
+
+    .admin-sidebar-toggle span::before,
+    .admin-sidebar-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+    }
+
+
+    .admin-sidebar-toggle span::before {
+      top: -6px;
+    }
+
+
+    .admin-sidebar-toggle span::after {
+      top: 6px;
+    }
+
+
+    .admin-topbar-kicker {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-topbar-title {
+      margin: 3px 0 0;
+      overflow: hidden;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.5px;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+
+    .admin-session {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border: 1px solid var(--admin-border);
+      background: rgba(4, 20, 45, 0.72);
+    }
+
+
+    .admin-session-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--admin-green);
+      box-shadow: 0 0 12px rgba(63, 242, 164, 0.7);
+    }
+
+
+    .admin-session-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-session-value {
+      margin-top: 1px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+
+    .admin-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid var(--admin-border);
+      color: #dcecff;
+      background: rgba(5, 24, 54, 0.82);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        border-color 150ms ease,
+        color 150ms ease,
+        background 150ms ease;
+    }
+
+
+    .admin-button:hover:not(:disabled),
+    .admin-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(12, 67, 127, 0.78);
+      outline: none;
+    }
+
+
+    .admin-button.is-primary {
+      color: #ffffff;
+      border-color: var(--admin-blue-light);
+      background:
+        linear-gradient(
+          100deg,
+          #005ce6,
+          #0d83ff
+        );
+    }
+
+
+    .admin-button.is-danger {
+      color: #ffc3cd;
+      border-color: rgba(255, 83, 107, 0.35);
+      background: rgba(119, 14, 34, 0.32);
+    }
+
+
+    .admin-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+
+    /*
+    =====================================================
+    MOBILE OVERLAY
+    =====================================================
+    */
+
+    .admin-sidebar-overlay {
+      position: fixed;
+      z-index: 75;
+      inset: 0;
+      display: none;
+      border: 0;
+      background: rgba(0, 4, 12, 0.74);
+      backdrop-filter: blur(3px);
+    }
+
+
+    .admin-sidebar-overlay.is-visible {
+      display: block;
+    }
+
+
+    /*
+    =====================================================
+    CONTENT
+    =====================================================
+    */
+
+    .admin-content {
+      width: 100%;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+
+    /*
+    =====================================================
+    HERO
+    =====================================================
+    */
+
+    .admin-hero {
+      position: relative;
+      min-height: 265px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 35px;
+      overflow: hidden;
+      padding: 38px 42px;
+      border: 1px solid rgba(81, 190, 255, 0.42);
+      background:
+        linear-gradient(
+          120deg,
+          rgba(0, 91, 213, 0.9),
+          rgba(5, 45, 104, 0.93) 48%,
+          rgba(39, 27, 87, 0.95) 76%,
+          rgba(4, 16, 38, 0.98)
+        );
+      box-shadow: 0 22px 65px rgba(0, 0, 0, 0.25);
+      clip-path: polygon(
+        0 0,
+        calc(100% - 34px) 0,
+        100% 34px,
+        100% 100%,
+        34px 100%,
+        0 calc(100% - 34px)
+      );
+    }
+
+
+    .admin-hero::before {
+      content: "";
+      position: absolute;
+      width: 440px;
+      height: 440px;
+      top: -230px;
+      right: -80px;
+      border: 70px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+    }
+
+
+    .admin-hero::after {
+      content: "CONTROL";
+      position: absolute;
+      right: -18px;
+      bottom: -25px;
+      color: rgba(255, 255, 255, 0.045);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(90px, 12vw, 170px);
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -5px;
+      pointer-events: none;
+    }
+
+
+    .admin-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+    }
+
+
+    .admin-hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--admin-cyan);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-hero-kicker::before {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background: var(--admin-cyan);
+    }
+
+
+    .admin-hero-title {
+      margin: 13px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(46px, 6vw, 76px);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-hero-description {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: rgba(232, 246, 255, 0.8);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+
+    .admin-hero-actions {
+      position: relative;
+      z-index: 3;
+      width: min(310px, 100%);
+      display: grid;
+      gap: 10px;
+    }
+
+
+    .admin-hero-action {
+      min-height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+      background: rgba(0, 13, 35, 0.46);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        transform 150ms ease,
+        background 150ms ease,
+        border-color 150ms ease;
+    }
+
+
+    .admin-hero-action:hover,
+    .admin-hero-action:focus-visible {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.65);
+      background: rgba(0, 32, 78, 0.74);
+      outline: none;
+      transform: translateX(4px);
+    }
+
+
+    .admin-hero-action.is-primary {
+      border-color: var(--admin-cyan);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(0, 92, 230, 0.96),
+          rgba(13, 131, 255, 0.96)
+        );
+    }
+
+
+    .admin-hero-action.is-purple {
+      border-color: rgba(190, 159, 255, 0.8);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(82, 46, 190, 0.96),
+          rgba(132, 91, 255, 0.96)
+        );
+    }
+
+
+    /*
+    =====================================================
+    SECTIONS
+    =====================================================
+    */
+
+    .admin-section {
+      margin-top: 28px;
+    }
+
+
+    .admin-section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+
+    .admin-section-kicker {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-section-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-section-link {
+      padding: 0;
+      border: 0;
+      color: var(--admin-blue-light);
+      background: transparent;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-section-link:hover,
+    .admin-section-link:focus-visible {
+      color: #ffffff;
+      text-decoration: underline;
+      outline: none;
+    }
+
+
+    /*
+    =====================================================
+    SUMMARY
+    =====================================================
+    */
+
+    .admin-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+
+    .admin-summary {
+      position: relative;
+      min-height: 155px;
+      overflow: hidden;
+      padding: 20px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 28, 62, 0.95),
+          rgba(3, 14, 34, 0.97)
+        );
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    }
+
+
+    .admin-summary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 75px;
+      height: 4px;
+      background: var(--accent, var(--admin-blue));
+    }
+
+
+    .admin-summary::after {
+      content: "";
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      right: -45px;
+      bottom: -50px;
+      border: 22px solid rgba(255, 255, 255, 0.035);
+      border-radius: 50%;
+    }
+
+
+    .admin-summary-label {
+      position: relative;
+      z-index: 2;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-summary-value {
+      position: relative;
+      z-index: 2;
+      margin-top: 13px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 0.85;
+    }
+
+
+    .admin-summary-note {
+      position: relative;
+      z-index: 2;
+      margin-top: 14px;
+      color: #9bb6d5;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+
+    /*
+    =====================================================
+    DASHBOARD GRID
+    =====================================================
+    */
+
+    .admin-dashboard-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(300px, 0.75fr);
+      gap: 18px;
+    }
+
+
+    /*
+    =====================================================
+    PANEL
+    =====================================================
+    */
+
+    .admin-panel {
+      overflow: hidden;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(6, 24, 55, 0.96),
+          rgba(2, 12, 30, 0.98)
+        );
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.19);
+    }
+
+
+    .admin-panel-header {
+      min-height: 59px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 17px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(9, 35, 75, 0.62);
+    }
+
+
+    .admin-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-title::before {
+      content: "";
+      width: 5px;
+      height: 22px;
+      background: var(--admin-blue-light);
+    }
+
+
+    .admin-panel-subtitle {
+      margin-top: 3px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-body {
+      padding: 17px;
+    }
+
+
+    /*
+    =====================================================
+    TABLE
+    =====================================================
+    */
+
+    .admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+
+    .admin-table {
+      width: 100%;
+      min-width: 770px;
+      border-collapse: collapse;
+    }
+
+
+    .admin-table th {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--admin-border);
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-table td {
+      padding: 12px 11px;
+      border-bottom: 1px solid rgba(117, 185, 255, 0.09);
+      color: #c5d8ec;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+
+    .admin-table tbody tr:hover {
+      background: rgba(18, 88, 163, 0.12);
+    }
+
+
+    .admin-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+
+    .admin-member {
+      min-width: 190px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+
+    .admin-member-photo {
+      width: 39px;
+      height: 39px;
+      flex: 0 0 39px;
+      object-fit: cover;
+      border: 1px solid var(--admin-border);
+      background: #07152d;
+    }
+
+
+    .admin-member-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-member-id {
+      margin-top: 2px;
+      color: var(--admin-muted);
+      font-size: 9px;
+    }
+
+
+    .admin-badge {
+      min-height: 23px;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border: 1px solid var(--admin-border);
+      color: #b8d3ed;
+      background: rgba(6, 25, 56, 0.8);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-badge.is-active {
+      color: #a9ffd6;
+      border-color: rgba(63, 242, 164, 0.28);
+      background: rgba(11, 105, 67, 0.18);
+    }
+
+
+    .admin-badge.is-draft {
+      color: #ffe9a8;
+      border-color: rgba(255, 212, 91, 0.28);
+    }
+
+
+    .admin-badge.is-hidden {
+      color: #e1d3ff;
+      border-color: rgba(181, 140, 255, 0.3);
+    }
+
+
+    .admin-badge.is-deleted {
+      color: #ffc7d0;
+      border-color: rgba(255, 83, 107, 0.3);
+    }
+
+
+    .admin-table-link {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 9px;
+      border: 1px solid var(--admin-border);
+      color: var(--admin-blue-light);
+      background: rgba(5, 29, 64, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-table-link:hover,
+    .admin-table-link:focus-visible {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      outline: none;
+    }
+
+
+    /*
+    =====================================================
+    QUICK ACTIONS
+    =====================================================
+    */
+
+    .admin-action-list {
+      display: grid;
+      gap: 10px;
+    }
+
+
+    .admin-action {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 12px 14px;
+      border: 1px solid var(--admin-border);
+      color: #d8eaff;
+      background: rgba(5, 24, 54, 0.72);
+      text-decoration: none;
+      transition:
+        border-color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+    }
+
+
+    .admin-action:hover,
+    .admin-action:focus-visible {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(9, 54, 109, 0.72);
+      outline: none;
+      transform: translateX(3px);
+    }
+
+
+    .admin-action.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+
+    .admin-action-icon {
+      width: 39px;
+      height: 39px;
+      flex: 0 0 39px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(85, 188, 255, 0.25);
+      color: var(--admin-blue-light);
+      background: rgba(7, 34, 75, 0.9);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+
+    .admin-action-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+
+    .admin-action-title {
+      display: block;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-action-description {
+      display: block;
+      margin-top: 3px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+
+    .admin-action-status {
+      color: var(--admin-green);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-action-status.is-pending {
+      color: var(--admin-yellow);
+    }
+
+
+    /*
+    =====================================================
+    SYSTEM STATUS
+    =====================================================
+    */
+
+    .admin-system-list {
+      display: grid;
+      gap: 4px;
+    }
+
+
+    .admin-system-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 13px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(117, 185, 255, 0.1);
+    }
+
+
+    .admin-system-item:last-child {
+      border-bottom: 0;
+    }
+
+
+    .admin-system-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-system-value {
+      max-width: 60%;
+      overflow: hidden;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-align: right;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-system-value.is-online {
+      color: var(--admin-green);
+    }
+
+
+    .admin-system-value.is-pending {
+      color: var(--admin-yellow);
+    }
+
+
+    .admin-system-value.is-offline {
+      color: var(--admin-red);
+    }
+
+
+    /*
+    =====================================================
+    STATE
+    =====================================================
+    */
+
+    .admin-state {
+      padding: 40px 20px;
+      color: var(--admin-muted);
+      text-align: center;
+    }
+
+
+    .admin-state-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-state-message {
+      max-width: 520px;
+      margin: 8px auto 0;
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+
+    .admin-alert {
+      display: none;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      background: rgba(4, 19, 44, 0.96);
+    }
+
+
+    .admin-alert.is-visible {
+      display: block;
+    }
+
+
+    .admin-alert.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-alert.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-alert-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-alert-message {
+      margin-top: 4px;
+      color: #a9c0db;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    /*
+    =====================================================
+    RESPONSIVE
+    =====================================================
+    */
+
+    @media (max-width: 1240px) {
+      .admin-session {
+        display: none;
+      }
+    }
+
+
+    @media (max-width: 1199.98px) {
+      .admin-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-hero {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+
+      .admin-hero-actions {
+        width: 100%;
+        max-width: 600px;
+      }
+    }
+
+
+    @media (max-width: 991.98px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+      }
+
+
+      body.is-sidebar-open .admin-sidebar {
+        transform: translateX(0);
+      }
+
+
+      .admin-main {
+        margin-left: 0;
+      }
+
+
+      .admin-loading-bar {
+        left: 0;
+      }
+
+
+      .admin-sidebar-toggle {
+        display: grid;
+      }
+
+
+      .admin-topbar {
+        padding-right: 17px;
+        padding-left: 17px;
+      }
+
+
+      .admin-content {
+        padding: 22px 17px;
+      }
+    }
+
+
+    @media (max-width: 767.98px) {
+      .admin-topbar-actions .admin-button span {
+        display: none;
+      }
+
+
+      .admin-topbar-actions .admin-button {
+        width: 43px;
+        padding: 8px;
+      }
+
+
+      .admin-hero {
+        padding: 32px 27px;
+      }
+
+
+      .admin-hero-title {
+        font-size: 52px;
+      }
+    }
+
+
+    @media (max-width: 575.98px) {
+      .admin-content {
+        padding: 15px 11px 30px;
+      }
+
+
+      .admin-topbar-title {
+        font-size: 20px;
+      }
+
+
+      .admin-topbar-kicker {
+        display: none;
+      }
+
+
+      .admin-hero {
+        padding: 28px 22px;
+        clip-path: none;
+      }
+
+
+      .admin-hero-title {
+        font-size: 45px;
+      }
+
+
+      .admin-summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+      }
+
+
+      .admin-panel-body {
+        padding: 13px;
+      }
+    }
+
+
+
+
+    /*
+    =====================================================
+    MERGED UX ENHANCEMENTS
+    =====================================================
+    */
+
+    .admin-nav-link.is-alter:hover,
+    .admin-nav-link.is-alter:focus-visible {
+      border-color: rgba(167, 131, 255, 0.45);
+      background: rgba(101, 63, 186, 0.18);
+    }
+
+
+    .admin-nav-link.is-alter .admin-nav-icon {
+      color: #d1bcff;
+      border-color: rgba(167, 131, 255, 0.42);
+      background: rgba(72, 43, 132, 0.3);
+    }
+
+
+    .admin-button.is-alter {
+      color: #ffffff;
+      border-color: #d1bcff;
+      background:
+        linear-gradient(
+          100deg,
+          #5b35ce,
+          #855cff
+        );
+    }
+
+
+    .admin-action.is-add {
+      border-color: rgba(63, 242, 164, 0.28);
+      background: rgba(11, 105, 67, 0.17);
+    }
+
+
+    .admin-action.is-add:hover,
+    .admin-action.is-add:focus-visible {
+      border-color: rgba(63, 242, 164, 0.58);
+      background: rgba(11, 105, 67, 0.32);
+    }
+
+
+    .admin-action.is-add .admin-action-icon {
+      color: #baffdd;
+      border-color: rgba(63, 242, 164, 0.34);
+      background: rgba(11, 105, 67, 0.32);
+    }
+
+
+    .admin-table-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+
+    .admin-retry-button {
+      min-height: 38px;
+      margin-top: 16px;
+      padding: 8px 15px;
+      border: 1px solid var(--admin-border-strong);
+      color: #ffffff;
+      background: rgba(7, 82, 167, 0.78);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-retry-button:hover,
+    .admin-retry-button:focus-visible {
+      border-color: var(--admin-cyan);
+      background: rgba(11, 105, 196, 0.9);
+      outline: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div
+    class="admin-background"
+    aria-hidden="true"
+  >
+    <div class="admin-background-grid"></div>
+    <div class="admin-background-lines"></div>
+    <div class="admin-background-orb"></div>
+  </div>
+
+
+  <div
+    class="admin-loading-bar"
+    id="loadingBar"
+    aria-hidden="true"
+  ></div>
+
+
+  <button
+    class="admin-sidebar-overlay"
+    id="sidebarOverlay"
+    type="button"
+    aria-label="Tutup menu administrator"
+  ></button>
+
+
+  <noscript>
+    <div
+      style="
+        position:relative;
+        z-index:9999;
+        padding:20px;
+        color:white;
+        background:#8e1830;
+      "
+    >
+      Panel administrator membutuhkan JavaScript.
+    </div>
+  </noscript>
+
+
+  <div class="admin-app">
+
+    <!-- =================================================
+         SIDEBAR
+         ================================================= -->
+
+    <aside
+      class="admin-sidebar"
+      id="adminSidebar"
+      aria-label="Navigasi administrator"
+    >
+
+      <div class="admin-sidebar-header">
+
+        <img
+          class="admin-logo"
+          src="./assets/img/logo.png"
+          alt="Logo PUSDATIN X BOC"
+          onerror="
+            this.onerror=null;
+            this.src='./assets/img/placeholder.png';
+          "
+        >
+
+        <div class="admin-brand">
+
+          <div class="admin-brand-small">
+            Administrator
+          </div>
+
+          <div class="admin-brand-name">
+            PUSDATIN X BOC
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-sidebar-content">
+
+        <div class="admin-nav-label">
+          Main Control
+        </div>
+
+
+        <nav class="admin-nav">
+
+          <a
+            class="admin-nav-link is-active"
+            href="./admin.html"
+            aria-current="page"
+          >
+            <span class="admin-nav-icon">
+              DB
+            </span>
+
+            <span>
+              Dashboard
+            </span>
+          </a>
+
+
+          <a
+            class="admin-nav-link"
+            href="./admin-members.html"
+          >
+            <span class="admin-nav-icon">
+              MB
+            </span>
+
+            <span>
+              Members
+            </span>
+
+            <span class="admin-nav-badge">
+              Ready
+            </span>
+          </a>
+
+
+          <a
+            class="admin-nav-link is-alter"
+            href="./admin-alters.html"
+          >
+            <span class="admin-nav-icon">
+              AL
+            </span>
+
+            <span>
+              Alter Profiles
+            </span>
+
+            <span class="admin-nav-badge">
+              Ready
+            </span>
+          </a>
+
+
+          <a
+            class="admin-nav-link"
+            href="./admin-divisions.html"
+          >
+            <span class="admin-nav-icon">
+              DV
+            </span>
+
+            <span>
+              Divisions
+            </span>
+
+            <span class="admin-nav-badge">
+              Ready
+            </span>
+          </a>
+
+        </nav>
+
+
+        <div class="admin-nav-label">
+          Website
+        </div>
+
+
+        <nav class="admin-nav">
+
+          <a
+            class="admin-nav-link"
+            href="./index.html"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="admin-nav-icon">
+              WB
+            </span>
+
+            <span>
+              View Website
+            </span>
+          </a>
+
+
+          <a
+            class="admin-nav-link"
+            href="./admin-login.html"
+          >
+            <span class="admin-nav-icon">
+              LG
+            </span>
+
+            <span>
+              Login Page
+            </span>
+          </a>
+
+        </nav>
+
+
+        <div class="admin-nav-label">
+          Settings
+        </div>
+
+
+        <nav class="admin-nav">
+
+          <a
+            class="admin-nav-link is-disabled"
+            href="#"
+            aria-disabled="true"
+            tabindex="-1"
+          >
+            <span class="admin-nav-icon">
+              PW
+            </span>
+
+            <span>
+              Change Password
+            </span>
+
+            <span class="admin-nav-badge is-pending">
+              Soon
+            </span>
+          </a>
+
+
+          <a
+            class="admin-nav-link is-disabled"
+            href="#"
+            aria-disabled="true"
+            tabindex="-1"
+          >
+            <span class="admin-nav-icon">
+              MD
+            </span>
+
+            <span>
+              Media Drive
+            </span>
+
+            <span class="admin-nav-badge is-pending">
+              Next
+            </span>
+          </a>
+
+        </nav>
+
+      </div>
+
+
+      <div class="admin-sidebar-footer">
+
+        <div class="admin-user-box">
+
+          <div
+            class="admin-user-avatar"
+            id="userAvatar"
+          >
+            A
+          </div>
+
+          <div class="admin-user-info">
+
+            <div
+              class="admin-user-name"
+              id="userName"
+            >
+              Administrator
+            </div>
+
+            <div
+              class="admin-user-role"
+              id="userRole"
+            >
+              Memeriksa session
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN
+         ================================================= -->
+
+    <div class="admin-main">
+
+      <header class="admin-topbar">
+
+        <div class="admin-topbar-left">
+
+          <button
+            class="admin-sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Buka menu administrator"
+            aria-expanded="false"
+          >
+            <span></span>
+          </button>
+
+
+          <div>
+
+            <div class="admin-topbar-kicker">
+              Profile Management System
+            </div>
+
+            <h1 class="admin-topbar-title">
+              Administrator Dashboard
+            </h1>
+
+          </div>
+
+        </div>
+
+
+        <div class="admin-topbar-actions">
+
+          <div class="admin-session">
+
+            <span class="admin-session-dot"></span>
+
+            <div>
+
+              <div class="admin-session-label">
+                Session
+              </div>
+
+              <div
+                class="admin-session-value"
+                id="sessionCountdown"
+              >
+                Checking
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <a
+            class="admin-button"
+            href="./admin-members.html"
+            title="Kelola member"
+          >
+            MB
+
+            <span>
+              Members
+            </span>
+          </a>
+
+
+          <a
+            class="admin-button is-alter"
+            href="./admin-alters.html"
+            title="Kelola Alter Profile"
+          >
+            AL
+
+            <span>
+              Alters
+            </span>
+          </a>
+
+
+          <a
+            class="admin-button is-primary"
+            href="./admin-divisions.html"
+            title="Kelola divisi"
+          >
+            DV
+
+            <span>
+              Divisions
+            </span>
+          </a>
+
+
+          <a
+            class="admin-button"
+            href="./index.html"
+            target="_blank"
+            rel="noopener"
+            title="Buka website"
+          >
+            ↗
+
+            <span>
+              Website
+            </span>
+          </a>
+
+
+          <button
+            class="admin-button is-danger"
+            id="logoutButton"
+            type="button"
+            title="Logout"
+          >
+            ×
+
+            <span>
+              Logout
+            </span>
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <main class="admin-content">
+
+        <div
+          class="admin-alert"
+          id="adminAlert"
+          role="status"
+          aria-live="polite"
+        >
+
+          <div
+            class="admin-alert-title"
+            id="adminAlertTitle"
+          >
+            System Message
+          </div>
+
+          <div
+            class="admin-alert-message"
+            id="adminAlertMessage"
+          ></div>
+
+        </div>
+
+
+        <!-- HERO -->
+
+        <section class="admin-hero">
+
+          <div class="admin-hero-content">
+
+            <div class="admin-hero-kicker">
+              Authorized Access
+            </div>
+
+            <h2 class="admin-hero-title">
+              Welcome,
+              <br>
+
+              <span id="welcomeName">
+                Administrator
+              </span>
+            </h2>
+
+            <p class="admin-hero-description">
+              Pengelolaan Member, Alter Profile, dan Divisions
+              sudah tersedia. Seluruh data terhubung langsung
+              dengan Google Spreadsheet melalui Google Apps Script.
+            </p>
+
+          </div>
+
+
+          <div class="admin-hero-actions">
+
+            <a
+              class="admin-hero-action is-primary"
+              href="./admin-members.html"
+            >
+              <span>
+                Kelola Members
+              </span>
+
+              <span>
+                →
+              </span>
+            </a>
+
+
+            <a
+              class="admin-hero-action is-purple"
+              href="./admin-alters.html"
+            >
+              <span>
+                Kelola Alter Profiles
+              </span>
+
+              <span>
+                →
+              </span>
+            </a>
+
+
+            <a
+              class="admin-hero-action"
+              href="./admin-divisions.html"
+            >
+              <span>
+                Kelola Divisions
+              </span>
+
+              <span>
+                →
+              </span>
+            </a>
+
+
+            <a
+              class="admin-hero-action"
+              href="./index.html"
+              target="_blank"
+              rel="noopener"
+            >
+              <span>
+                Lihat Website
+              </span>
+
+              <span>
+                ↗
+              </span>
+            </a>
+
+          </div>
+
+        </section>
+
+
+        <!-- SUMMARY -->
+
+        <section class="admin-section">
+
+          <div class="admin-section-header">
+
+            <div>
+
+              <div class="admin-section-kicker">
+                Database Overview
+              </div>
+
+              <h2 class="admin-section-title">
+                Website Summary
+              </h2>
+
+            </div>
+
+
+            <button
+              class="admin-section-link"
+              id="refreshButton"
+              type="button"
+            >
+              Refresh Data
+            </button>
+
+          </div>
+
+
+          <div class="admin-summary-grid">
+
+            <article
+              class="admin-summary"
+              style="--accent:var(--admin-blue-light)"
+            >
+
+              <div class="admin-summary-label">
+                Total Members
+              </div>
+
+              <div
+                class="admin-summary-value"
+                id="totalMembers"
+              >
+                —
+              </div>
+
+              <div class="admin-summary-note">
+                Seluruh Member yang tersedia pada database.
+              </div>
+
+            </article>
+
+
+            <article
+              class="admin-summary"
+              style="--accent:var(--admin-purple)"
+            >
+
+              <div class="admin-summary-label">
+                Alter Profiles
+              </div>
+
+              <div
+                class="admin-summary-value"
+                id="totalAlters"
+              >
+                —
+              </div>
+
+              <div class="admin-summary-note">
+                Profil alternatif yang terhubung ke Member.
+              </div>
+
+            </article>
+
+
+            <article
+              class="admin-summary"
+              style="--accent:var(--admin-cyan)"
+            >
+
+              <div class="admin-summary-label">
+                Divisions
+              </div>
+
+              <div
+                class="admin-summary-value"
+                id="totalDivisions"
+              >
+                —
+              </div>
+
+              <div class="admin-summary-note">
+                Divisi yang tersedia untuk Member dan Alter.
+              </div>
+
+            </article>
+
+
+            <article
+              class="admin-summary"
+              style="--accent:var(--admin-green)"
+            >
+
+              <div class="admin-summary-label">
+                API Status
+              </div>
+
+              <div
+                class="admin-summary-value"
+                id="apiStatus"
+                style="font-size:32px"
+              >
+                CHECKING
+              </div>
+
+              <div
+                class="admin-summary-note"
+                id="apiStatusNote"
+              >
+                Memeriksa Google Apps Script.
+              </div>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+        <!-- DASHBOARD CONTENT -->
+
+        <section class="admin-section">
+
+          <div class="admin-section-header">
+
+            <div>
+
+              <div class="admin-section-kicker">
+                Control Center
+              </div>
+
+              <h2 class="admin-section-title">
+                Dashboard Data
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div class="admin-dashboard-grid">
+
+            <!-- MEMBER PREVIEW -->
+
+            <section class="admin-panel">
+
+              <div class="admin-panel-header">
+
+                <div>
+
+                  <div class="admin-panel-title">
+                    Member Database
+                  </div>
+
+                  <div class="admin-panel-subtitle">
+                    Preview data Member
+                  </div>
+
+                </div>
+
+
+                <a
+                  class="admin-section-link"
+                  href="./admin-members.html"
+                >
+                  Manage Members
+                </a>
+
+              </div>
+
+
+              <div
+                class="admin-panel-body"
+                id="memberTableContainer"
+              >
+
+                <div class="admin-state">
+
+                  <div class="admin-state-title">
+                    Loading Data
+                  </div>
+
+                  <div class="admin-state-message">
+                    Mengambil data Member dari Google Spreadsheet.
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div
+              style="
+                display:grid;
+                gap:18px;
+              "
+            >
+
+              <!-- QUICK ACTION -->
+
+              <section class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                  <div>
+
+                    <div class="admin-panel-title">
+                      Quick Actions
+                    </div>
+
+                    <div class="admin-panel-subtitle">
+                      Akses pengelolaan website
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <div class="admin-panel-body">
+
+                  <div class="admin-action-list">
+
+                    <a
+                      class="admin-action is-add"
+                      href="./admin-members.html"
+                    >
+
+                      <span class="admin-action-icon">
+                        +
+                      </span>
+
+                      <span class="admin-action-content">
+
+                        <span class="admin-action-title">
+                          Add Member
+                        </span>
+
+                        <span class="admin-action-description">
+                          Buka pengelolaan Member untuk menambahkan profil baru.
+                        </span>
+
+                      </span>
+
+                      <span class="admin-action-status">
+                        Ready
+                      </span>
+
+                    </a>
+
+
+                    <a
+                      class="admin-action"
+                      href="./admin-members.html"
+                    >
+
+                      <span class="admin-action-icon">
+                        MB
+                      </span>
+
+                      <span class="admin-action-content">
+
+                        <span class="admin-action-title">
+                          Manage Members
+                        </span>
+
+                        <span class="admin-action-description">
+                          Tambah, edit, hapus, dan pulihkan Member.
+                        </span>
+
+                      </span>
+
+                      <span class="admin-action-status">
+                        Ready
+                      </span>
+
+                    </a>
+
+
+                    <a
+                      class="admin-action"
+                      href="./admin-alters.html"
+                    >
+
+                      <span class="admin-action-icon">
+                        AL
+                      </span>
+
+                      <span class="admin-action-content">
+
+                        <span class="admin-action-title">
+                          Manage Alter Profiles
+                        </span>
+
+                        <span class="admin-action-description">
+                          Kelola profil alternatif dan relasi Member.
+                        </span>
+
+                      </span>
+
+                      <span class="admin-action-status">
+                        Ready
+                      </span>
+
+                    </a>
+
+
+                    <a
+                      class="admin-action"
+                      href="./admin-divisions.html"
+                    >
+
+                      <span class="admin-action-icon">
+                        DV
+                      </span>
+
+                      <span class="admin-action-content">
+
+                        <span class="admin-action-title">
+                          Manage Divisions
+                        </span>
+
+                        <span class="admin-action-description">
+                          Kelola nama, urutan, CSS, dan relasi divisi.
+                        </span>
+
+                      </span>
+
+                      <span class="admin-action-status">
+                        Ready
+                      </span>
+
+                    </a>
+
+
+                    <a
+                      class="admin-action is-disabled"
+                      href="#"
+                      aria-disabled="true"
+                      tabindex="-1"
+                    >
+
+                      <span class="admin-action-icon">
+                        MD
+                      </span>
+
+                      <span class="admin-action-content">
+
+                        <span class="admin-action-title">
+                          Media Drive
+                        </span>
+
+                        <span class="admin-action-description">
+                          Upload foto, video, dan gallery ke Google Drive.
+                        </span>
+
+                      </span>
+
+                      <span class="admin-action-status is-pending">
+                        Next
+                      </span>
+
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </section>
+
+
+              <!-- SYSTEM INFORMATION -->
+
+              <section class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                  <div>
+
+                    <div class="admin-panel-title">
+                      System Information
+                    </div>
+
+                    <div class="admin-panel-subtitle">
+                      Status koneksi saat ini
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <div class="admin-panel-body">
+
+                  <div class="admin-system-list">
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Admin
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="systemEmail"
+                      >
+                        —
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Role
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="systemRole"
+                      >
+                        —
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        API Version
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="systemVersion"
+                      >
+                        —
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Authentication
+                      </div>
+
+                      <div
+                        class="admin-system-value is-online"
+                        id="authStatus"
+                      >
+                        Active
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Member CRUD
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="memberCrudStatus"
+                      >
+                        Checking
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Alter CRUD
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="alterCrudStatus"
+                      >
+                        Checking
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Division CRUD
+                      </div>
+
+                      <div
+                        class="admin-system-value"
+                        id="divisionCrudStatus"
+                      >
+                        Checking
+                      </div>
+
+                    </div>
+
+
+                    <div class="admin-system-item">
+
+                      <div class="admin-system-label">
+                        Media Drive
+                      </div>
+
+                      <div
+                        class="admin-system-value is-pending"
+                        id="mediaStatus"
+                      >
+                        Pending
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </section>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/admin-api.js"></script>
+
+
+  <script>
+    (function initializeAdminDashboard() {
+      "use strict";
+
+
+      /*
+      =====================================================
+      STATE
+      =====================================================
+      */
+
+      const state = {
+        initialized:
+          false,
+
+        loading:
+          false,
+
+        session:
+          null,
+
+        members:
+          [],
+
+        sessionTimer:
+          null,
+
+        sessionVerificationTimer:
+          null
+      };
+
+
+      /*
+      =====================================================
+      ELEMENTS
+      =====================================================
+      */
+
+      function getElement(id) {
+        return document.getElementById(id);
+      }
+
+
+      const elements = {
+        loadingBar:
+          getElement("loadingBar"),
+
+        sidebarToggle:
+          getElement("sidebarToggle"),
+
+        sidebarOverlay:
+          getElement("sidebarOverlay"),
+
+        logoutButton:
+          getElement("logoutButton"),
+
+        refreshButton:
+          getElement("refreshButton"),
+
+        adminAlert:
+          getElement("adminAlert"),
+
+        adminAlertTitle:
+          getElement("adminAlertTitle"),
+
+        adminAlertMessage:
+          getElement("adminAlertMessage"),
+
+        welcomeName:
+          getElement("welcomeName"),
+
+        userAvatar:
+          getElement("userAvatar"),
+
+        userName:
+          getElement("userName"),
+
+        userRole:
+          getElement("userRole"),
+
+        sessionCountdown:
+          getElement("sessionCountdown"),
+
+        totalMembers:
+          getElement("totalMembers"),
+
+        totalAlters:
+          getElement("totalAlters"),
+
+        totalDivisions:
+          getElement("totalDivisions"),
+
+        apiStatus:
+          getElement("apiStatus"),
+
+        apiStatusNote:
+          getElement("apiStatusNote"),
+
+        memberTableContainer:
+          getElement("memberTableContainer"),
+
+        systemEmail:
+          getElement("systemEmail"),
+
+        systemRole:
+          getElement("systemRole"),
+
+        systemVersion:
+          getElement("systemVersion"),
+
+        authStatus:
+          getElement("authStatus"),
+
+        memberCrudStatus:
+          getElement("memberCrudStatus"),
+
+        alterCrudStatus:
+          getElement("alterCrudStatus"),
+
+        divisionCrudStatus:
+          getElement("divisionCrudStatus"),
+
+        mediaStatus:
+          getElement("mediaStatus")
+      };
+
+
+      /*
+      =====================================================
+      HELPERS
+      =====================================================
+      */
+
+      function asString(value) {
+        if (
+          value === null ||
+          value === undefined
+        ) {
+          return "";
+        }
+
+        return String(value).trim();
+      }
+
+
+      function asArray(value) {
+        return Array.isArray(value)
+          ? value
+          : [];
+      }
+
+
+      function isPlainObject(value) {
+        return (
+          value !== null &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        );
+      }
+
+
+      function asNumber(
+        value,
+        fallback
+      ) {
+        const numericValue =
+          Number(value);
+
+        return Number.isFinite(
+          numericValue
+        )
+          ? numericValue
+          : fallback;
+      }
+
+
+      function escapeHTML(value) {
+        return String(
+          value === null ||
+          value === undefined
+            ? ""
+            : value
+        )
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+
+      function getInitials(name) {
+        const words =
+          asString(name)
+            .split(/\s+/)
+            .filter(Boolean);
+
+        if (!words.length) {
+          return "A";
+        }
+
+        if (words.length === 1) {
+          return words[0]
+            .substring(0, 2)
+            .toUpperCase();
+        }
+
+        return (
+          words[0].charAt(0) +
+          words[
+            words.length - 1
+          ].charAt(0)
+        ).toUpperCase();
+      }
+
+
+      function getProfileUrl(memberId) {
+        if (
+          window.P3R_PAGE_URLS &&
+          typeof window.P3R_PAGE_URLS.profile ===
+            "function"
+        ) {
+          return window.P3R_PAGE_URLS.profile(
+            memberId
+          );
+        }
+
+        return (
+          "./profile.html?id=" +
+          encodeURIComponent(
+            memberId
+          )
+        );
+      }
+
+
+      function getMediaUrl(source) {
+        const value =
+          asString(source);
+
+        if (!value) {
+          return "./assets/img/placeholder.png";
+        }
+
+        if (
+          value.startsWith("http://") ||
+          value.startsWith("https://") ||
+          value.startsWith("data:") ||
+          value.startsWith("blob:")
+        ) {
+          return value;
+        }
+
+        const cleanPath =
+          value.replace(/^\/+/, "");
+
+        if (
+          window.P3R_CONFIG &&
+          typeof window.P3R_CONFIG.resolveSiteUrl ===
+            "function"
+        ) {
+          return window.P3R_CONFIG.resolveSiteUrl(
+            cleanPath
+          );
+        }
+
+        return (
+          "./" +
+          cleanPath
+        );
+      }
+
+
+      /*
+      =====================================================
+      LOADING
+      =====================================================
+      */
+
+      function setLoading(loading) {
+        state.loading =
+          Boolean(loading);
+
+        elements.loadingBar.classList.toggle(
+          "is-visible",
+          state.loading
+        );
+
+        elements.refreshButton.disabled =
+          state.loading;
+
+        elements.logoutButton.disabled =
+          state.loading;
+      }
+
+
+      /*
+      =====================================================
+      ALERT
+      =====================================================
+      */
+
+      function showAlert(
+        type,
+        title,
+        message
+      ) {
+        elements.adminAlert.classList.remove(
+          "is-error",
+          "is-warning"
+        );
+
+        elements.adminAlert.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "warning"
+          )
+        );
+
+        elements.adminAlertTitle.textContent =
+          title ||
+          "System Message";
+
+        elements.adminAlertMessage.textContent =
+          message ||
+          "";
+      }
+
+
+      function hideAlert() {
+        elements.adminAlert.classList.remove(
+          "is-visible",
+          "is-error",
+          "is-warning"
+        );
+      }
+
+
+      /*
+      =====================================================
+      SIDEBAR
+      =====================================================
+      */
+
+      function setSidebarOpen(open) {
+        const shouldOpen =
+          Boolean(open);
+
+        document.body.classList.toggle(
+          "is-sidebar-open",
+          shouldOpen
+        );
+
+        elements.sidebarToggle.setAttribute(
+          "aria-expanded",
+          shouldOpen
+            ? "true"
+            : "false"
+        );
+
+        elements.sidebarOverlay.classList.toggle(
+          "is-visible",
+          shouldOpen
+        );
+      }
+
+
+      /*
+      =====================================================
+      AUTH
+      =====================================================
+      */
+
+      function redirectToLogin() {
+        if (
+          window.P3R_ADMIN_API &&
+          typeof window.P3R_ADMIN_API.redirectToLogin ===
+            "function"
+        ) {
+          window.P3R_ADMIN_API.redirectToLogin(
+            window.location.href
+          );
+
+          return;
+        }
+
+        window.location.replace(
+          "./admin-login.html"
+        );
+      }
+
+
+      function isSessionError(error) {
+        return [
+          "ADMIN_SESSION_INVALID",
+          "ADMIN_SESSION_MISSING",
+          "ADMIN_TOKEN_REQUIRED",
+          "SESSION_NOT_FOUND",
+          "SESSION_EXPIRED",
+          "INVALID_SESSION",
+          "AUTH_REQUIRED",
+          "UNAUTHORIZED"
+        ].includes(
+          asString(
+            error &&
+            error.code
+          )
+        );
+      }
+
+
+      async function initializeAuthentication() {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.requireSession !==
+            "function"
+        ) {
+          redirectToLogin();
+
+          return false;
+        }
+
+        try {
+          const session =
+            await window.P3R_ADMIN_API
+              .requireSession({
+                redirect:
+                  true,
+
+                verify:
+                  true,
+
+                returnUrl:
+                  window.location.href
+              });
+
+          if (!session) {
+            return false;
+          }
+
+          state.session =
+            session;
+
+          renderUser(
+            session.user
+          );
+
+          startSessionCountdown();
+
+          return true;
+        } catch (error) {
+          redirectToLogin();
+
+          return false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      USER
+      =====================================================
+      */
+
+      function renderUser(user) {
+        const safeUser =
+          isPlainObject(user)
+            ? user
+            : {};
+
+        const name =
+          asString(
+            safeUser.name
+          ) ||
+          "Administrator";
+
+        const email =
+          asString(
+            safeUser.email
+          ) ||
+          "—";
+
+        const role =
+          asString(
+            safeUser.role
+          ) ||
+          "admin";
+
+        elements.welcomeName.textContent =
+          name;
+
+        elements.userName.textContent =
+          name;
+
+        elements.userRole.textContent =
+          role;
+
+        elements.userAvatar.textContent =
+          getInitials(name);
+
+        elements.systemEmail.textContent =
+          email;
+
+        elements.systemRole.textContent =
+          role;
+      }
+
+
+      /*
+      =====================================================
+      SESSION COUNTDOWN
+      =====================================================
+      */
+
+      function formatRemaining(milliseconds) {
+        const seconds =
+          Math.max(
+            0,
+            Math.floor(
+              milliseconds / 1000
+            )
+          );
+
+        const hours =
+          Math.floor(
+            seconds / 3600
+          );
+
+        const minutes =
+          Math.floor(
+            (
+              seconds % 3600
+            ) / 60
+          );
+
+        const remainingSeconds =
+          seconds % 60;
+
+        if (hours > 0) {
+          return (
+            hours +
+            "h " +
+            minutes +
+            "m"
+          );
+        }
+
+        return (
+          minutes +
+          "m " +
+          remainingSeconds +
+          "s"
+        );
+      }
+
+
+      function updateSessionCountdown() {
+        if (!state.session) {
+          return;
+        }
+
+        const expiresAt =
+          new Date(
+            state.session.expiresAt
+          ).getTime();
+
+        if (
+          !Number.isFinite(
+            expiresAt
+          )
+        ) {
+          elements.sessionCountdown.textContent =
+            "Active";
+
+          return;
+        }
+
+        const remaining =
+          expiresAt -
+          Date.now();
+
+        if (remaining <= 0) {
+          elements.sessionCountdown.textContent =
+            "Expired";
+
+          redirectToLogin();
+
+          return;
+        }
+
+        elements.sessionCountdown.textContent =
+          formatRemaining(
+            remaining
+          );
+      }
+
+
+      function startSessionCountdown() {
+        if (state.sessionTimer) {
+          window.clearInterval(
+            state.sessionTimer
+          );
+        }
+
+        updateSessionCountdown();
+
+        state.sessionTimer =
+          window.setInterval(
+            updateSessionCountdown,
+            1000
+          );
+      }
+
+
+      /*
+      =====================================================
+      MEMBER NORMALIZATION
+      =====================================================
+      */
+
+      function normalizeMember(member) {
+        if (!isPlainObject(member)) {
+          return null;
+        }
+
+        return {
+          id:
+            asString(member.id),
+
+          name:
+            asString(member.name) ||
+            "Tanpa Nama",
+
+          role:
+            asString(member.role) ||
+            "—",
+
+          division:
+            asString(member.division) ||
+            "—",
+
+          status:
+            asString(member.status) ||
+            "Active",
+
+          photo:
+            asString(member.photo)
+        };
+      }
+
+
+      function getStatusClass(status) {
+        const normalized =
+          asString(status)
+            .toLowerCase();
+
+        const allowed = [
+          "active",
+          "inactive",
+          "draft",
+          "hidden",
+          "deleted"
+        ];
+
+        return allowed.includes(
+          normalized
+        )
+          ? "is-" + normalized
+          : "";
+      }
+
+
+      /*
+      =====================================================
+      MEMBER TABLE
+      =====================================================
+      */
+
+      function renderMembers(members) {
+        const normalizedMembers =
+          asArray(members)
+            .map(normalizeMember)
+            .filter(Boolean)
+            .slice(0, 7);
+
+        if (!normalizedMembers.length) {
+          elements.memberTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Belum Ada Member
+              </div>
+
+              <div class="admin-state-message">
+                Tambahkan Member melalui halaman pengelolaan Member.
+              </div>
+
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.memberTableContainer.innerHTML = `
+          <div class="admin-table-wrap">
+
+            <table class="admin-table">
+
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Role</th>
+                  <th>Division</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${normalizedMembers
+                  .map(
+                    function createMemberRow(member) {
+                      return `
+                        <tr>
+
+                          <td>
+                            <div class="admin-member">
+
+                              <img
+                                class="admin-member-photo"
+                                src="${escapeHTML(
+                                  getMediaUrl(
+                                    member.photo
+                                  )
+                                )}"
+                                alt="${escapeHTML(
+                                  member.name
+                                )}"
+                                loading="lazy"
+                                decoding="async"
+                                onerror="
+                                  this.onerror=null;
+                                  this.src='./assets/img/placeholder.png';
+                                "
+                              >
+
+                              <div>
+
+                                <div class="admin-member-name">
+                                  ${escapeHTML(
+                                    member.name
+                                  )}
+                                </div>
+
+                                <div class="admin-member-id">
+                                  ${escapeHTML(
+                                    member.id
+                                  )}
+                                </div>
+
+                              </div>
+
+                            </div>
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              member.role
+                            )}
+                          </td>
+
+
+                          <td>
+                            ${escapeHTML(
+                              member.division
+                            )}
+                          </td>
+
+
+                          <td>
+                            <span class="admin-badge ${getStatusClass(
+                              member.status
+                            )}">
+                              ${escapeHTML(
+                                member.status
+                              )}
+                            </span>
+                          </td>
+
+
+                          <td>
+                            <div class="admin-table-actions">
+
+                              <a
+                                class="admin-table-link"
+                                href="${escapeHTML(
+                                  getProfileUrl(
+                                    member.id
+                                  )
+                                )}"
+                                target="_blank"
+                                rel="noopener"
+                              >
+                                View
+                              </a>
+
+                              <a
+                                class="admin-table-link"
+                                href="./admin-members.html"
+                              >
+                                Manage
+                              </a>
+
+                            </div>
+                          </td>
+
+                        </tr>
+                      `;
+                    }
+                  )
+                  .join("")}
+              </tbody>
+
+            </table>
+
+          </div>
+        `;
+      }
+
+
+      /*
+      =====================================================
+      CRUD STATUS
+      =====================================================
+      */
+
+      function setCrudStatus(
+        element,
+        available
+      ) {
+        element.textContent =
+          available
+            ? "Ready"
+            : "Unavailable";
+
+        element.classList.toggle(
+          "is-online",
+          available
+        );
+
+        element.classList.toggle(
+          "is-offline",
+          !available
+        );
+
+        element.classList.remove(
+          "is-pending"
+        );
+      }
+
+
+      /*
+      =====================================================
+      FRIENDLY ERROR
+      =====================================================
+      */
+
+      function getFriendlyError(error) {
+        const code =
+          asString(
+            error &&
+            error.code
+          );
+
+        switch (code) {
+          case "REQUEST_TIMEOUT":
+            return (
+              "Koneksi ke Google Apps Script melewati batas waktu."
+            );
+
+          case "NETWORK_ERROR":
+            return (
+              "Browser tidak dapat terhubung ke Google Apps Script."
+            );
+
+          case "INVALID_JSON_RESPONSE":
+            return (
+              "Server mengembalikan data yang tidak dapat dibaca."
+            );
+
+          case "API_METHOD_MISSING":
+            return (
+              "Frontend admin belum sinkron dengan admin-api.js terbaru."
+            );
+
+          case "ADMIN_SESSION_INVALID":
+          case "ADMIN_SESSION_MISSING":
+          case "ADMIN_TOKEN_REQUIRED":
+          case "SESSION_NOT_FOUND":
+          case "SESSION_EXPIRED":
+          case "INVALID_SESSION":
+          case "AUTH_REQUIRED":
+          case "UNAUTHORIZED":
+            return (
+              "Session administrator sudah tidak berlaku."
+            );
+
+          default:
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Data dashboard gagal dimuat."
+            );
+        }
+      }
+
+
+      function createMissingMethodError(
+        methodName
+      ) {
+        const error =
+          new Error(
+            "Method " +
+            methodName +
+            " belum tersedia pada admin-api.js."
+          );
+
+        error.code =
+          "API_METHOD_MISSING";
+
+        return error;
+      }
+
+
+      function callAdminApi(
+        methodName,
+        args
+      ) {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API[methodName] !==
+            "function"
+        ) {
+          return Promise.reject(
+            createMissingMethodError(
+              methodName
+            )
+          );
+        }
+
+        return window.P3R_ADMIN_API[
+          methodName
+        ].apply(
+          window.P3R_ADMIN_API,
+          Array.isArray(args)
+            ? args
+            : []
+        );
+      }
+
+
+      function getSettledValue(
+        result,
+        fallback
+      ) {
+        return (
+          result &&
+          result.status ===
+            "fulfilled"
+        )
+          ? result.value
+          : fallback;
+      }
+
+
+      function getSettledErrors(results) {
+        return results
+          .filter(
+            function filterRejected(
+              result
+            ) {
+              return (
+                result &&
+                result.status ===
+                  "rejected"
+              );
+            }
+          )
+          .map(
+            function mapRejected(
+              result
+            ) {
+              return result.reason;
+            }
+          );
+      }
+
+
+      /*
+      =====================================================
+      DASHBOARD DATA
+      =====================================================
+      */
+
+      async function loadDashboard() {
+        if (state.loading) {
+          return;
+        }
+
+        hideAlert();
+        setLoading(true);
+
+        elements.apiStatus.textContent =
+          "CHECKING";
+
+        elements.apiStatus.style.color =
+          "";
+
+        elements.apiStatusNote.textContent =
+          "Menghubungkan ke Google Apps Script.";
+
+        elements.memberTableContainer.innerHTML = `
+          <div class="admin-state">
+
+            <div class="admin-state-title">
+              Loading Data
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data dashboard dari Google Spreadsheet.
+            </div>
+
+          </div>
+        `;
+
+        try {
+          const results =
+            await Promise.allSettled([
+              callAdminApi(
+                "listMembers",
+                [{
+                  page:
+                    1,
+
+                  pageSize:
+                    8,
+
+                  includeDeleted:
+                    false
+                }]
+              ),
+
+              callAdminApi(
+                "listAlters",
+                [{
+                  page:
+                    1,
+
+                  pageSize:
+                    1,
+
+                  includeDeleted:
+                    false
+                }]
+              ),
+
+              callAdminApi(
+                "listDivisions",
+                [{
+                  page:
+                    1,
+
+                  pageSize:
+                    1
+                }]
+              ),
+
+              callAdminApi(
+                "adminPing",
+                []
+              )
+            ]);
+
+          const errors =
+            getSettledErrors(
+              results
+            );
+
+          const sessionError =
+            errors.find(
+              isSessionError
+            );
+
+          if (sessionError) {
+            throw sessionError;
+          }
+
+          const memberResult =
+            getSettledValue(
+              results[0],
+              {
+                members:
+                  [],
+
+                pagination: {
+                  total:
+                    0
+                }
+              }
+            ) || {};
+
+          const alterResult =
+            getSettledValue(
+              results[1],
+              {
+                alters:
+                  [],
+
+                pagination: {
+                  total:
+                    0
+                }
+              }
+            ) || {};
+
+          const divisionResult =
+            getSettledValue(
+              results[2],
+              {
+                divisions:
+                  [],
+
+                pagination: {
+                  total:
+                    0
+                },
+
+                summary: {
+                  totalDivisions:
+                    0
+                }
+              }
+            ) || {};
+
+          const ping =
+            getSettledValue(
+              results[3],
+              {}
+            ) || {};
+
+          const memberPagination =
+            isPlainObject(
+              memberResult.pagination
+            )
+              ? memberResult.pagination
+              : {};
+
+          const alterPagination =
+            isPlainObject(
+              alterResult.pagination
+            )
+              ? alterResult.pagination
+              : {};
+
+          const divisionPagination =
+            isPlainObject(
+              divisionResult.pagination
+            )
+              ? divisionResult.pagination
+              : {};
+
+          const divisionSummary =
+            isPlainObject(
+              divisionResult.summary
+            )
+              ? divisionResult.summary
+              : {};
+
+          const crudResources =
+            isPlainObject(
+              ping.crudResources
+            )
+              ? ping.crudResources
+              : {};
+
+          state.members =
+            asArray(
+              memberResult.members
+            );
+
+          elements.totalMembers.textContent =
+            String(
+              Math.max(
+                0,
+                asNumber(
+                  memberPagination.total,
+                  state.members.length
+                )
+              )
+            );
+
+          elements.totalAlters.textContent =
+            String(
+              Math.max(
+                0,
+                asNumber(
+                  alterPagination.total,
+                  asArray(
+                    alterResult.alters
+                  ).length
+                )
+              )
+            );
+
+          elements.totalDivisions.textContent =
+            String(
+              Math.max(
+                0,
+                asNumber(
+                  divisionSummary.totalDivisions,
+                  asNumber(
+                    divisionPagination.total,
+                    asArray(
+                      divisionResult.divisions
+                    ).length
+                  )
+                )
+              )
+            );
+
+          const pingAvailable =
+            results[3].status ===
+              "fulfilled";
+
+          elements.apiStatus.textContent =
+            pingAvailable
+              ? "ONLINE"
+              : "DEGRADED";
+
+          elements.apiStatus.style.color =
+            pingAvailable
+              ? "var(--admin-green)"
+              : "var(--admin-yellow)";
+
+          elements.apiStatusNote.textContent =
+            pingAvailable
+              ? "Google Apps Script dan autentikasi admin aktif."
+              : "Data sebagian dapat dimuat, tetapi pemeriksaan API gagal.";
+
+          elements.systemVersion.textContent =
+            asString(
+              ping.version
+            ) ||
+            "—";
+
+          setCrudStatus(
+            elements.memberCrudStatus,
+            crudResources.members ===
+              true
+          );
+
+          setCrudStatus(
+            elements.alterCrudStatus,
+            crudResources.alters ===
+              true
+          );
+
+          setCrudStatus(
+            elements.divisionCrudStatus,
+            crudResources.divisions ===
+              true
+          );
+
+          elements.mediaStatus.textContent =
+            crudResources.media === true
+              ? "Ready"
+              : "Pending";
+
+          elements.mediaStatus.classList.toggle(
+            "is-online",
+            crudResources.media ===
+              true
+          );
+
+          elements.mediaStatus.classList.toggle(
+            "is-pending",
+            crudResources.media !==
+              true
+          );
+
+          elements.mediaStatus.classList.remove(
+            "is-offline"
+          );
+
+          renderMembers(
+            state.members
+          );
+
+          if (errors.length) {
+            const warningMessages =
+              errors
+                .map(
+                  getFriendlyError
+                )
+                .filter(
+                  function uniqueWarning(
+                    message,
+                    index,
+                    messages
+                  ) {
+                    return (
+                      messages.indexOf(
+                        message
+                      ) ===
+                      index
+                    );
+                  }
+                );
+
+            showAlert(
+              "warning",
+              "Partial Dashboard Data",
+              warningMessages.join(
+                " "
+              )
+            );
+          }
+        } catch (error) {
+          console.error(
+            "[P3R ADMIN] Dashboard gagal dimuat.",
+            error
+          );
+
+          if (isSessionError(error)) {
+            redirectToLogin();
+
+            return;
+          }
+
+          const friendlyMessage =
+            getFriendlyError(
+              error
+            );
+
+          elements.apiStatus.textContent =
+            "OFFLINE";
+
+          elements.apiStatus.style.color =
+            "var(--admin-red)";
+
+          elements.apiStatusNote.textContent =
+            "Koneksi ke Google Apps Script gagal.";
+
+          elements.memberTableContainer.innerHTML = `
+            <div class="admin-state">
+
+              <div class="admin-state-title">
+                Data Tidak Tersedia
+              </div>
+
+              <div class="admin-state-message">
+                ${escapeHTML(
+                  friendlyMessage
+                )}
+              </div>
+
+              <button
+                class="admin-retry-button"
+                id="dashboardRetryButton"
+                type="button"
+              >
+                Retry Connection
+              </button>
+
+            </div>
+          `;
+
+          const retryButton =
+            getElement(
+              "dashboardRetryButton"
+            );
+
+          if (retryButton) {
+            retryButton.addEventListener(
+              "click",
+              loadDashboard,
+              {
+                once:
+                  true
+              }
+            );
+          }
+
+          showAlert(
+            "error",
+            "Dashboard Load Failed",
+            friendlyMessage
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      VERIFY SESSION
+      =====================================================
+      */
+
+      async function verifySessionPeriodically() {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.verifySession !==
+            "function"
+        ) {
+          return;
+        }
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API
+              .verifySession();
+
+          if (
+            !result ||
+            result.authenticated !==
+              true
+          ) {
+            redirectToLogin();
+
+            return;
+          }
+
+          state.session =
+            result.session ||
+            state.session;
+
+          renderUser(
+            state.session &&
+            state.session.user
+          );
+        } catch (error) {
+          if (isSessionError(error)) {
+            redirectToLogin();
+
+            return;
+          }
+
+          showAlert(
+            "warning",
+            "Session Check Failed",
+            "Session belum dapat diverifikasi karena " +
+              getFriendlyError(error) +
+              " Dashboard tetap menggunakan session lokal."
+          );
+        }
+      }
+
+
+      function startSessionVerification() {
+        if (
+          state.sessionVerificationTimer
+        ) {
+          window.clearInterval(
+            state.sessionVerificationTimer
+          );
+        }
+
+        state.sessionVerificationTimer =
+          window.setInterval(
+            verifySessionPeriodically,
+            5 * 60 * 1000
+          );
+      }
+
+
+      /*
+      =====================================================
+      LOGOUT
+      =====================================================
+      */
+
+      async function logoutAdmin() {
+        if (state.loading) {
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          await window.P3R_ADMIN_API
+            .logout();
+        } catch (error) {
+          console.warn(
+            "[P3R ADMIN] Logout server gagal.",
+            error
+          );
+        } finally {
+          window.location.replace(
+            "./admin-login.html"
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      LISTENERS
+      =====================================================
+      */
+
+      function setupListeners() {
+        elements.sidebarToggle.addEventListener(
+          "click",
+          function toggleSidebar() {
+            setSidebarOpen(
+              !document.body.classList.contains(
+                "is-sidebar-open"
+              )
+            );
+          }
+        );
+
+
+        elements.sidebarOverlay.addEventListener(
+          "click",
+          function closeSidebar() {
+            setSidebarOpen(false);
+          }
+        );
+
+
+        elements.refreshButton.addEventListener(
+          "click",
+          loadDashboard
+        );
+
+
+        elements.logoutButton.addEventListener(
+          "click",
+          logoutAdmin
+        );
+
+
+        window.addEventListener(
+          "resize",
+          function handleResize() {
+            if (
+              window.innerWidth >=
+              992
+            ) {
+              setSidebarOpen(false);
+            }
+          }
+        );
+
+
+        window.addEventListener(
+          "p3r:admin-logout",
+          redirectToLogin
+        );
+
+
+        document.addEventListener(
+          "visibilitychange",
+          function handleVisibility() {
+            if (!document.hidden) {
+              updateSessionCountdown();
+            }
+          }
+        );
+      }
+
+
+      /*
+      =====================================================
+      INIT
+      =====================================================
+      */
+
+      async function init() {
+        if (state.initialized) {
+          return;
+        }
+
+        state.initialized =
+          true;
+
+        setupListeners();
+
+        setLoading(true);
+
+        const authenticated =
+          await initializeAuthentication();
+
+        setLoading(false);
+
+        if (!authenticated) {
+          return;
+        }
+
+        startSessionVerification();
+
+        await loadDashboard();
+      }
+
+
+      if (
+        document.readyState ===
+        "loading"
+      ) {
+        document.addEventListener(
+          "DOMContentLoaded",
+          init,
+          {
+            once: true
+          }
+        );
+      } else {
+        init();
+      }
+
+
+      /*
+      =====================================================
+      CLEANUP
+      =====================================================
+      */
+
+      window.addEventListener(
+        "beforeunload",
+        function cleanup() {
+          if (state.sessionTimer) {
+            window.clearInterval(
+              state.sessionTimer
+            );
+          }
+
+          if (
+            state.sessionVerificationTimer
+          ) {
+            window.clearInterval(
+              state.sessionVerificationTimer
+            );
+          }
+        }
+      );
+    })();
+  </script>
+</body>
+</html>

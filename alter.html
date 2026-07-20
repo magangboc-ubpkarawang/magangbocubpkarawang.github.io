@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Alter Profile anggota magang PUSDATIN dan BOC Universitas Buana Perjuangan Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#07140a"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    PUSDATIN X BOC — Alter Profile
+  </title>
+
+
+  <!-- ===================================================
+       FAVICON
+       =================================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="./assets/img/logo.png"
+  >
+
+
+  <!-- ===================================================
+       BOOTSTRAP
+       =================================================== -->
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       GOOGLE FONTS
+       =================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700;900&family=Oxanium:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       CSS
+       =================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r-alterprofile.css"
+  >
+</head>
+
+
+<body class="p3r p3r-alter p3r-alter-page">
+
+  <!-- ===================================================
+       BACKGROUND
+       =================================================== -->
+
+  <div
+    class="p3r-bg"
+    aria-hidden="true"
+  >
+    <div class="p3r-grid"></div>
+    <div class="p3r-halftone"></div>
+    <div class="p3r-diagonals"></div>
+    <div class="p3r-noise"></div>
+    <div class="p3r-vignette"></div>
+  </div>
+
+
+  <!-- ===================================================
+       NOSCRIPT
+       =================================================== -->
+
+  <noscript>
+    <div
+      class="container py-4"
+      style="
+        position:relative;
+        z-index:9999;
+      "
+    >
+      <div class="alert alert-danger">
+        Halaman Alter Profile membutuhkan JavaScript untuk
+        mengambil data dari Google Spreadsheet.
+      </div>
+    </div>
+  </noscript>
+
+
+  <!-- ===================================================
+       MAIN
+       =================================================== -->
+
+  <main class="p3r-main p3r-alter-main">
+
+    <!-- =================================================
+         TOP COMMAND BAR
+         ================================================= -->
+
+    <section class="container p3r-alter-top">
+      <div class="p3r-alter-command">
+
+        <a
+          class="p3r-btn p3r-btn-ghost"
+          id="backToNormalBtn"
+          href="./index.html#roster"
+        >
+          BACK
+        </a>
+
+
+        <div class="p3r-alter-command-title">
+          <span>
+            ALTER
+          </span>
+
+          <small>
+            DARK HOUR / GREEN DOSSIER
+          </small>
+        </div>
+
+
+        <div
+          class="d-flex flex-wrap gap-2 justify-content-end"
+        >
+          <a
+            class="p3r-btn"
+            id="copyLinkBtn"
+            href="#"
+            aria-label="Salin link Alter Profile"
+          >
+            COPY LINK
+          </a>
+
+          <a
+            class="p3r-btn p3r-btn-ghost"
+            id="normalBtn"
+            href="#"
+            style="display:none"
+            aria-label="Kembali ke profil normal"
+          >
+            NORMAL
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================================================
+         ALTER STATUS SCREEN
+         ================================================= -->
+
+    <section
+      class="container p3r-alter-stage"
+      aria-busy="true"
+    >
+
+      <div
+        class="p3r-alter-bg-word"
+        aria-hidden="true"
+      >
+        DARK HOUR
+      </div>
+
+
+      <div class="row g-4 align-items-stretch">
+
+        <!-- =============================================
+             LEFT PHOTO
+             ============================================= -->
+
+        <div class="col-12 col-lg-4">
+          <div
+            class="
+              p3r-alter-card
+              p3r-alter-photo-card
+              p3r-reveal
+              is-in
+            "
+          >
+            <div class="p3r-alter-card-label">
+              ALTER IMAGE
+            </div>
+
+
+            <div class="p3r-photo-frame">
+              <img
+                id="photo"
+                class="p3r-photo"
+                src="./assets/img/placeholder.png"
+                alt="Foto Alter"
+                loading="eager"
+                decoding="async"
+              >
+
+              <div
+                class="p3r-photo-wipe"
+                aria-hidden="true"
+              ></div>
+            </div>
+
+
+            <div class="p3r-alter-mini mt-3">
+              <div class="p3r-mini-label">
+                JOIN DATE
+              </div>
+
+              <div
+                class="p3r-mini-value"
+                id="joinDate"
+              >
+                —
+              </div>
+            </div>
+
+
+            <div class="p3r-alter-mini">
+              <div class="p3r-mini-label">
+                SIGNATURE
+              </div>
+
+              <div
+                class="p3r-mini-value"
+                id="signature"
+              >
+                —
+              </div>
+            </div>
+
+
+            <a
+              class="p3r-btn w-100 mt-3"
+              id="shareBtn"
+              href="#"
+              aria-label="Bagikan Alter Profile"
+            >
+              SHARE ALTER
+            </a>
+          </div>
+        </div>
+
+
+        <!-- =============================================
+             RIGHT STATUS
+             ============================================= -->
+
+        <div class="col-12 col-lg-8">
+          <div
+            class="
+              p3r-alter-board
+              p3r-reveal
+              is-in
+            "
+          >
+
+            <!-- ALTER HEADER -->
+
+            <div class="p3r-alter-header">
+              <div>
+                <div class="p3r-alter-kicker">
+                  DARK HOUR / ALTER DATA
+                </div>
+
+                <h1
+                  class="p3r-alter-name p3r-glitch"
+                  id="name"
+                  data-text="INITIALIZING..."
+                >
+                  INITIALIZING...
+                </h1>
+              </div>
+
+
+              <div class="p3r-alter-rank">
+                <span>
+                  RANK
+                </span>
+
+                <b id="rank">
+                  —
+                </b>
+              </div>
+            </div>
+
+
+            <!-- ALTER STATUS LINES -->
+
+            <div class="p3r-alter-lines">
+
+              <div class="p3r-alter-line">
+                <span>
+                  ROLE
+                </span>
+
+                <b id="role">
+                  —
+                </b>
+              </div>
+
+
+              <div class="p3r-alter-line is-white">
+                <span>
+                  DIVISION
+                </span>
+
+                <b id="division">
+                  —
+                </b>
+              </div>
+
+
+              <div class="p3r-alter-line">
+                <span>
+                  MAIN ROLE
+                </span>
+
+                <b id="mainRole">
+                  —
+                </b>
+              </div>
+
+
+              <div class="p3r-alter-line is-green">
+                <span>
+                  STATUS
+                </span>
+
+                <b id="status">
+                  —
+                </b>
+              </div>
+
+            </div>
+
+
+            <!-- ALTER STATS -->
+
+            <div class="p3r-alter-stat-grid mt-4">
+
+              <div class="p3r-alter-stat">
+                <span>
+                  LEVEL
+                </span>
+
+                <b id="level">
+                  —
+                </b>
+              </div>
+
+
+              <div class="p3r-alter-stat">
+                <span>
+                  SUCCESS RATE
+                </span>
+
+                <b>
+                  <span id="winrate">
+                    —
+                  </span>%
+                </b>
+              </div>
+
+
+              <div class="p3r-alter-stat">
+                <span>
+                  PROFILE TYPE
+                </span>
+
+                <b>
+                  ALTER
+                </b>
+              </div>
+
+            </div>
+
+
+            <!-- TAGLINE -->
+
+            <div
+              class="
+                p3r-alter-subtitle
+                p3r-glitch
+                mt-4
+              "
+              id="tagline"
+              data-text="—"
+            >
+              —
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="p3r-alter-section-title mt-4">
+              <span aria-hidden="true"></span>
+
+              DARK HOUR DESCRIPTION
+            </div>
+
+
+            <div
+              class="p3r-desc"
+              id="bio"
+            >
+              Menghubungkan Dark Hour dossier dengan database.
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================================================
+         ALTER DETAILS
+         ================================================= -->
+
+    <section
+      class="container p3r-alter-details pb-5"
+      aria-busy="true"
+    >
+      <div class="row g-4">
+
+        <!-- =============================================
+             LEFT DETAIL COLUMN
+             ============================================= -->
+
+        <div class="col-12 col-lg-6">
+
+          <!-- SKILL MATRIX -->
+
+          <div class="p3r-panel p3r-reveal">
+            <div class="p3r-panel-title">
+              <span
+                class="p3r-panel-title-dot"
+                aria-hidden="true"
+              ></span>
+
+              ALTER SKILL MATRIX
+            </div>
+
+
+            <div
+              class="p3r-muted mt-2"
+              id="skillHint"
+            >
+              Mengambil data skill...
+            </div>
+
+
+            <div
+              class="vstack gap-3 mt-3"
+              id="skillsWrap"
+              aria-live="polite"
+            >
+              <div class="p3r-skill">
+                <div class="p3r-skill-top">
+                  <div>
+                    LOADING
+                  </div>
+
+                  <div>
+                    0/100
+                  </div>
+                </div>
+
+                <div class="p3r-bar">
+                  <span style="width:0%"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- GALLERY -->
+
+          <div
+            class="p3r-panel p3r-reveal"
+            id="galleryPanel"
+            style="display:none"
+          >
+            <div class="p3r-panel-title">
+              <span
+                class="p3r-panel-title-dot"
+                aria-hidden="true"
+              ></span>
+
+              ALTER GALLERY
+            </div>
+
+
+            <div class="p3r-muted mt-2">
+              Dark Hour documentation
+            </div>
+
+
+            <div
+              class="p3r-gallery mt-3"
+              id="gallery"
+            >
+
+              <button
+                class="p3r-g-btn p3r-g-prev"
+                type="button"
+                id="gPrev"
+                aria-label="Gambar sebelumnya"
+              >
+                ‹
+              </button>
+
+
+              <div
+                class="p3r-g-viewport"
+                id="gViewport"
+              >
+                <div
+                  class="p3r-g-track"
+                  id="gTrack"
+                ></div>
+              </div>
+
+
+              <button
+                class="p3r-g-btn p3r-g-next"
+                type="button"
+                id="gNext"
+                aria-label="Gambar selanjutnya"
+              >
+                ›
+              </button>
+
+
+              <div
+                class="p3r-g-dots"
+                id="gDots"
+                aria-label="Navigasi Alter Gallery"
+              ></div>
+
+
+              <div
+                class="p3r-g-cap"
+                id="gCap"
+                aria-live="polite"
+              ></div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             RIGHT DETAIL COLUMN
+             ============================================= -->
+
+        <div class="col-12 col-lg-6">
+
+          <!-- VIDEO CV -->
+
+          <div class="p3r-panel p3r-reveal">
+            <div class="p3r-panel-title">
+              <span
+                class="p3r-panel-title-dot"
+                aria-hidden="true"
+              ></span>
+
+              ALTER VIDEO CV
+            </div>
+
+
+            <div
+              class="p3r-muted mt-2"
+              id="videoNote"
+            >
+              Memeriksa ketersediaan video...
+            </div>
+
+
+            <div
+              class="p3r-video mt-3"
+              id="videoWrap"
+            ></div>
+          </div>
+
+
+          <!-- EXPERTISE -->
+
+          <div class="p3r-panel p3r-reveal">
+            <div class="p3r-panel-title">
+              <span
+                class="p3r-panel-title-dot"
+                aria-hidden="true"
+              ></span>
+
+              EXPERTISE
+            </div>
+
+
+            <div class="mt-3">
+
+              <!-- PLAYSTYLE -->
+
+              <div
+                class="
+                  p3r-alter-section-title
+                  small-title
+                "
+              >
+                <span aria-hidden="true"></span>
+
+                PLAYSTYLE
+              </div>
+
+              <div
+                class="fw-bold"
+                id="playstyle"
+              >
+                —
+              </div>
+
+
+              <div class="p3r-divider my-3"></div>
+
+
+              <!-- STRENGTH -->
+
+              <div
+                class="
+                  p3r-alter-section-title
+                  small-title
+                "
+              >
+                <span aria-hidden="true"></span>
+
+                STRENGTH
+              </div>
+
+              <div
+                class="p3r-tags mt-2"
+                id="strengthTags"
+              >
+                <span class="p3r-tag">
+                  LOADING
+                </span>
+              </div>
+
+
+              <!-- ROLE POOL -->
+
+              <div
+                class="
+                  p3r-alter-section-title
+                  small-title
+                  mt-3
+                "
+              >
+                <span aria-hidden="true"></span>
+
+                ROLE POOL
+              </div>
+
+              <div
+                class="p3r-tags mt-2"
+                id="rolePool"
+              >
+                <span class="p3r-tag">
+                  LOADING
+                </span>
+              </div>
+
+
+              <!-- MAINS -->
+
+              <div
+                class="
+                  p3r-alter-section-title
+                  small-title
+                  mt-3
+                "
+              >
+                <span aria-hidden="true"></span>
+
+                MAINS
+              </div>
+
+              <div
+                class="p3r-tags mt-2"
+                id="mains"
+              >
+                <span class="p3r-tag">
+                  LOADING
+                </span>
+              </div>
+
+
+              <div class="p3r-divider my-3"></div>
+
+
+              <!-- ACHIEVEMENT -->
+
+              <div
+                class="
+                  p3r-alter-section-title
+                  small-title
+                "
+              >
+                <span aria-hidden="true"></span>
+
+                ACHIEVEMENT
+              </div>
+
+              <div
+                class="fw-bold"
+                id="achievement"
+              >
+                —
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================================================
+         FOOTER
+         ================================================= -->
+
+    <footer class="p3r-footer">
+      <div
+        class="
+          container
+          d-flex
+          flex-wrap
+          justify-content-between
+          align-items-center
+          gap-2
+        "
+      >
+        <div class="p3r-muted">
+          ©
+
+          <span id="year"></span>
+
+          PUSDATIN X BOC
+        </div>
+
+        <div class="p3r-muted small">
+          ALTER PROFILE / DARK HOUR DOSSIER
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+
+  <!-- ===================================================
+       JAVASCRIPT
+
+       Urutan:
+       1. config.js
+       2. api.js
+       3. p3r-alterprofile.js
+
+       Efek glitch sudah dimasukkan ke p3r-alterprofile.js,
+       jadi p3r-glitch.js lama tidak perlu dimuat.
+       =================================================== -->
+
+  <script src="./assets/js/config.js"></script>
+
+  <script src="./assets/js/api.js"></script>
+
+  <script src="./assets/js/p3r-alterprofile.js"></script>
+
+
+  <!-- ===================================================
+       BOOTSTRAP JS
+       =================================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
+</html>

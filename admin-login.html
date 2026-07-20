@@ -1,0 +1,2203 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Login administrator Website Profile Magang PUSDATIN X BOC UBP Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#071d39"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    Admin Login — PUSDATIN X BOC
+  </title>
+
+
+  <!-- ===================================================
+       FAVICON
+       =================================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="./assets/img/logo.png"
+  >
+
+
+  <!-- ===================================================
+       BOOTSTRAP
+       =================================================== -->
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       GOOGLE FONTS
+       =================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Oxanium:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       CSS UTAMA
+       =================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+
+  <!-- ===================================================
+       CSS HALAMAN LOGIN
+       =================================================== -->
+
+  <style>
+    :root {
+      --admin-blue: #0c72ff;
+      --admin-blue-light: #52b7ff;
+      --admin-blue-dark: #051f4f;
+      --admin-cyan: #35e5ff;
+      --admin-white: #f4f9ff;
+      --admin-black: #020711;
+      --admin-muted: #8ba4c7;
+      --admin-danger: #ff4f69;
+      --admin-warning: #ffd45a;
+      --admin-success: #4af0a6;
+      --admin-border: rgba(141, 203, 255, 0.28);
+      --admin-panel: rgba(3, 14, 34, 0.94);
+    }
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      min-height: 100%;
+      background: var(--admin-black);
+    }
+
+
+    body.p3r-admin-login-page {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--admin-white);
+      background:
+        radial-gradient(
+          circle at 76% 22%,
+          rgba(12, 114, 255, 0.25),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 14% 78%,
+          rgba(53, 229, 255, 0.12),
+          transparent 35%
+        ),
+        linear-gradient(
+          135deg,
+          #020711 0%,
+          #05142c 52%,
+          #020711 100%
+        );
+      font-family: "Oxanium", sans-serif;
+    }
+
+
+    .admin-login-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+
+    .admin-login-grid {
+      position: absolute;
+      inset: -20%;
+      opacity: 0.18;
+      transform: perspective(800px) rotateX(62deg) translateY(18%);
+      transform-origin: center bottom;
+      background-image:
+        linear-gradient(
+          rgba(69, 170, 255, 0.32) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(69, 170, 255, 0.32) 1px,
+          transparent 1px
+        );
+      background-size: 54px 54px;
+    }
+
+
+    .admin-login-diagonal {
+      position: absolute;
+      width: 58vw;
+      height: 140vh;
+      top: -28vh;
+      right: -28vw;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(33, 142, 255, 0.24),
+          rgba(33, 142, 255, 0)
+        );
+      transform: rotate(18deg);
+      border-left: 1px solid rgba(76, 186, 255, 0.35);
+    }
+
+
+    .admin-login-circle {
+      position: absolute;
+      width: min(74vw, 850px);
+      aspect-ratio: 1 / 1;
+      top: 50%;
+      left: 54%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(74, 177, 255, 0.12);
+      border-radius: 50%;
+      box-shadow:
+        0 0 100px rgba(0, 104, 255, 0.1),
+        inset 0 0 100px rgba(0, 104, 255, 0.05);
+    }
+
+
+    .admin-login-circle::before,
+    .admin-login-circle::after {
+      content: "";
+      position: absolute;
+      border-radius: inherit;
+      border: 1px solid rgba(74, 177, 255, 0.1);
+    }
+
+
+    .admin-login-circle::before {
+      inset: 12%;
+    }
+
+
+    .admin-login-circle::after {
+      inset: 27%;
+    }
+
+
+    .admin-login-main {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 32px 16px;
+    }
+
+
+    .admin-login-container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+
+    .admin-login-shell {
+      position: relative;
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(360px, 0.95fr);
+      min-height: 620px;
+      overflow: hidden;
+      border: 1px solid var(--admin-border);
+      background: rgba(2, 9, 23, 0.86);
+      box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.48),
+        0 0 60px rgba(0, 107, 255, 0.1);
+      clip-path: polygon(
+        0 0,
+        calc(100% - 36px) 0,
+        100% 36px,
+        100% 100%,
+        36px 100%,
+        0 calc(100% - 36px)
+      );
+    }
+
+
+    .admin-login-shell::before {
+      content: "";
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 0;
+      width: 170px;
+      height: 5px;
+      background: var(--admin-cyan);
+      box-shadow:
+        170px 0 0 var(--admin-blue),
+        340px 0 0 rgba(255, 255, 255, 0.86);
+    }
+
+
+    .admin-login-info {
+      position: relative;
+      min-height: 620px;
+      padding: 64px 54px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(0, 111, 255, 0.94),
+          rgba(4, 45, 112, 0.92) 55%,
+          rgba(3, 17, 45, 0.97)
+        );
+    }
+
+
+    .admin-login-info::before {
+      content: "";
+      position: absolute;
+      width: 490px;
+      height: 490px;
+      right: -190px;
+      bottom: -200px;
+      border: 80px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+    }
+
+
+    .admin-login-info::after {
+      content: "ADMIN";
+      position: absolute;
+      left: -24px;
+      bottom: 32px;
+      color: rgba(255, 255, 255, 0.055);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(110px, 15vw, 190px);
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -8px;
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+
+    .admin-login-brand {
+      position: relative;
+      z-index: 2;
+    }
+
+
+    .admin-login-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+
+    .admin-login-logo {
+      width: 70px;
+      height: 70px;
+      padding: 8px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.94);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+
+    .admin-login-brand-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-brand-name {
+      margin: 2px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 520px;
+      margin: 56px 0;
+    }
+
+
+    .admin-login-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--admin-cyan);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-kicker::before {
+      content: "";
+      width: 42px;
+      height: 4px;
+      background: var(--admin-cyan);
+    }
+
+
+    .admin-login-heading {
+      margin: 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(54px, 7vw, 92px);
+      font-weight: 900;
+      line-height: 0.82;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-description {
+      max-width: 500px;
+      margin: 24px 0 0;
+      color: rgba(236, 247, 255, 0.8);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+
+    .admin-login-info-footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      color: rgba(255, 255, 255, 0.64);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-panel {
+      position: relative;
+      padding: 64px 54px;
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(3, 14, 34, 0.97),
+          rgba(1, 7, 19, 0.98)
+        );
+    }
+
+
+    .admin-login-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      pointer-events: none;
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          transparent 0,
+          transparent 12px,
+          rgba(255, 255, 255, 0.2) 13px,
+          transparent 14px
+        );
+    }
+
+
+    .admin-login-form-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 410px;
+      margin: 0 auto;
+    }
+
+
+    .admin-login-form-kicker {
+      margin-bottom: 8px;
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-form-title {
+      margin: 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-form-description {
+      margin: 12px 0 30px;
+      color: var(--admin-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+
+    .admin-field {
+      margin-bottom: 20px;
+    }
+
+
+    .admin-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #dcecff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-label-index {
+      color: var(--admin-blue-light);
+      font-size: 11px;
+    }
+
+
+    .admin-input-wrap {
+      position: relative;
+    }
+
+
+    .admin-input {
+      width: 100%;
+      min-height: 54px;
+      padding: 14px 52px 14px 16px;
+      border: 1px solid rgba(129, 190, 255, 0.28);
+      border-radius: 0;
+      outline: 0;
+      color: #ffffff;
+      background: rgba(0, 10, 27, 0.85);
+      font-family: "Oxanium", sans-serif;
+      font-size: 14px;
+      transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+    }
+
+
+    .admin-input::placeholder {
+      color: rgba(146, 173, 207, 0.5);
+    }
+
+
+    .admin-input:focus {
+      border-color: var(--admin-blue-light);
+      background: rgba(0, 15, 39, 0.95);
+      box-shadow:
+        0 0 0 3px rgba(29, 130, 255, 0.14),
+        inset 4px 0 0 var(--admin-blue);
+    }
+
+
+    .admin-input:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+
+    .admin-input-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+
+    .admin-password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 9px;
+      min-width: 40px;
+      min-height: 36px;
+      padding: 6px 8px;
+      transform: translateY(-50%);
+      border: 0;
+      color: var(--admin-blue-light);
+      background: transparent;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-password-toggle:hover,
+    .admin-password-toggle:focus-visible {
+      color: #ffffff;
+      outline: 1px solid rgba(82, 183, 255, 0.5);
+    }
+
+
+    .admin-caps-lock {
+      display: none;
+      margin-top: 7px;
+      color: var(--admin-warning);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-caps-lock.is-visible {
+      display: block;
+    }
+
+
+    .admin-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin: 2px 0 24px;
+    }
+
+
+    .admin-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+
+    .admin-check input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--admin-blue);
+    }
+
+
+    .admin-back-link {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-back-link:hover,
+    .admin-back-link:focus-visible {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+
+    .admin-login-button {
+      position: relative;
+      width: 100%;
+      min-height: 56px;
+      overflow: hidden;
+      border: 1px solid var(--admin-blue-light);
+      border-radius: 0;
+      color: #ffffff;
+      background:
+        linear-gradient(
+          100deg,
+          #005ce6,
+          #0d83ff
+        );
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      box-shadow:
+        8px 8px 0 rgba(0, 0, 0, 0.32);
+      transition:
+        transform 150ms ease,
+        box-shadow 150ms ease,
+        filter 150ms ease;
+    }
+
+
+    .admin-login-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-110%);
+      background:
+        linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.25),
+          transparent
+        );
+      transition: transform 380ms ease;
+    }
+
+
+    .admin-login-button:hover:not(:disabled)::before {
+      transform: translateX(110%);
+    }
+
+
+    .admin-login-button:hover:not(:disabled) {
+      transform: translate(-2px, -2px);
+      box-shadow:
+        11px 11px 0 rgba(0, 0, 0, 0.34);
+      filter: brightness(1.08);
+    }
+
+
+    .admin-login-button:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow:
+        5px 5px 0 rgba(0, 0, 0, 0.3);
+    }
+
+
+    .admin-login-button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+    }
+
+
+    .admin-login-button-content {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+    }
+
+
+    .admin-login-spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: adminSpinner 700ms linear infinite;
+    }
+
+
+    .admin-login-spinner.is-visible {
+      display: inline-block;
+    }
+
+
+    @keyframes adminSpinner {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    .admin-login-status {
+      display: none;
+      margin-top: 20px;
+      padding: 14px 15px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      background: rgba(4, 17, 38, 0.9);
+    }
+
+
+    .admin-login-status.is-visible {
+      display: block;
+    }
+
+
+    .admin-login-status.is-info {
+      border-left-color: var(--admin-blue-light);
+    }
+
+
+    .admin-login-status.is-success {
+      border-left-color: var(--admin-success);
+    }
+
+
+    .admin-login-status.is-warning {
+      border-left-color: var(--admin-warning);
+    }
+
+
+    .admin-login-status.is-error {
+      border-left-color: var(--admin-danger);
+    }
+
+
+    .admin-login-status-title {
+      margin: 0 0 4px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-login-status-message {
+      margin: 0;
+      color: #b5c9e4;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+
+    .admin-login-security {
+      margin-top: 22px;
+      color: rgba(143, 166, 199, 0.7);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+
+    .admin-login-security strong {
+      color: var(--admin-blue-light);
+      font-weight: 700;
+    }
+
+
+    @media (max-width: 991.98px) {
+      .admin-login-main {
+        padding: 22px 14px;
+      }
+
+
+      .admin-login-shell {
+        grid-template-columns: 1fr;
+        max-width: 620px;
+        min-height: 0;
+        margin: 0 auto;
+      }
+
+
+      .admin-login-info {
+        min-height: 330px;
+        padding: 44px 38px;
+      }
+
+
+      .admin-login-copy {
+        margin: 40px 0 24px;
+      }
+
+
+      .admin-login-heading {
+        font-size: clamp(52px, 12vw, 82px);
+      }
+
+
+      .admin-login-info-footer {
+        margin-top: 30px;
+      }
+
+
+      .admin-login-panel {
+        padding: 48px 38px 54px;
+      }
+    }
+
+
+    @media (max-width: 575.98px) {
+      .admin-login-main {
+        align-items: flex-start;
+        padding: 0;
+      }
+
+
+      .admin-login-shell {
+        min-height: 100vh;
+        border: 0;
+        clip-path: none;
+      }
+
+
+      .admin-login-info {
+        min-height: 270px;
+        padding: 38px 24px 32px;
+      }
+
+
+      .admin-login-logo {
+        width: 56px;
+        height: 56px;
+      }
+
+
+      .admin-login-brand-name {
+        font-size: 21px;
+      }
+
+
+      .admin-login-copy {
+        margin: 34px 0 6px;
+      }
+
+
+      .admin-login-heading {
+        font-size: 56px;
+      }
+
+
+      .admin-login-description {
+        margin-top: 18px;
+        font-size: 12px;
+      }
+
+
+      .admin-login-info-footer {
+        display: none;
+      }
+
+
+      .admin-login-panel {
+        padding: 42px 24px 48px;
+      }
+
+
+      .admin-login-form-title {
+        font-size: 38px;
+      }
+
+
+      .admin-options {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body class="p3r p3r-admin-login-page">
+
+  <!-- ===================================================
+       BACKGROUND
+       =================================================== -->
+
+  <div
+    class="admin-login-background"
+    aria-hidden="true"
+  >
+    <div class="admin-login-grid"></div>
+    <div class="admin-login-diagonal"></div>
+    <div class="admin-login-circle"></div>
+  </div>
+
+
+  <!-- ===================================================
+       NOSCRIPT
+       =================================================== -->
+
+  <noscript>
+    <div
+      class="container py-4"
+      style="
+        position: relative;
+        z-index: 9999;
+      "
+    >
+      <div class="alert alert-danger">
+        Halaman login admin membutuhkan JavaScript.
+      </div>
+    </div>
+  </noscript>
+
+
+  <!-- ===================================================
+       MAIN
+       =================================================== -->
+
+  <main class="admin-login-main">
+    <div class="admin-login-container">
+
+      <section
+        class="admin-login-shell"
+        aria-labelledby="adminLoginTitle"
+      >
+
+        <!-- =============================================
+             INFORMATION PANEL
+             ============================================= -->
+
+        <div class="admin-login-info">
+
+          <div class="admin-login-brand">
+            <div class="admin-login-logo-wrap">
+
+              <img
+                class="admin-login-logo"
+                src="./assets/img/logo.png"
+                alt="Logo PUSDATIN X BOC"
+                loading="eager"
+                decoding="async"
+                onerror="
+                  this.onerror=null;
+                  this.src='./assets/img/placeholder.png';
+                "
+              >
+
+              <div>
+                <div class="admin-login-brand-label">
+                  UBP Karawang
+                </div>
+
+                <div class="admin-login-brand-name">
+                  PUSDATIN X BOC
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="admin-login-copy">
+            <div class="admin-login-kicker">
+              Restricted Area
+            </div>
+
+            <h1 class="admin-login-heading">
+              Admin
+              <br>
+              Access
+            </h1>
+
+            <p class="admin-login-description">
+              Halaman ini digunakan untuk mengelola data member,
+              division, Alter Profile, serta konten Website Profile
+              Magang PUSDATIN X BOC.
+            </p>
+          </div>
+
+
+          <div class="admin-login-info-footer">
+            <span>
+              Profile Management System
+            </span>
+
+            <span>
+              Authorized Personnel Only
+            </span>
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             LOGIN PANEL
+             ============================================= -->
+
+        <div class="admin-login-panel">
+          <div class="admin-login-form-wrap">
+
+            <div class="admin-login-form-kicker">
+              Administrator Authentication
+            </div>
+
+            <h2
+              class="admin-login-form-title"
+              id="adminLoginTitle"
+            >
+              Sign In
+            </h2>
+
+            <p class="admin-login-form-description">
+              Masukkan akun administrator yang terdaftar pada
+              database website.
+            </p>
+
+
+            <!-- =========================================
+                 FORM LOGIN
+                 ========================================= -->
+
+            <form
+              id="loginForm"
+              autocomplete="on"
+              novalidate
+            >
+
+              <!-- EMAIL -->
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="email"
+                >
+                  <span>
+                    Email Admin
+                  </span>
+
+                  <span class="admin-label-index">
+                    01
+                  </span>
+                </label>
+
+
+                <div class="admin-input-wrap">
+                  <input
+                    class="admin-input"
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="admin@example.com"
+                    autocomplete="username"
+                    inputmode="email"
+                    spellcheck="false"
+                    maxlength="160"
+                    required
+                  >
+
+                  <span
+                    class="admin-input-icon"
+                    aria-hidden="true"
+                  >
+                    ID
+                  </span>
+                </div>
+              </div>
+
+
+              <!-- PASSWORD -->
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="password"
+                >
+                  <span>
+                    Password
+                  </span>
+
+                  <span class="admin-label-index">
+                    02
+                  </span>
+                </label>
+
+
+                <div class="admin-input-wrap">
+                  <input
+                    class="admin-input"
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Masukkan password"
+                    autocomplete="current-password"
+                    maxlength="200"
+                    required
+                  >
+
+                  <button
+                    class="admin-password-toggle"
+                    id="togglePassword"
+                    type="button"
+                    aria-label="Tampilkan password"
+                    aria-pressed="false"
+                  >
+                    Show
+                  </button>
+                </div>
+
+
+                <div
+                  class="admin-caps-lock"
+                  id="capsLockWarning"
+                  aria-live="polite"
+                >
+                  Caps Lock aktif
+                </div>
+              </div>
+
+
+              <!-- OPTIONS -->
+
+              <div class="admin-options">
+
+                <label
+                  class="admin-check"
+                  for="remember"
+                >
+                  <input
+                    id="remember"
+                    name="remember"
+                    type="checkbox"
+                  >
+
+                  <span>
+                    Ingat login di perangkat ini
+                  </span>
+                </label>
+
+
+                <a
+                  class="admin-back-link"
+                  href="./index.html"
+                >
+                  Kembali ke Website
+                </a>
+
+              </div>
+
+
+              <!-- LOGIN BUTTON -->
+
+              <button
+                class="admin-login-button"
+                id="loginButton"
+                type="submit"
+              >
+                <span class="admin-login-button-content">
+
+                  <span
+                    class="admin-login-spinner"
+                    id="loginSpinner"
+                    aria-hidden="true"
+                  ></span>
+
+                  <span id="loginButtonText">
+                    Enter Admin Panel
+                  </span>
+
+                </span>
+              </button>
+
+
+              <!-- STATUS -->
+
+              <div
+                class="admin-login-status"
+                id="loginStatus"
+                role="status"
+                aria-live="polite"
+              >
+                <div
+                  class="admin-login-status-title"
+                  id="loginStatusTitle"
+                >
+                  System Message
+                </div>
+
+                <p
+                  class="admin-login-status-message"
+                  id="loginStatusMessage"
+                >
+                  Menyiapkan halaman login.
+                </p>
+              </div>
+
+
+              <div class="admin-login-security">
+                Password dikirim melalui koneksi HTTPS dan diverifikasi
+                oleh Google Apps Script. Jangan menyimpan akun admin pada
+                perangkat umum.
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- ===================================================
+       JAVASCRIPT UTAMA
+       =================================================== -->
+
+  <script src="./assets/js/config.js"></script>
+
+  <script src="./assets/js/admin-api.js"></script>
+
+
+  <!-- ===================================================
+       LOGIN CONTROLLER
+       =================================================== -->
+
+  <script>
+    (function initializeAdminLoginPage() {
+      "use strict";
+
+
+      /*
+      =====================================================
+      STATE
+      =====================================================
+      */
+
+      const state = {
+        loading:
+          false,
+
+        checkingSession:
+          false
+      };
+
+
+      /*
+      =====================================================
+      ELEMENTS
+      =====================================================
+      */
+
+      const elements = {
+        form:
+          document.getElementById(
+            "loginForm"
+          ),
+
+        email:
+          document.getElementById(
+            "email"
+          ),
+
+        password:
+          document.getElementById(
+            "password"
+          ),
+
+        remember:
+          document.getElementById(
+            "remember"
+          ),
+
+        togglePassword:
+          document.getElementById(
+            "togglePassword"
+          ),
+
+        capsLockWarning:
+          document.getElementById(
+            "capsLockWarning"
+          ),
+
+        loginButton:
+          document.getElementById(
+            "loginButton"
+          ),
+
+        loginButtonText:
+          document.getElementById(
+            "loginButtonText"
+          ),
+
+        loginSpinner:
+          document.getElementById(
+            "loginSpinner"
+          ),
+
+        status:
+          document.getElementById(
+            "loginStatus"
+          ),
+
+        statusTitle:
+          document.getElementById(
+            "loginStatusTitle"
+          ),
+
+        statusMessage:
+          document.getElementById(
+            "loginStatusMessage"
+          )
+      };
+
+
+      /*
+      =====================================================
+      HELPER STRING
+      =====================================================
+      */
+
+      function asString(value) {
+        if (
+          value === null ||
+          value === undefined
+        ) {
+          return "";
+        }
+
+        return String(value).trim();
+      }
+
+
+      /*
+      =====================================================
+      STATUS MESSAGE
+      =====================================================
+      */
+
+      function setStatus(
+        type,
+        title,
+        message
+      ) {
+        if (!elements.status) {
+          return;
+        }
+
+        elements.status.classList.remove(
+          "is-info",
+          "is-success",
+          "is-warning",
+          "is-error"
+        );
+
+        elements.status.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "info"
+          )
+        );
+
+        if (elements.statusTitle) {
+          elements.statusTitle.textContent =
+            title ||
+            "System Message";
+        }
+
+        if (elements.statusMessage) {
+          elements.statusMessage.textContent =
+            message ||
+            "";
+        }
+      }
+
+
+      function hideStatus() {
+        if (!elements.status) {
+          return;
+        }
+
+        elements.status.classList.remove(
+          "is-visible",
+          "is-info",
+          "is-success",
+          "is-warning",
+          "is-error"
+        );
+      }
+
+
+      /*
+      =====================================================
+      LOADING STATE
+      =====================================================
+      */
+
+      function setLoading(
+        loading,
+        buttonText
+      ) {
+        state.loading =
+          Boolean(loading);
+
+        if (elements.email) {
+          elements.email.disabled =
+            state.loading;
+        }
+
+        if (elements.password) {
+          elements.password.disabled =
+            state.loading;
+        }
+
+        if (elements.remember) {
+          elements.remember.disabled =
+            state.loading;
+        }
+
+        if (elements.togglePassword) {
+          elements.togglePassword.disabled =
+            state.loading;
+        }
+
+        if (elements.loginButton) {
+          elements.loginButton.disabled =
+            state.loading;
+        }
+
+        if (elements.loginSpinner) {
+          elements.loginSpinner.classList.toggle(
+            "is-visible",
+            state.loading
+          );
+        }
+
+        if (elements.loginButtonText) {
+          elements.loginButtonText.textContent =
+            buttonText ||
+            (
+              state.loading
+                ? "Authenticating..."
+                : "Enter Admin Panel"
+            );
+        }
+      }
+
+
+      /*
+      =====================================================
+      FRIENDLY ERROR
+      =====================================================
+      */
+
+      function getFriendlyError(error) {
+        const code =
+          asString(
+            error && error.code
+          );
+
+        const details =
+          error && error.details
+            ? error.details
+            : {};
+
+
+        switch (code) {
+          case "EMAIL_REQUIRED":
+            return (
+              "Email administrator wajib diisi."
+            );
+
+          case "PASSWORD_REQUIRED":
+            return (
+              "Password administrator wajib diisi."
+            );
+
+          case "LOGIN_FIELDS_REQUIRED":
+            return (
+              "Email dan password wajib diisi."
+            );
+
+          case "INVALID_LOGIN":
+            if (
+              Number.isFinite(
+                Number(
+                  details.remainingAttempts
+                )
+              )
+            ) {
+              return (
+                "Email atau password salah. Sisa percobaan: " +
+                details.remainingAttempts +
+                "."
+              );
+            }
+
+            return (
+              "Email atau password salah."
+            );
+
+          case "LOGIN_TEMPORARILY_LOCKED":
+            if (
+              Number.isFinite(
+                Number(
+                  details.retryAfterSeconds
+                )
+              )
+            ) {
+              return (
+                "Login dikunci sementara. Coba kembali dalam " +
+                details.retryAfterSeconds +
+                " detik."
+              );
+            }
+
+            return (
+              "Login dikunci sementara karena terlalu banyak percobaan."
+            );
+
+          case "PASSWORD_RESET_REQUIRED":
+            return (
+              "Password admin belum disiapkan untuk sistem Apps Script."
+            );
+
+          case "ACCOUNT_DISABLED":
+            return (
+              "Akun administrator sedang tidak aktif."
+            );
+
+          case "ADMIN_ACCESS_DENIED":
+            return (
+              "Akun ini tidak memiliki akses administrator."
+            );
+
+          case "REQUEST_TIMEOUT":
+            return (
+              "Koneksi ke Google Apps Script melewati batas waktu."
+            );
+
+          case "NETWORK_ERROR":
+            return (
+              "Browser tidak dapat terhubung ke Google Apps Script."
+            );
+
+          case "API_URL_NOT_CONFIGURED":
+            return (
+              "URL Apps Script belum tersedia di config.js."
+            );
+
+          case "INVALID_JSON_RESPONSE":
+            return (
+              "Server mengembalikan response yang tidak dapat dibaca."
+            );
+
+          case "HTTP_ERROR":
+            return (
+              "Server gagal merespons permintaan login."
+            );
+
+          default:
+            return (
+              asString(
+                error && error.message
+              ) ||
+              "Login administrator gagal."
+            );
+        }
+      }
+
+
+      /*
+      =====================================================
+      URL ADMIN
+      =====================================================
+      */
+
+      function getAdminUrl() {
+        if (
+          window.P3R_PAGE_URLS &&
+          typeof window.P3R_PAGE_URLS.admin ===
+            "function"
+        ) {
+          return window.P3R_PAGE_URLS.admin();
+        }
+
+        return new URL(
+          "./admin.html",
+          window.location.href
+        ).href;
+      }
+
+
+      /*
+      =====================================================
+      URL REDIRECT AMAN
+      =====================================================
+      */
+
+      function getSafeReturnUrl() {
+        const parameters =
+          new URLSearchParams(
+            window.location.search
+          );
+
+        const requestedUrl =
+          asString(
+            parameters.get("return")
+          );
+
+        if (!requestedUrl) {
+          return getAdminUrl();
+        }
+
+        try {
+          const parsedUrl =
+            new URL(
+              requestedUrl,
+              window.location.href
+            );
+
+          if (
+            parsedUrl.origin !==
+            window.location.origin
+          ) {
+            return getAdminUrl();
+          }
+
+          return parsedUrl.href;
+        } catch (error) {
+          return getAdminUrl();
+        }
+      }
+
+
+      /*
+      =====================================================
+      REDIRECT
+      =====================================================
+      */
+
+      function redirectToAdmin() {
+        window.location.replace(
+          getSafeReturnUrl()
+        );
+      }
+
+
+      /*
+      =====================================================
+      VALIDASI FORM
+      =====================================================
+      */
+
+      function validateForm() {
+        const email =
+          asString(
+            elements.email
+              ? elements.email.value
+              : ""
+          ).toLowerCase();
+
+        const password =
+          elements.password
+            ? elements.password.value
+            : "";
+
+        if (!email) {
+          setStatus(
+            "error",
+            "Email Required",
+            "Masukkan email administrator."
+          );
+
+          if (elements.email) {
+            elements.email.focus();
+          }
+
+          return null;
+        }
+
+        if (
+          elements.email &&
+          !elements.email.validity.valid
+        ) {
+          setStatus(
+            "error",
+            "Invalid Email",
+            "Format email administrator tidak valid."
+          );
+
+          elements.email.focus();
+
+          return null;
+        }
+
+        if (!password) {
+          setStatus(
+            "error",
+            "Password Required",
+            "Masukkan password administrator."
+          );
+
+          if (elements.password) {
+            elements.password.focus();
+          }
+
+          return null;
+        }
+
+        return {
+          email:
+            email,
+
+          password:
+            password,
+
+          remember:
+            Boolean(
+              elements.remember &&
+              elements.remember.checked
+            )
+        };
+      }
+
+
+      /*
+      =====================================================
+      LOGIN
+      =====================================================
+      */
+
+      async function handleLogin(event) {
+        event.preventDefault();
+
+        if (
+          state.loading ||
+          state.checkingSession
+        ) {
+          return;
+        }
+
+        const formData =
+          validateForm();
+
+        if (!formData) {
+          return;
+        }
+
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.login !==
+            "function"
+        ) {
+          setStatus(
+            "error",
+            "System Error",
+            "admin-api.js belum berhasil dimuat."
+          );
+
+          return;
+        }
+
+        hideStatus();
+
+        setLoading(
+          true,
+          "Authenticating..."
+        );
+
+        setStatus(
+          "info",
+          "Connecting",
+          "Memverifikasi akun administrator."
+        );
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.login(
+              formData.email,
+              formData.password,
+              formData.remember
+            );
+
+          setStatus(
+            "success",
+            "Access Granted",
+            result &&
+            result.user &&
+            result.user.name
+              ? "Selamat datang, " +
+                result.user.name +
+                ". Mengalihkan ke panel admin."
+              : "Login berhasil. Mengalihkan ke panel admin."
+          );
+
+          setLoading(
+            true,
+            "Access Granted"
+          );
+
+          window.setTimeout(
+            redirectToAdmin,
+            650
+          );
+        } catch (error) {
+          setLoading(
+            false
+          );
+
+          setStatus(
+            "error",
+            "Access Denied",
+            getFriendlyError(
+              error
+            )
+          );
+
+          if (
+            elements.password &&
+            [
+              "INVALID_LOGIN",
+              "PASSWORD_REQUIRED",
+              "LOGIN_FIELDS_REQUIRED"
+            ].includes(
+              asString(
+                error && error.code
+              )
+            )
+          ) {
+            elements.password.value =
+              "";
+
+            elements.password.focus();
+          }
+        }
+      }
+
+
+      /*
+      =====================================================
+      PASSWORD VISIBILITY
+      =====================================================
+      */
+
+      function togglePasswordVisibility() {
+        if (
+          !elements.password ||
+          !elements.togglePassword
+        ) {
+          return;
+        }
+
+        const hidden =
+          elements.password.type ===
+          "password";
+
+        elements.password.type =
+          hidden
+            ? "text"
+            : "password";
+
+        elements.togglePassword.textContent =
+          hidden
+            ? "Hide"
+            : "Show";
+
+        elements.togglePassword.setAttribute(
+          "aria-label",
+          hidden
+            ? "Sembunyikan password"
+            : "Tampilkan password"
+        );
+
+        elements.togglePassword.setAttribute(
+          "aria-pressed",
+          hidden
+            ? "true"
+            : "false"
+        );
+
+        elements.password.focus();
+
+        const passwordLength =
+          elements.password.value.length;
+
+        elements.password.setSelectionRange(
+          passwordLength,
+          passwordLength
+        );
+      }
+
+
+      /*
+      =====================================================
+      CAPS LOCK
+      =====================================================
+      */
+
+      function updateCapsLockWarning(event) {
+        if (
+          !elements.capsLockWarning ||
+          typeof event.getModifierState !==
+            "function"
+        ) {
+          return;
+        }
+
+        const capsLockActive =
+          event.getModifierState(
+            "CapsLock"
+          );
+
+        elements.capsLockWarning.classList.toggle(
+          "is-visible",
+          capsLockActive
+        );
+      }
+
+
+      function hideCapsLockWarning() {
+        if (elements.capsLockWarning) {
+          elements.capsLockWarning.classList.remove(
+            "is-visible"
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      PERIKSA SESSION LAMA
+      =====================================================
+      */
+
+      async function checkExistingSession() {
+        if (
+          !window.P3R_ADMIN_API
+        ) {
+          setStatus(
+            "error",
+            "System Error",
+            "Modul admin API tidak berhasil dimuat."
+          );
+
+          return;
+        }
+
+        if (
+          typeof window.P3R_ADMIN_API.getRememberPreference ===
+            "function" &&
+          elements.remember
+        ) {
+          elements.remember.checked =
+            window.P3R_ADMIN_API
+              .getRememberPreference();
+        }
+
+        if (
+          typeof window.P3R_ADMIN_API.isAuthenticated !==
+            "function" ||
+          !window.P3R_ADMIN_API.isAuthenticated()
+        ) {
+          hideStatus();
+
+          if (elements.email) {
+            elements.email.focus();
+          }
+
+          return;
+        }
+
+        state.checkingSession =
+          true;
+
+        setLoading(
+          true,
+          "Checking Session..."
+        );
+
+        setStatus(
+          "info",
+          "Session Detected",
+          "Memeriksa session administrator yang tersimpan."
+        );
+
+        try {
+          const verification =
+            await window.P3R_ADMIN_API.verifySession();
+
+          if (
+            verification &&
+            verification.authenticated ===
+              true
+          ) {
+            setStatus(
+              "success",
+              "Session Active",
+              "Session administrator masih aktif. Mengalihkan ke panel admin."
+            );
+
+            window.setTimeout(
+              redirectToAdmin,
+              450
+            );
+
+            return;
+          }
+
+          setLoading(
+            false
+          );
+
+          hideStatus();
+
+          if (elements.email) {
+            elements.email.focus();
+          }
+        } catch (error) {
+          setLoading(
+            false
+          );
+
+          setStatus(
+            "warning",
+            "Session Check Failed",
+            "Session lama tidak dapat diverifikasi. Anda tetap dapat mencoba login kembali."
+          );
+
+          if (elements.email) {
+            elements.email.focus();
+          }
+        } finally {
+          state.checkingSession =
+            false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      LISTENERS
+      =====================================================
+      */
+
+      if (elements.form) {
+        elements.form.addEventListener(
+          "submit",
+          handleLogin
+        );
+      }
+
+
+      if (elements.togglePassword) {
+        elements.togglePassword.addEventListener(
+          "click",
+          togglePasswordVisibility
+        );
+      }
+
+
+      if (elements.password) {
+        elements.password.addEventListener(
+          "keydown",
+          updateCapsLockWarning
+        );
+
+        elements.password.addEventListener(
+          "keyup",
+          updateCapsLockWarning
+        );
+
+        elements.password.addEventListener(
+          "blur",
+          hideCapsLockWarning
+        );
+      }
+
+
+      /*
+      =====================================================
+      INIT
+      =====================================================
+      */
+
+      checkExistingSession();
+    })();
+  </script>
+
+
+  <!-- ===================================================
+       BOOTSTRAP JS
+       =================================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
+</html>

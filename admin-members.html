@@ -1,0 +1,6854 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Pengelolaan data member Website Profile Magang PUSDATIN X BOC UBP Karawang."
+  >
+
+  <meta
+    name="theme-color"
+    content="#06152d"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark"
+  >
+
+  <title>
+    Kelola Member — PUSDATIN X BOC
+  </title>
+
+
+  <!-- ===================================================
+       FAVICON
+       =================================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/img/logo.png"
+  >
+
+
+  <!-- ===================================================
+       GOOGLE FONTS
+       =================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Oxanium:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ===================================================
+       CSS UTAMA
+       =================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/p3r.css"
+  >
+
+
+  <!-- ===================================================
+       CSS HALAMAN MEMBER
+       =================================================== -->
+
+  <style>
+    :root {
+      --admin-bg: #020711;
+      --admin-bg-soft: #06142b;
+      --admin-panel: rgba(5, 18, 42, 0.96);
+      --admin-panel-light: rgba(8, 31, 67, 0.94);
+
+      --admin-blue: #0877ff;
+      --admin-blue-light: #55bcff;
+      --admin-cyan: #32e3ff;
+      --admin-green: #3ff2a4;
+      --admin-yellow: #ffd45b;
+      --admin-red: #ff536b;
+
+      --admin-white: #f4f9ff;
+      --admin-text: #c5d9ef;
+      --admin-muted: #7793b6;
+
+      --admin-border: rgba(117, 185, 255, 0.22);
+      --admin-border-strong: rgba(117, 203, 255, 0.46);
+    }
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      min-height: 100%;
+      background: var(--admin-bg);
+    }
+
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--admin-white);
+      background:
+        radial-gradient(
+          circle at 90% 0,
+          rgba(8, 119, 255, 0.18),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 8% 100%,
+          rgba(50, 227, 255, 0.08),
+          transparent 28%
+        ),
+        var(--admin-bg);
+      font-family: "Oxanium", sans-serif;
+    }
+
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+
+    button {
+      border-radius: 0;
+    }
+
+
+    .admin-background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+
+    .admin-background::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.075;
+      background-image:
+        linear-gradient(
+          rgba(80, 175, 255, 0.35) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(80, 175, 255, 0.35) 1px,
+          transparent 1px
+        );
+      background-size: 48px 48px;
+    }
+
+
+    .admin-background::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.045;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent 0,
+          transparent 28px,
+          rgba(255, 255, 255, 0.35) 29px,
+          transparent 30px
+        );
+    }
+
+
+    .admin-loading-bar {
+      position: fixed;
+      z-index: 200;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(37, 100, 166, 0.3);
+      transition: opacity 150ms ease;
+    }
+
+
+    .admin-loading-bar.is-visible {
+      opacity: 1;
+    }
+
+
+    .admin-loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 35%;
+      height: 100%;
+      left: -35%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--admin-cyan),
+          transparent
+        );
+      animation: loadingBar 1s linear infinite;
+    }
+
+
+    @keyframes loadingBar {
+      to {
+        transform: translateX(390%);
+      }
+    }
+
+
+    .admin-page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+
+    /*
+    =====================================================
+    TOPBAR
+    =====================================================
+    */
+
+    .admin-topbar {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 28px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(2, 9, 23, 0.93);
+      backdrop-filter: blur(18px);
+    }
+
+
+    .admin-topbar-left {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+    .admin-logo {
+      width: 48px;
+      height: 48px;
+      padding: 5px;
+      object-fit: contain;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-heading-kicker {
+      color: var(--admin-blue-light);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-heading-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+
+    .admin-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border: 1px solid var(--admin-border);
+      color: #dcecff;
+      background: rgba(5, 24, 54, 0.84);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        border-color 150ms ease,
+        color 150ms ease,
+        background 150ms ease,
+        transform 150ms ease;
+    }
+
+
+    .admin-button:hover:not(:disabled),
+    .admin-button:focus-visible:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(12, 67, 127, 0.78);
+      outline: none;
+    }
+
+
+    .admin-button.is-primary {
+      color: #ffffff;
+      border-color: var(--admin-blue-light);
+      background:
+        linear-gradient(
+          100deg,
+          #005ce6,
+          #0d83ff
+        );
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.28);
+    }
+
+
+    .admin-button.is-success {
+      color: #dffff0;
+      border-color: rgba(63, 242, 164, 0.45);
+      background: rgba(12, 105, 69, 0.5);
+    }
+
+
+    .admin-button.is-danger {
+      color: #ffd1d8;
+      border-color: rgba(255, 83, 107, 0.38);
+      background: rgba(126, 17, 38, 0.42);
+    }
+
+
+    .admin-button.is-ghost {
+      background: transparent;
+    }
+
+
+    .admin-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+
+    /*
+    =====================================================
+    CONTENT
+    =====================================================
+    */
+
+    .admin-content {
+      width: 100%;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+
+    .admin-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-breadcrumb a {
+      color: var(--admin-blue-light);
+      text-decoration: none;
+    }
+
+
+    .admin-breadcrumb a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+
+    .admin-page-header {
+      position: relative;
+      min-height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      overflow: hidden;
+      padding: 32px 38px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          115deg,
+          rgba(0, 91, 213, 0.88),
+          rgba(5, 45, 104, 0.92) 55%,
+          rgba(4, 16, 38, 0.97)
+        );
+      clip-path: polygon(
+        0 0,
+        calc(100% - 32px) 0,
+        100% 32px,
+        100% 100%,
+        32px 100%,
+        0 calc(100% - 32px)
+      );
+    }
+
+
+    .admin-page-header::before {
+      content: "";
+      position: absolute;
+      width: 390px;
+      height: 390px;
+      right: -100px;
+      bottom: -240px;
+      border: 65px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+    }
+
+
+    .admin-page-header::after {
+      content: "MEMBERS";
+      position: absolute;
+      right: -10px;
+      bottom: -25px;
+      color: rgba(255, 255, 255, 0.045);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(90px, 13vw, 170px);
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -5px;
+      pointer-events: none;
+    }
+
+
+    .admin-page-header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+
+    .admin-page-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--admin-cyan);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-kicker::before {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background: var(--admin-cyan);
+    }
+
+
+    .admin-page-title {
+      margin: 11px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 0.86;
+      text-transform: uppercase;
+    }
+
+
+    .admin-page-description {
+      max-width: 700px;
+      margin: 16px 0 0;
+      color: rgba(235, 247, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+
+    /*
+    =====================================================
+    SUMMARY
+    =====================================================
+    */
+
+    .admin-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+
+    .admin-summary {
+      position: relative;
+      min-height: 112px;
+      overflow: hidden;
+      padding: 17px 19px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 28, 62, 0.95),
+          rgba(3, 14, 34, 0.97)
+        );
+    }
+
+
+    .admin-summary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 66px;
+      height: 4px;
+      background: var(--accent, var(--admin-blue-light));
+    }
+
+
+    .admin-summary-label {
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-summary-value {
+      margin-top: 9px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+
+    .admin-summary-note {
+      margin-top: 7px;
+      color: #8ea9c8;
+      font-size: 9px;
+    }
+
+
+    /*
+    =====================================================
+    PANEL
+    =====================================================
+    */
+
+    .admin-panel {
+      margin-top: 20px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(6, 24, 55, 0.96),
+          rgba(2, 12, 30, 0.98)
+        );
+      box-shadow: 0 18px 52px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .admin-panel-header {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--admin-border);
+      background: rgba(9, 35, 75, 0.62);
+    }
+
+
+    .admin-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-title::before {
+      content: "";
+      width: 5px;
+      height: 24px;
+      background: var(--admin-blue-light);
+    }
+
+
+    .admin-panel-subtitle {
+      margin-top: 3px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-panel-body {
+      padding: 18px;
+    }
+
+
+    /*
+    =====================================================
+    FILTER
+    =====================================================
+    */
+
+    .admin-filter-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(230px, 1.5fr)
+        minmax(160px, 0.7fr)
+        minmax(160px, 0.7fr)
+        minmax(150px, 0.5fr)
+        auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+
+    .admin-field {
+      min-width: 0;
+    }
+
+
+    .admin-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #b8d1ea;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-input,
+    .admin-select,
+    .admin-textarea {
+      width: 100%;
+      border: 1px solid rgba(129, 190, 255, 0.28);
+      border-radius: 0;
+      outline: none;
+      color: #ffffff;
+      background: rgba(0, 10, 27, 0.88);
+      font-family: "Oxanium", sans-serif;
+      font-size: 12px;
+      transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background 150ms ease;
+    }
+
+
+    .admin-input,
+    .admin-select {
+      min-height: 45px;
+      padding: 10px 13px;
+    }
+
+
+    .admin-textarea {
+      min-height: 110px;
+      padding: 12px 13px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+
+    .admin-textarea.is-code {
+      min-height: 170px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+      tab-size: 2;
+    }
+
+
+    .admin-input:focus,
+    .admin-select:focus,
+    .admin-textarea:focus {
+      border-color: var(--admin-blue-light);
+      background: rgba(0, 15, 39, 0.96);
+      box-shadow:
+        0 0 0 3px rgba(29, 130, 255, 0.13),
+        inset 4px 0 0 var(--admin-blue);
+    }
+
+
+    .admin-input:disabled,
+    .admin-select:disabled,
+    .admin-textarea:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+
+    .admin-input::placeholder,
+    .admin-textarea::placeholder {
+      color: rgba(146, 173, 207, 0.48);
+    }
+
+
+    .admin-checkbox {
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border: 1px solid var(--admin-border);
+      color: #a8c0dc;
+      background: rgba(3, 17, 39, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+
+    .admin-checkbox input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--admin-blue);
+    }
+
+
+    /*
+    =====================================================
+    TABLE
+    =====================================================
+    */
+
+    .admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+
+    .admin-table {
+      width: 100%;
+      min-width: 1040px;
+      border-collapse: collapse;
+    }
+
+
+    .admin-table th {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--admin-border);
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(117, 185, 255, 0.1);
+      color: #c5d8ec;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+
+    .admin-table tbody tr {
+      transition: background 140ms ease;
+    }
+
+
+    .admin-table tbody tr:hover {
+      background: rgba(18, 88, 163, 0.12);
+    }
+
+
+    .admin-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+
+    .admin-member-cell {
+      min-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+
+    .admin-member-photo {
+      width: 45px;
+      height: 45px;
+      flex: 0 0 45px;
+      object-fit: cover;
+      border: 1px solid var(--admin-border);
+      background: #07152d;
+    }
+
+
+    .admin-member-name {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-member-id {
+      margin-top: 2px;
+      color: var(--admin-muted);
+      font-size: 9px;
+    }
+
+
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border: 1px solid var(--admin-border);
+      color: #c1d7ed;
+      background: rgba(6, 25, 56, 0.8);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+
+    .admin-badge.is-active {
+      color: #a9ffd6;
+      border-color: rgba(63, 242, 164, 0.3);
+      background: rgba(11, 105, 67, 0.2);
+    }
+
+
+    .admin-badge.is-inactive {
+      color: #d1dbe6;
+      border-color: rgba(173, 190, 208, 0.25);
+    }
+
+
+    .admin-badge.is-draft {
+      color: #ffe9aa;
+      border-color: rgba(255, 212, 91, 0.3);
+      background: rgba(123, 87, 8, 0.18);
+    }
+
+
+    .admin-badge.is-hidden {
+      color: #d8c5ff;
+      border-color: rgba(172, 129, 255, 0.3);
+      background: rgba(71, 35, 126, 0.2);
+    }
+
+
+    .admin-badge.is-deleted {
+      color: #ffc3cc;
+      border-color: rgba(255, 83, 107, 0.33);
+      background: rgba(126, 17, 38, 0.24);
+    }
+
+
+    .admin-actions {
+      min-width: 210px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+
+    .admin-action-button {
+      min-height: 31px;
+      padding: 6px 9px;
+      border: 1px solid var(--admin-border);
+      color: #bcd7f1;
+      background: rgba(6, 30, 65, 0.82);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-action-button:hover:not(:disabled) {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+      background: rgba(11, 73, 143, 0.78);
+    }
+
+
+    .admin-action-button.is-danger {
+      color: #ffc4ce;
+      border-color: rgba(255, 83, 107, 0.3);
+      background: rgba(113, 15, 34, 0.3);
+    }
+
+
+    .admin-action-button.is-restore {
+      color: #baffdd;
+      border-color: rgba(63, 242, 164, 0.3);
+      background: rgba(12, 105, 69, 0.28);
+    }
+
+
+    .admin-action-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+
+    /*
+    =====================================================
+    STATE
+    =====================================================
+    */
+
+    .admin-state {
+      padding: 50px 20px;
+      color: var(--admin-muted);
+      text-align: center;
+    }
+
+
+    .admin-state-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-state-message {
+      max-width: 520px;
+      margin: 8px auto 0;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+
+    /*
+    =====================================================
+    PAGINATION
+    =====================================================
+    */
+
+    .admin-pagination {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(4, 19, 44, 0.7);
+    }
+
+
+    .admin-pagination-info {
+      color: var(--admin-muted);
+      font-size: 10px;
+    }
+
+
+    .admin-pagination-info strong {
+      color: #ffffff;
+    }
+
+
+    .admin-pagination-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+
+    /*
+    =====================================================
+    ALERT / TOAST
+    =====================================================
+    */
+
+    .admin-toast {
+      position: fixed;
+      z-index: 500;
+      right: 22px;
+      bottom: 22px;
+      width: min(390px, calc(100vw - 28px));
+      display: none;
+      padding: 14px 16px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      background: rgba(3, 15, 36, 0.98);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+    }
+
+
+    .admin-toast.is-visible {
+      display: block;
+    }
+
+
+    .admin-toast.is-success {
+      border-left-color: var(--admin-green);
+    }
+
+
+    .admin-toast.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-toast.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-toast-title {
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-toast-message {
+      margin-top: 4px;
+      color: #a9c0db;
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    /*
+    =====================================================
+    DIALOG
+    =====================================================
+    */
+
+    .admin-dialog {
+      width: min(1040px, calc(100vw - 26px));
+      max-height: calc(100vh - 26px);
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--admin-border-strong);
+      color: var(--admin-white);
+      background: #031027;
+      box-shadow: 0 35px 110px rgba(0, 0, 0, 0.75);
+    }
+
+
+    .admin-dialog::backdrop {
+      background: rgba(0, 4, 13, 0.82);
+      backdrop-filter: blur(5px);
+    }
+
+
+    .admin-dialog-shell {
+      max-height: calc(100vh - 28px);
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .admin-dialog-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 21px;
+      border-bottom: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(0, 91, 213, 0.88),
+          rgba(5, 38, 89, 0.95)
+        );
+    }
+
+
+    .admin-dialog-kicker {
+      color: var(--admin-cyan);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-title {
+      margin: 3px 0 0;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 27px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+
+    .admin-dialog-close {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 22px;
+    }
+
+
+    .admin-dialog-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+
+    .admin-dialog-footer {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      padding: 15px 20px;
+      border-top: 1px solid var(--admin-border);
+      background: rgba(2, 10, 25, 0.96);
+    }
+
+
+    .admin-form-section {
+      padding: 17px;
+      border: 1px solid var(--admin-border);
+      background: rgba(5, 23, 51, 0.75);
+    }
+
+
+    .admin-form-section + .admin-form-section {
+      margin-top: 15px;
+    }
+
+
+    .admin-form-section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 15px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-form-section-title::before {
+      content: "";
+      width: 5px;
+      height: 21px;
+      background: var(--admin-blue-light);
+    }
+
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .admin-form-grid.is-three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+
+    .admin-form-grid .is-full {
+      grid-column: 1 / -1;
+    }
+
+
+    .admin-field-note {
+      margin-top: 6px;
+      color: var(--admin-muted);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-json-error {
+      display: none;
+      margin-top: 6px;
+      color: var(--admin-red);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-json-error.is-visible {
+      display: block;
+    }
+
+
+
+
+    /*
+    =====================================================
+    MEDIA DRIVE
+    =====================================================
+    */
+
+    .admin-media-intro {
+      margin-bottom: 15px;
+      padding: 12px 14px;
+      border: 1px solid rgba(50, 227, 255, 0.24);
+      border-left: 5px solid var(--admin-cyan);
+      color: #b8d3ed;
+      background: rgba(5, 30, 61, 0.66);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+
+    .admin-media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .admin-media-card {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid var(--admin-border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(5, 28, 60, 0.88),
+          rgba(1, 12, 29, 0.94)
+        );
+    }
+
+
+    .admin-media-card.is-full {
+      grid-column: 1 / -1;
+    }
+
+
+    .admin-media-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: #ffffff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-card-badge {
+      padding: 3px 7px;
+      border: 1px solid rgba(63, 242, 164, 0.28);
+      color: var(--admin-green);
+      background: rgba(63, 242, 164, 0.08);
+      font-size: 8px;
+      letter-spacing: 0.8px;
+    }
+
+
+    .admin-media-preview {
+      position: relative;
+      min-height: 210px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(7, 33, 70, 0.86),
+          rgba(1, 9, 23, 0.96)
+        );
+    }
+
+
+    .admin-media-preview.is-video {
+      min-height: 150px;
+    }
+
+
+    .admin-media-preview-image {
+      width: 100%;
+      height: 230px;
+      display: block;
+      object-fit: cover;
+      background: #07152d;
+    }
+
+
+    .admin-media-preview-placeholder {
+      padding: 25px;
+      color: var(--admin-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-preview-label {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      padding: 4px 7px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      background: rgba(0, 7, 20, 0.78);
+      font-size: 8px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-file-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px;
+      border: 1px dashed rgba(87, 188, 255, 0.38);
+      color: #b9d2eb;
+      background: rgba(0, 10, 27, 0.76);
+      font-size: 10px;
+    }
+
+
+    .admin-file-input::file-selector-button {
+      min-height: 30px;
+      margin-right: 9px;
+      padding: 5px 10px;
+      border: 1px solid var(--admin-border);
+      border-radius: 0;
+      color: #ffffff;
+      background: rgba(8, 119, 255, 0.66);
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+
+    .admin-media-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+
+    .admin-media-actions .admin-button {
+      min-height: 35px;
+      padding: 7px 10px;
+      font-size: 10px;
+    }
+
+
+    .admin-media-link {
+      min-height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 10px;
+      border: 1px solid var(--admin-border);
+      color: var(--admin-blue-light);
+      background: rgba(5, 29, 64, 0.72);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-link:hover {
+      color: #ffffff;
+      border-color: var(--admin-border-strong);
+    }
+
+
+    .admin-media-link[hidden] {
+      display: none;
+    }
+
+
+    .admin-media-status {
+      display: none;
+      margin-top: 13px;
+      padding: 11px 12px;
+      border: 1px solid var(--admin-border);
+      border-left-width: 5px;
+      color: #b9d1e9;
+      background: rgba(1, 12, 29, 0.92);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+
+    .admin-media-status.is-visible {
+      display: block;
+    }
+
+
+    .admin-media-status.is-info {
+      border-left-color: var(--admin-blue-light);
+    }
+
+
+    .admin-media-status.is-success {
+      border-left-color: var(--admin-green);
+    }
+
+
+    .admin-media-status.is-warning {
+      border-left-color: var(--admin-yellow);
+    }
+
+
+    .admin-media-status.is-error {
+      border-left-color: var(--admin-red);
+    }
+
+
+    .admin-media-progress {
+      display: none;
+      margin-top: 12px;
+    }
+
+
+    .admin-media-progress.is-visible {
+      display: block;
+    }
+
+
+    .admin-media-progress-track {
+      height: 7px;
+      overflow: hidden;
+      border: 1px solid rgba(117, 185, 255, 0.22);
+      background: rgba(0, 8, 22, 0.9);
+    }
+
+
+    .admin-media-progress-bar {
+      width: 0;
+      height: 100%;
+      background:
+        linear-gradient(
+          90deg,
+          var(--admin-blue),
+          var(--admin-cyan)
+        );
+      transition: width 180ms ease;
+    }
+
+
+    .admin-media-progress-text {
+      margin-top: 6px;
+      color: var(--admin-muted);
+      font-size: 9px;
+    }
+
+
+    .admin-gallery-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 13px;
+    }
+
+
+    .admin-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+
+    .admin-gallery-empty {
+      grid-column: 1 / -1;
+      padding: 28px 18px;
+      border: 1px dashed rgba(117, 185, 255, 0.25);
+      color: var(--admin-muted);
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+
+    .admin-gallery-item {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      background: rgba(1, 12, 29, 0.92);
+    }
+
+
+    .admin-gallery-thumb-wrap {
+      position: relative;
+      height: 145px;
+      overflow: hidden;
+      background: #07152d;
+    }
+
+
+    .admin-gallery-thumb {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+
+    .admin-gallery-type {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      padding: 3px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      background: rgba(0, 7, 20, 0.78);
+      font-size: 8px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-gallery-body {
+      padding: 10px;
+    }
+
+
+    .admin-gallery-caption {
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 9px;
+      border: 1px solid rgba(117, 185, 255, 0.2);
+      color: #ffffff;
+      background: rgba(0, 8, 22, 0.84);
+      font-size: 9px;
+      outline: none;
+    }
+
+
+    .admin-gallery-caption:focus {
+      border-color: var(--admin-blue-light);
+    }
+
+
+    .admin-gallery-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+
+    .admin-gallery-remove {
+      min-height: 29px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 83, 107, 0.3);
+      color: #ffc4ce;
+      background: rgba(113, 15, 34, 0.3);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+
+    .admin-media-disabled-note {
+      display: none;
+      margin-top: 10px;
+      color: var(--admin-yellow);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .admin-media-disabled-note.is-visible {
+      display: block;
+    }
+
+
+    /*
+    =====================================================
+    RESPONSIVE
+    =====================================================
+    */
+
+    @media (max-width: 1199.98px) {
+      .admin-filter-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-filter-grid .admin-filter-button {
+        grid-column: span 2;
+      }
+    }
+
+
+    @media (max-width: 991.98px) {
+      .admin-summary-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+
+      .admin-topbar {
+        padding-right: 17px;
+        padding-left: 17px;
+      }
+
+
+      .admin-content {
+        padding: 22px 17px;
+      }
+    }
+
+
+    @media (max-width: 767.98px) {
+
+      .admin-media-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-media-card.is-full {
+        grid-column: auto;
+      }
+
+
+      .admin-gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .admin-topbar-actions .admin-button span {
+        display: none;
+      }
+
+
+      .admin-topbar-actions .admin-button {
+        width: 43px;
+        padding: 8px;
+      }
+
+
+      .admin-page-header {
+        min-height: 230px;
+        padding: 30px 25px;
+      }
+
+
+      .admin-form-grid,
+      .admin-form-grid.is-three {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-form-grid .is-full {
+        grid-column: auto;
+      }
+
+
+      .admin-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+
+    @media (max-width: 575.98px) {
+
+      .admin-gallery-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-media-preview-image {
+        height: 210px;
+      }
+
+      .admin-content {
+        padding: 15px 11px 30px;
+      }
+
+
+      .admin-logo {
+        display: none;
+      }
+
+
+      .admin-heading-title {
+        font-size: 21px;
+      }
+
+
+      .admin-heading-kicker {
+        display: none;
+      }
+
+
+      .admin-page-header {
+        padding: 26px 21px;
+        clip-path: none;
+      }
+
+
+      .admin-page-title {
+        font-size: 48px;
+      }
+
+
+      .admin-summary-grid,
+      .admin-filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .admin-filter-grid .admin-filter-button {
+        grid-column: auto;
+      }
+
+
+      .admin-panel-body {
+        padding: 13px;
+      }
+
+
+      .admin-dialog-body {
+        padding: 13px;
+      }
+
+
+      .admin-dialog-footer {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+
+
+      .admin-dialog-footer .admin-button {
+        width: 100%;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- ===================================================
+       BACKGROUND
+       =================================================== -->
+
+  <div
+    class="admin-background"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- ===================================================
+       LOADING BAR
+       =================================================== -->
+
+  <div
+    class="admin-loading-bar"
+    id="loadingBar"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- ===================================================
+       NOSCRIPT
+       =================================================== -->
+
+  <noscript>
+    <div
+      style="
+        position: relative;
+        z-index: 9999;
+        padding: 20px;
+        color: white;
+        background: #8e1830;
+      "
+    >
+      Halaman administrator membutuhkan JavaScript.
+    </div>
+  </noscript>
+
+
+  <!-- ===================================================
+       PAGE
+       =================================================== -->
+
+  <div class="admin-page">
+
+    <!-- =================================================
+         TOPBAR
+         ================================================= -->
+
+    <header class="admin-topbar">
+
+      <div class="admin-topbar-left">
+
+        <img
+          class="admin-logo"
+          src="./assets/img/logo.png"
+          alt="Logo PUSDATIN X BOC"
+          onerror="
+            this.onerror=null;
+            this.src='./assets/img/placeholder.png';
+          "
+        >
+
+        <div>
+          <div class="admin-heading-kicker">
+            Profile Management System
+          </div>
+
+          <h1 class="admin-heading-title">
+            Member Administration
+          </h1>
+        </div>
+
+      </div>
+
+
+      <div class="admin-topbar-actions">
+
+        <a
+          class="admin-button is-ghost"
+          href="./admin.html"
+          title="Kembali ke dashboard"
+        >
+          ←
+
+          <span>
+            Dashboard
+          </span>
+        </a>
+
+
+        <button
+          class="admin-button is-primary"
+          id="addMemberButton"
+          type="button"
+          title="Tambah member"
+        >
+          +
+
+          <span>
+            Tambah Member
+          </span>
+        </button>
+
+
+        <button
+          class="admin-button is-danger"
+          id="logoutButton"
+          type="button"
+          title="Logout"
+        >
+          ×
+
+          <span>
+            Logout
+          </span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- =================================================
+         CONTENT
+         ================================================= -->
+
+    <main class="admin-content">
+
+      <div class="admin-breadcrumb">
+        <a href="./admin.html">
+          Dashboard
+        </a>
+
+        <span>/</span>
+
+        <span>
+          Members
+        </span>
+      </div>
+
+
+      <!-- PAGE HEADER -->
+
+      <section class="admin-page-header">
+        <div class="admin-page-header-content">
+
+          <div class="admin-page-kicker">
+            Member Database
+          </div>
+
+          <h2 class="admin-page-title">
+            Manage
+            <br>
+            Members
+          </h2>
+
+          <p class="admin-page-description">
+            Tambahkan, perbarui, sembunyikan, hapus sementara,
+            atau pulihkan data member yang tampil pada website
+            Profile Magang PUSDATIN X BOC.
+          </p>
+
+        </div>
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <section class="admin-summary-grid">
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-blue-light)"
+        >
+          <div class="admin-summary-label">
+            Hasil Filter
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryTotal"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Total data sesuai filter.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-green)"
+        >
+          <div class="admin-summary-label">
+            Ditampilkan
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryDisplayed"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Member pada halaman ini.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-cyan)"
+        >
+          <div class="admin-summary-label">
+            Halaman
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryPage"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Posisi halaman saat ini.
+          </div>
+        </article>
+
+
+        <article
+          class="admin-summary"
+          style="--accent: var(--admin-yellow)"
+        >
+          <div class="admin-summary-label">
+            Administrator
+          </div>
+
+          <div
+            class="admin-summary-value"
+            id="summaryAdmin"
+            style="font-size: 25px"
+          >
+            —
+          </div>
+
+          <div class="admin-summary-note">
+            Akun yang sedang digunakan.
+          </div>
+        </article>
+
+      </section>
+
+
+      <!-- FILTER -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+          <div>
+            <div class="admin-panel-title">
+              Search & Filter
+            </div>
+
+            <div class="admin-panel-subtitle">
+              Pencarian data member
+            </div>
+          </div>
+        </div>
+
+
+        <div class="admin-panel-body">
+          <div class="admin-filter-grid">
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="searchInput"
+              >
+                Pencarian
+              </label>
+
+              <input
+                class="admin-input"
+                id="searchInput"
+                type="search"
+                placeholder="Cari nama, ID, role, atau divisi..."
+                autocomplete="off"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="statusFilter"
+              >
+                Status
+              </label>
+
+              <select
+                class="admin-select"
+                id="statusFilter"
+              >
+                <option value="">
+                  Semua status
+                </option>
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+                <option value="Draft">
+                  Draft
+                </option>
+
+                <option value="Hidden">
+                  Hidden
+                </option>
+
+                <option value="Deleted">
+                  Deleted
+                </option>
+              </select>
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="divisionFilter"
+              >
+                Divisi
+              </label>
+
+              <input
+                class="admin-input"
+                id="divisionFilter"
+                type="text"
+                placeholder="Contoh: core"
+                autocomplete="off"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="pageSizeFilter"
+              >
+                Per Halaman
+              </label>
+
+              <select
+                class="admin-select"
+                id="pageSizeFilter"
+              >
+                <option value="10">
+                  10 data
+                </option>
+
+                <option value="20">
+                  20 data
+                </option>
+
+                <option value="50" selected>
+                  50 data
+                </option>
+
+                <option value="100">
+                  100 data
+                </option>
+              </select>
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                aria-hidden="true"
+              >
+                Opsi
+              </label>
+
+              <label
+                class="admin-checkbox"
+                for="includeDeletedFilter"
+              >
+                <input
+                  id="includeDeletedFilter"
+                  type="checkbox"
+                >
+
+                Tampilkan Deleted
+              </label>
+            </div>
+
+
+            <button
+              class="admin-button is-primary admin-filter-button"
+              id="applyFilterButton"
+              type="button"
+            >
+              Terapkan Filter
+            </button>
+
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- MEMBER TABLE -->
+
+      <section class="admin-panel">
+
+        <div class="admin-panel-header">
+
+          <div>
+            <div class="admin-panel-title">
+              Member Database
+            </div>
+
+            <div
+              class="admin-panel-subtitle"
+              id="tableSubtitle"
+            >
+              Menyiapkan data
+            </div>
+          </div>
+
+
+          <button
+            class="admin-button is-ghost"
+            id="refreshButton"
+            type="button"
+          >
+            Refresh
+          </button>
+
+        </div>
+
+
+        <div
+          class="admin-panel-body"
+          id="memberTableContainer"
+        >
+          <div class="admin-state">
+            <div class="admin-state-title">
+              Loading Members
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data member dari Google Spreadsheet.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="admin-pagination">
+
+          <div
+            class="admin-pagination-info"
+            id="paginationInfo"
+          >
+            Menyiapkan pagination.
+          </div>
+
+
+          <div class="admin-pagination-actions">
+
+            <button
+              class="admin-button is-ghost"
+              id="previousPageButton"
+              type="button"
+              disabled
+            >
+              Sebelumnya
+            </button>
+
+
+            <button
+              class="admin-button is-ghost"
+              id="nextPageButton"
+              type="button"
+              disabled
+            >
+              Selanjutnya
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ===================================================
+       MEMBER FORM DIALOG
+       =================================================== -->
+
+  <dialog
+    class="admin-dialog"
+    id="memberDialog"
+  >
+    <form
+      class="admin-dialog-shell"
+      id="memberForm"
+      novalidate
+    >
+
+      <!-- DIALOG HEADER -->
+
+      <header class="admin-dialog-header">
+
+        <div>
+          <div class="admin-dialog-kicker">
+            Member Database Editor
+          </div>
+
+          <h2
+            class="admin-dialog-title"
+            id="memberDialogTitle"
+          >
+            Tambah Member
+          </h2>
+        </div>
+
+
+        <button
+          class="admin-dialog-close"
+          id="closeDialogButton"
+          type="button"
+          aria-label="Tutup form"
+        >
+          ×
+        </button>
+
+      </header>
+
+
+      <!-- DIALOG BODY -->
+
+      <div class="admin-dialog-body">
+
+        <!-- DATA UTAMA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Data Utama
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberId"
+              >
+                ID Member *
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberId"
+                name="id"
+                type="text"
+                placeholder="contoh: faisalalrico"
+                maxlength="64"
+                required
+              >
+
+              <div class="admin-field-note">
+                ID menjadi alamat profil dan tidak dapat diubah
+                setelah member dibuat.
+              </div>
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberName"
+              >
+                Nama Member *
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberName"
+                name="name"
+                type="text"
+                maxlength="255"
+                required
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberRole"
+              >
+                Role
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberRole"
+                name="role"
+                type="text"
+                maxlength="128"
+                placeholder="Contoh: Programmer"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberMainRole"
+              >
+                Main Role
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberMainRole"
+                name="mainRole"
+                type="text"
+                maxlength="128"
+                placeholder="Contoh: Frontend Developer"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberDivision"
+              >
+                Nama Divisi
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberDivision"
+                name="division"
+                type="text"
+                maxlength="64"
+                placeholder="Contoh: PUSDATIN"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberDivisionKey"
+              >
+                Division Key
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberDivisionKey"
+                name="divisionKey"
+                type="text"
+                maxlength="32"
+                placeholder="Contoh: core"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberStatus"
+              >
+                Status
+              </label>
+
+              <select
+                class="admin-select"
+                id="memberStatus"
+                name="status"
+              >
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+                <option value="Draft">
+                  Draft
+                </option>
+
+                <option value="Hidden">
+                  Hidden
+                </option>
+
+                <option value="Deleted">
+                  Deleted
+                </option>
+              </select>
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberJoinDate"
+              >
+                Join Date
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberJoinDate"
+                name="joinDate"
+                type="date"
+              >
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberTagline"
+              >
+                Tagline
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberTagline"
+                name="tagline"
+                type="text"
+                maxlength="255"
+              >
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberBio"
+              >
+                Bio
+              </label>
+
+              <textarea
+                class="admin-textarea"
+                id="memberBio"
+                name="bio"
+                maxlength="10000"
+              ></textarea>
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberSignature"
+              >
+                Signature
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberSignature"
+                name="signature"
+                type="text"
+                maxlength="255"
+              >
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- STATISTIK -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Statistik Profil
+          </div>
+
+
+          <div class="admin-form-grid is-three">
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberRank"
+              >
+                Rank
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberRank"
+                type="text"
+                maxlength="100"
+                placeholder="Contoh: S"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberLevel"
+              >
+                Level
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberLevel"
+                type="number"
+                min="0"
+                max="9999"
+                value="0"
+              >
+            </div>
+
+
+            <div class="admin-field">
+              <label
+                class="admin-label"
+                for="memberWinrate"
+              >
+                Success Rate
+              </label>
+
+              <input
+                class="admin-input"
+                id="memberWinrate"
+                type="number"
+                min="0"
+                max="100"
+                value="0"
+              >
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- MEDIA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Media & Google Drive
+          </div>
+
+
+          <div class="admin-media-intro">
+            File baru akan diunggah setelah data Member berhasil
+            disimpan. Tautan lama tetap dapat digunakan. Penggantian
+            media tidak langsung menghapus file lama dari Drive.
+          </div>
+
+
+          <div class="admin-media-grid">
+
+            <!-- FOTO PROFIL -->
+
+            <article class="admin-media-card">
+
+              <div class="admin-media-card-title">
+                Foto Profil
+
+                <span class="admin-media-card-badge">
+                  Maks. 5 MB
+                </span>
+              </div>
+
+
+              <div class="admin-media-preview">
+                <img
+                  class="admin-media-preview-image"
+                  id="memberPhotoPreview"
+                  src="./assets/img/placeholder.png"
+                  alt="Preview foto profil"
+                >
+
+                <div
+                  class="admin-media-preview-label"
+                  id="memberPhotoPreviewLabel"
+                >
+                  Belum ada foto
+                </div>
+              </div>
+
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="memberPhoto"
+                >
+                  Photo Path / URL
+                </label>
+
+                <input
+                  class="admin-input"
+                  id="memberPhoto"
+                  name="photo"
+                  type="text"
+                  maxlength="5000"
+                  placeholder="Path lama atau URL eksternal"
+                >
+              </div>
+
+
+              <div
+                class="admin-field"
+                style="margin-top:10px"
+              >
+                <label
+                  class="admin-label"
+                  for="memberPhotoFile"
+                >
+                  Upload Foto Baru
+                </label>
+
+                <input
+                  class="admin-file-input"
+                  id="memberPhotoFile"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                >
+
+                <div class="admin-field-note">
+                  JPG, PNG, atau WEBP. Upload dijalankan setelah
+                  tombol Simpan Member ditekan.
+                </div>
+              </div>
+
+
+              <div class="admin-media-actions">
+
+                <a
+                  class="admin-media-link"
+                  id="openMemberPhotoLink"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  hidden
+                >
+                  Buka Foto
+                </a>
+
+
+                <button
+                  class="admin-button is-danger"
+                  id="clearMemberPhotoButton"
+                  type="button"
+                >
+                  Hapus Referensi
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <!-- VIDEO CV -->
+
+            <article class="admin-media-card">
+
+              <div class="admin-media-card-title">
+                Video CV
+
+                <span class="admin-media-card-badge">
+                  Maks. 20 MB
+                </span>
+              </div>
+
+
+              <div class="admin-media-preview is-video">
+                <div
+                  class="admin-media-preview-placeholder"
+                  id="memberVideoPreviewText"
+                >
+                  Belum ada Video CV
+                </div>
+
+                <div
+                  class="admin-media-preview-label"
+                  id="memberVideoPreviewLabel"
+                >
+                  URL / Drive
+                </div>
+              </div>
+
+
+              <div class="admin-field">
+                <label
+                  class="admin-label"
+                  for="memberVideoCV"
+                >
+                  Video CV Path / URL
+                </label>
+
+                <input
+                  class="admin-input"
+                  id="memberVideoCV"
+                  name="videoCV"
+                  type="text"
+                  maxlength="5000"
+                  placeholder="URL YouTube, Drive, atau path lama"
+                >
+              </div>
+
+
+              <div
+                class="admin-field"
+                style="margin-top:10px"
+              >
+                <label
+                  class="admin-label"
+                  for="memberVideoFile"
+                >
+                  Upload Video Baru
+                </label>
+
+                <input
+                  class="admin-file-input"
+                  id="memberVideoFile"
+                  type="file"
+                  accept=".mp4,.webm,video/mp4,video/webm"
+                >
+
+                <div class="admin-field-note">
+                  MP4 atau WEBM. Untuk video besar, gunakan URL
+                  YouTube atau platform eksternal.
+                </div>
+              </div>
+
+
+              <div class="admin-media-actions">
+
+                <a
+                  class="admin-media-link"
+                  id="openMemberVideoLink"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  hidden
+                >
+                  Buka Video
+                </a>
+
+
+                <button
+                  class="admin-button is-danger"
+                  id="clearMemberVideoButton"
+                  type="button"
+                >
+                  Hapus Referensi
+                </button>
+
+              </div>
+
+            </article>
+
+
+            <!-- GALLERY -->
+
+            <article class="admin-media-card is-full">
+
+              <div class="admin-media-card-title">
+                Gallery
+
+                <span class="admin-media-card-badge">
+                  Maks. 8 MB / gambar
+                </span>
+              </div>
+
+
+              <div class="admin-gallery-toolbar">
+
+                <div class="admin-field">
+                  <label
+                    class="admin-label"
+                    for="memberGalleryFiles"
+                  >
+                    Tambah Gambar Gallery
+                  </label>
+
+                  <input
+                    class="admin-file-input"
+                    id="memberGalleryFiles"
+                    type="file"
+                    multiple
+                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                  >
+                </div>
+
+
+                <button
+                  class="admin-button is-ghost"
+                  id="refreshGalleryPreviewButton"
+                  type="button"
+                >
+                  Sinkronkan Preview
+                </button>
+
+              </div>
+
+
+              <div
+                class="admin-gallery-grid"
+                id="memberGalleryPreview"
+              >
+                <div class="admin-gallery-empty">
+                  Gallery masih kosong.
+                </div>
+              </div>
+
+
+              <div class="admin-field-note">
+                Gambar yang dihapus dari preview akan dikeluarkan
+                dari Gallery JSON saat Member disimpan. File Drive
+                tidak dipindahkan ke Trash secara otomatis.
+              </div>
+
+            </article>
+
+          </div>
+
+
+          <div
+            class="admin-media-status"
+            id="memberMediaStatus"
+          ></div>
+
+
+          <div
+            class="admin-media-progress"
+            id="memberMediaProgress"
+          >
+            <div class="admin-media-progress-track">
+              <div
+                class="admin-media-progress-bar"
+                id="memberMediaProgressBar"
+              ></div>
+            </div>
+
+            <div
+              class="admin-media-progress-text"
+              id="memberMediaProgressText"
+            >
+              Menyiapkan media.
+            </div>
+          </div>
+
+
+          <div
+            class="admin-media-disabled-note"
+            id="memberMediaDisabledNote"
+          >
+            Fungsi Media Drive tidak ditemukan pada admin-api.js.
+            Data URL masih dapat disimpan, tetapi upload file
+            langsung tidak tersedia.
+          </div>
+
+        </section>
+
+
+        <!-- JSON DATA -->
+
+        <section class="admin-form-section">
+
+          <div class="admin-form-section-title">
+            Data Lanjutan
+          </div>
+
+
+          <div class="admin-form-grid">
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberSkills"
+              >
+                Skills JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="memberSkills"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="skillsJsonError"
+              ></div>
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberExpertise"
+              >
+                Expertise JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="memberExpertise"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="expertiseJsonError"
+              ></div>
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberGallery"
+              >
+                Gallery JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="memberGallery"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="galleryJsonError"
+              ></div>
+
+              <div class="admin-field-note">
+                Media gallery dapat dikosongkan menggunakan
+                nilai <code>[]</code>.
+              </div>
+            </div>
+
+
+            <div class="admin-field is-full">
+              <label
+                class="admin-label"
+                for="memberAlter"
+              >
+                Alter Pointer JSON
+              </label>
+
+              <textarea
+                class="admin-textarea is-code"
+                id="memberAlter"
+                spellcheck="false"
+              ></textarea>
+
+              <div
+                class="admin-json-error"
+                id="alterJsonError"
+              ></div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- DIALOG FOOTER -->
+
+      <footer class="admin-dialog-footer">
+
+        <button
+          class="admin-button is-ghost"
+          id="cancelMemberButton"
+          type="button"
+        >
+          Batal
+        </button>
+
+
+        <button
+          class="admin-button is-primary"
+          id="saveMemberButton"
+          type="submit"
+        >
+          Simpan Member
+        </button>
+
+      </footer>
+
+    </form>
+  </dialog>
+
+
+  <!-- ===================================================
+       TOAST
+       =================================================== -->
+
+  <div
+    class="admin-toast"
+    id="adminToast"
+    role="status"
+    aria-live="polite"
+  >
+    <div
+      class="admin-toast-title"
+      id="adminToastTitle"
+    >
+      System Message
+    </div>
+
+    <div
+      class="admin-toast-message"
+      id="adminToastMessage"
+    ></div>
+  </div>
+
+
+  <!-- ===================================================
+       JAVASCRIPT
+       =================================================== -->
+
+  <script src="./assets/js/config.js"></script>
+
+  <script src="./assets/js/admin-api.js"></script>
+
+
+  <!-- ===================================================
+       PAGE CONTROLLER
+       =================================================== -->
+
+  <script>
+    (function initializeMemberAdministration() {
+      "use strict";
+
+
+      /*
+      =====================================================
+      STATE
+      =====================================================
+      */
+
+      const state = {
+        initialized: false,
+        authenticated: false,
+        loading: false,
+        saving: false,
+        editingMemberId: "",
+        members: [],
+
+        pagination: {
+          page: 1,
+          pageSize: 50,
+          total: 0,
+          totalPages: 1,
+          hasPrevious: false,
+          hasNext: false
+        },
+
+        filters: {
+          search: "",
+          division: "",
+          status: "",
+          includeDeleted: false
+        },
+
+        media: {
+          available: false,
+          loadingAssets: false,
+          assets: [],
+          photoFile: null,
+          videoFile: null,
+          galleryFiles: [],
+          removedAssetIds: new Set(),
+          photoRemoveRequested: false,
+          videoRemoveRequested: false,
+          objectUrls: []
+        },
+
+        toastTimer: null,
+        searchTimer: null
+      };
+
+
+      /*
+      =====================================================
+      ELEMENTS
+      =====================================================
+      */
+
+      function getElement(id) {
+        return document.getElementById(id);
+      }
+
+
+      const elements = {
+        loadingBar: getElement("loadingBar"),
+        addMemberButton: getElement("addMemberButton"),
+        logoutButton: getElement("logoutButton"),
+        refreshButton: getElement("refreshButton"),
+        applyFilterButton: getElement("applyFilterButton"),
+
+        searchInput: getElement("searchInput"),
+        statusFilter: getElement("statusFilter"),
+        divisionFilter: getElement("divisionFilter"),
+        pageSizeFilter: getElement("pageSizeFilter"),
+        includeDeletedFilter: getElement("includeDeletedFilter"),
+
+        memberTableContainer: getElement("memberTableContainer"),
+        tableSubtitle: getElement("tableSubtitle"),
+        paginationInfo: getElement("paginationInfo"),
+        previousPageButton: getElement("previousPageButton"),
+        nextPageButton: getElement("nextPageButton"),
+
+        summaryTotal: getElement("summaryTotal"),
+        summaryDisplayed: getElement("summaryDisplayed"),
+        summaryPage: getElement("summaryPage"),
+        summaryAdmin: getElement("summaryAdmin"),
+
+        memberDialog: getElement("memberDialog"),
+        memberForm: getElement("memberForm"),
+        memberDialogTitle: getElement("memberDialogTitle"),
+        closeDialogButton: getElement("closeDialogButton"),
+        cancelMemberButton: getElement("cancelMemberButton"),
+        saveMemberButton: getElement("saveMemberButton"),
+
+        memberId: getElement("memberId"),
+        memberName: getElement("memberName"),
+        memberRole: getElement("memberRole"),
+        memberMainRole: getElement("memberMainRole"),
+        memberDivision: getElement("memberDivision"),
+        memberDivisionKey: getElement("memberDivisionKey"),
+        memberStatus: getElement("memberStatus"),
+        memberJoinDate: getElement("memberJoinDate"),
+        memberTagline: getElement("memberTagline"),
+        memberBio: getElement("memberBio"),
+        memberSignature: getElement("memberSignature"),
+        memberRank: getElement("memberRank"),
+        memberLevel: getElement("memberLevel"),
+        memberWinrate: getElement("memberWinrate"),
+
+        memberPhoto: getElement("memberPhoto"),
+        memberVideoCV: getElement("memberVideoCV"),
+        memberPhotoFile: getElement("memberPhotoFile"),
+        memberVideoFile: getElement("memberVideoFile"),
+        memberGalleryFiles: getElement("memberGalleryFiles"),
+
+        memberPhotoPreview: getElement("memberPhotoPreview"),
+        memberPhotoPreviewLabel: getElement("memberPhotoPreviewLabel"),
+        memberVideoPreviewText: getElement("memberVideoPreviewText"),
+        memberVideoPreviewLabel: getElement("memberVideoPreviewLabel"),
+        openMemberPhotoLink: getElement("openMemberPhotoLink"),
+        openMemberVideoLink: getElement("openMemberVideoLink"),
+        clearMemberPhotoButton: getElement("clearMemberPhotoButton"),
+        clearMemberVideoButton: getElement("clearMemberVideoButton"),
+        refreshGalleryPreviewButton: getElement("refreshGalleryPreviewButton"),
+        memberGalleryPreview: getElement("memberGalleryPreview"),
+        memberMediaStatus: getElement("memberMediaStatus"),
+        memberMediaProgress: getElement("memberMediaProgress"),
+        memberMediaProgressBar: getElement("memberMediaProgressBar"),
+        memberMediaProgressText: getElement("memberMediaProgressText"),
+        memberMediaDisabledNote: getElement("memberMediaDisabledNote"),
+
+        memberSkills: getElement("memberSkills"),
+        memberExpertise: getElement("memberExpertise"),
+        memberGallery: getElement("memberGallery"),
+        memberAlter: getElement("memberAlter"),
+
+        skillsJsonError: getElement("skillsJsonError"),
+        expertiseJsonError: getElement("expertiseJsonError"),
+        galleryJsonError: getElement("galleryJsonError"),
+        alterJsonError: getElement("alterJsonError"),
+
+        adminToast: getElement("adminToast"),
+        adminToastTitle: getElement("adminToastTitle"),
+        adminToastMessage: getElement("adminToastMessage")
+      };
+
+
+      /*
+      =====================================================
+      GENERAL HELPERS
+      =====================================================
+      */
+
+      function asString(value) {
+        if (
+          value === null ||
+          value === undefined
+        ) {
+          return "";
+        }
+
+        return String(value).trim();
+      }
+
+
+      function asArray(value) {
+        return Array.isArray(value)
+          ? value
+          : [];
+      }
+
+
+      function isPlainObject(value) {
+        return (
+          value !== null &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        );
+      }
+
+
+      function toNumber(
+        value,
+        fallback
+      ) {
+        const numericValue = Number(value);
+
+        return Number.isFinite(numericValue)
+          ? numericValue
+          : fallback;
+      }
+
+
+      function escapeHTML(value) {
+        return String(
+          value === null ||
+          value === undefined
+            ? ""
+            : value
+        )
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+
+      function escapeAttribute(value) {
+        return escapeHTML(value);
+      }
+
+
+      function prettyJSON(value) {
+        return JSON.stringify(
+          value,
+          null,
+          2
+        );
+      }
+
+
+      function normalizeDateInput(value) {
+        const text = asString(value);
+        const match = text.match(/^\d{4}-\d{2}-\d{2}/);
+
+        return match
+          ? match[0]
+          : "";
+      }
+
+
+      function getResultCollection(
+        result,
+        keys
+      ) {
+        if (Array.isArray(result)) {
+          return result;
+        }
+
+        for (const key of keys) {
+          if (
+            result &&
+            Array.isArray(result[key])
+          ) {
+            return result[key];
+          }
+        }
+
+        return [];
+      }
+
+
+      /*
+      =====================================================
+      MEDIA URL HELPERS
+      =====================================================
+      */
+
+      function getPublicMediaUrl(source) {
+        const normalized = asString(source);
+
+        if (!normalized) {
+          return "./assets/img/placeholder.png";
+        }
+
+        if (
+          normalized.startsWith("http://") ||
+          normalized.startsWith("https://") ||
+          normalized.startsWith("data:") ||
+          normalized.startsWith("blob:")
+        ) {
+          return normalized;
+        }
+
+        const cleanPath = normalized.replace(/^\/+/, "");
+
+        if (
+          window.P3R_CONFIG &&
+          typeof window.P3R_CONFIG.resolveSiteUrl === "function"
+        ) {
+          return window.P3R_CONFIG.resolveSiteUrl(cleanPath);
+        }
+
+        return "./" + cleanPath;
+      }
+
+
+      function getProfileUrl(memberId) {
+        if (
+          window.P3R_PAGE_URLS &&
+          typeof window.P3R_PAGE_URLS.profile === "function"
+        ) {
+          return window.P3R_PAGE_URLS.profile(memberId);
+        }
+
+        return (
+          "./profile.html?id=" +
+          encodeURIComponent(memberId)
+        );
+      }
+
+
+      function revokeMediaObjectUrls() {
+        state.media.objectUrls.forEach(
+          function revokeUrl(url) {
+            try {
+              URL.revokeObjectURL(url);
+            } catch (error) {
+              console.warn(
+                "[P3R MEMBER] Object URL gagal dibersihkan.",
+                error
+              );
+            }
+          }
+        );
+
+        state.media.objectUrls = [];
+      }
+
+
+      function createMediaObjectUrl(file) {
+        const url = URL.createObjectURL(file);
+
+        state.media.objectUrls.push(url);
+
+        return url;
+      }
+
+
+      function normalizeGalleryItem(item) {
+        if (typeof item === "string") {
+          return {
+            src: asString(item),
+            caption: ""
+          };
+        }
+
+        if (isPlainObject(item)) {
+          return {
+            src: asString(
+              item.src ||
+              item.url ||
+              item.path
+            ),
+
+            caption: asString(
+              item.caption ||
+              item.title
+            )
+          };
+        }
+
+        return {
+          src: "",
+          caption: ""
+        };
+      }
+
+
+      function readGalleryFromTextarea(showError) {
+        const raw = elements.memberGallery.value.trim();
+
+        try {
+          const parsed = JSON.parse(raw || "[]");
+
+          if (!Array.isArray(parsed)) {
+            throw new Error(
+              "Gallery JSON harus berupa array."
+            );
+          }
+
+          const gallery = parsed
+            .map(normalizeGalleryItem)
+            .filter(
+              function filterGalleryItem(item) {
+                return Boolean(item.src);
+              }
+            );
+
+          if (showError !== false) {
+            elements.galleryJsonError.textContent = "";
+            elements.galleryJsonError.classList.remove(
+              "is-visible"
+            );
+          }
+
+          return gallery;
+        } catch (error) {
+          if (showError !== false) {
+            elements.galleryJsonError.textContent =
+              error.message;
+
+            elements.galleryJsonError.classList.add(
+              "is-visible"
+            );
+          }
+
+          return null;
+        }
+      }
+
+
+      function writeGalleryToTextarea(gallery) {
+        elements.memberGallery.value = prettyJSON(
+          asArray(gallery)
+            .map(normalizeGalleryItem)
+            .filter(
+              function filterGalleryItem(item) {
+                return Boolean(item.src);
+              }
+            )
+        );
+
+        elements.galleryJsonError.textContent = "";
+        elements.galleryJsonError.classList.remove(
+          "is-visible"
+        );
+      }
+
+
+      function normalizeMediaAsset(asset) {
+        if (!isPlainObject(asset)) {
+          return null;
+        }
+
+        return {
+          id: asString(asset.id),
+          ownerType: asString(
+            asset.ownerType ||
+            asset.owner_type
+          ).toLowerCase(),
+          ownerId: asString(
+            asset.ownerId ||
+            asset.owner_id
+          ).toLowerCase(),
+          assetType: asString(
+            asset.assetType ||
+            asset.asset_type
+          ).toLowerCase(),
+          field: asString(asset.field),
+          status: asString(asset.status).toLowerCase() || "active",
+          url: asString(
+            asset.url ||
+            asset.publicUrl ||
+            asset.public_url ||
+            asset.targetUrl ||
+            asset.target_url ||
+            asset.currentPath ||
+            asset.current_path ||
+            asset.previewUrl ||
+            asset.preview_url ||
+            asset.viewUrl ||
+            asset.view_url
+          ),
+          publicUrl: asString(
+            asset.publicUrl ||
+            asset.public_url
+          ),
+          previewUrl: asString(
+            asset.previewUrl ||
+            asset.preview_url
+          ),
+          viewUrl: asString(
+            asset.viewUrl ||
+            asset.view_url
+          ),
+          currentPath: asString(
+            asset.currentPath ||
+            asset.current_path
+          ),
+          targetUrl: asString(
+            asset.targetUrl ||
+            asset.target_url
+          ),
+          sourceUrl: asString(
+            asset.sourceUrl ||
+            asset.source_url
+          ),
+          caption: asString(asset.caption),
+          fileId: asString(
+            asset.fileId ||
+            asset.file_id
+          )
+        };
+      }
+
+
+      function getActiveMediaAssets() {
+        return state.media.assets.filter(
+          function filterActiveAsset(asset) {
+            return (
+              asset &&
+              asset.status === "active" &&
+              !state.media.removedAssetIds.has(
+                asset.id
+              )
+            );
+          }
+        );
+      }
+
+
+      function findActiveAssetByType(assetType) {
+        return getActiveMediaAssets().find(
+          function findAsset(asset) {
+            return asset.assetType === assetType;
+          }
+        ) || null;
+      }
+
+
+      function getAssetReferences(asset) {
+        return [
+          asset && asset.url,
+          asset && asset.publicUrl,
+          asset && asset.previewUrl,
+          asset && asset.viewUrl,
+          asset && asset.currentPath,
+          asset && asset.targetUrl,
+          asset && asset.sourceUrl
+        ]
+          .map(asString)
+          .filter(Boolean);
+      }
+
+
+      function findAssetByReference(reference) {
+        const target = asString(reference);
+
+        if (!target) {
+          return null;
+        }
+
+        return getActiveMediaAssets().find(
+          function findMatchingAsset(asset) {
+            return getAssetReferences(asset)
+              .includes(target);
+          }
+        ) || null;
+      }
+
+
+      function resetPendingMedia() {
+        revokeMediaObjectUrls();
+
+        state.media.assets = [];
+        state.media.photoFile = null;
+        state.media.videoFile = null;
+        state.media.galleryFiles = [];
+        state.media.removedAssetIds = new Set();
+        state.media.photoRemoveRequested = false;
+        state.media.videoRemoveRequested = false;
+        state.media.loadingAssets = false;
+
+        if (elements.memberPhotoFile) {
+          elements.memberPhotoFile.value = "";
+        }
+
+        if (elements.memberVideoFile) {
+          elements.memberVideoFile.value = "";
+        }
+
+        if (elements.memberGalleryFiles) {
+          elements.memberGalleryFiles.value = "";
+        }
+
+        setMediaStatus("", "", false);
+        setMediaProgress(false, 0, "");
+      }
+
+
+      /*
+      =====================================================
+      LOADING AND SAVING
+      =====================================================
+      */
+
+      function updateLoadingBar() {
+        if (!elements.loadingBar) {
+          return;
+        }
+
+        elements.loadingBar.classList.toggle(
+          "is-visible",
+          state.loading ||
+          state.saving
+        );
+      }
+
+
+      function setLoading(loading) {
+        state.loading = Boolean(loading);
+        updateLoadingBar();
+
+        const ordinaryButtons = [
+          elements.addMemberButton,
+          elements.refreshButton,
+          elements.applyFilterButton
+        ];
+
+        ordinaryButtons.forEach(
+          function updateButton(button) {
+            if (button) {
+              button.disabled = state.loading;
+            }
+          }
+        );
+
+        if (elements.previousPageButton) {
+          elements.previousPageButton.disabled =
+            state.loading ||
+            !state.pagination.hasPrevious;
+        }
+
+        if (elements.nextPageButton) {
+          elements.nextPageButton.disabled =
+            state.loading ||
+            !state.pagination.hasNext;
+        }
+      }
+
+
+      function setSaving(saving) {
+        state.saving = Boolean(saving);
+        updateLoadingBar();
+
+        if (elements.saveMemberButton) {
+          elements.saveMemberButton.disabled =
+            state.saving;
+
+          elements.saveMemberButton.textContent =
+            state.saving
+              ? "Menyimpan..."
+              : "Simpan Member";
+        }
+
+        [
+          elements.cancelMemberButton,
+          elements.closeDialogButton,
+          elements.memberPhotoFile,
+          elements.memberVideoFile,
+          elements.memberGalleryFiles,
+          elements.clearMemberPhotoButton,
+          elements.clearMemberVideoButton,
+          elements.refreshGalleryPreviewButton
+        ].forEach(
+          function toggleControl(control) {
+            if (control) {
+              control.disabled = state.saving;
+            }
+          }
+        );
+      }
+
+
+      /*
+      =====================================================
+      TOAST
+      =====================================================
+      */
+
+      function showToast(
+        type,
+        title,
+        message
+      ) {
+        if (!elements.adminToast) {
+          return;
+        }
+
+        if (state.toastTimer) {
+          window.clearTimeout(
+            state.toastTimer
+          );
+        }
+
+        elements.adminToast.classList.remove(
+          "is-success",
+          "is-error",
+          "is-warning"
+        );
+
+        elements.adminToast.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "warning"
+          )
+        );
+
+        elements.adminToastTitle.textContent =
+          title ||
+          "System Message";
+
+        elements.adminToastMessage.textContent =
+          message ||
+          "";
+
+        state.toastTimer = window.setTimeout(
+          function hideToast() {
+            elements.adminToast.classList.remove(
+              "is-visible"
+            );
+          },
+          6000
+        );
+      }
+
+
+      /*
+      =====================================================
+      FRIENDLY ERROR
+      =====================================================
+      */
+
+      function getFriendlyError(error) {
+        const code = asString(
+          error &&
+          error.code
+        );
+
+        switch (code) {
+          case "ADMIN_SESSION_INVALID":
+          case "ADMIN_SESSION_MISSING":
+          case "ADMIN_TOKEN_REQUIRED":
+          case "SESSION_NOT_FOUND":
+          case "SESSION_EXPIRED":
+          case "INVALID_SESSION":
+          case "AUTH_REQUIRED":
+          case "UNAUTHORIZED":
+            return "Session administrator sudah tidak berlaku.";
+
+          case "ADMIN_MEMBER_ALREADY_EXISTS":
+            return "ID member tersebut sudah digunakan.";
+
+          case "ADMIN_MEMBER_NOT_FOUND":
+          case "MEDIA_OWNER_NOT_FOUND":
+            return "Data member tidak ditemukan.";
+
+          case "MEMBER_FIELD_REQUIRED":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Data wajib belum diisi."
+            );
+
+          case "MEMBER_JSON_INVALID":
+          case "MEMBER_JSON_TYPE_INVALID":
+            return "Salah satu field JSON belum memiliki format yang valid.";
+
+          case "ADMIN_MEMBER_HAS_LINKED_ALTER":
+            return "Member masih memiliki Alter Profile yang terhubung.";
+
+          case "MEDIA_FILE_TOO_LARGE":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Ukuran media melewati batas upload."
+            );
+
+          case "MEDIA_FILE_EXTENSION_NOT_ALLOWED":
+          case "MEDIA_FILE_MIME_NOT_ALLOWED":
+          case "DRIVE_MIME_TYPE_NOT_ALLOWED":
+          case "DRIVE_FILE_EXTENSION_NOT_ALLOWED":
+          case "DRIVE_EXTENSION_MIME_MISMATCH":
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Format media tidak diperbolehkan."
+            );
+
+          case "MEDIA_GALLERY_LIMIT_REACHED":
+            return "Jumlah gallery telah mencapai batas maksimum.";
+
+          case "DRIVE_PUBLIC_SHARING_FAILED":
+            return "File berhasil dibuat, tetapi tidak dapat dibuka secara publik.";
+
+          case "REQUEST_TIMEOUT":
+            return "Koneksi ke Apps Script melewati batas waktu.";
+
+          case "NETWORK_ERROR":
+            return "Browser tidak dapat terhubung ke Apps Script.";
+
+          default:
+            return (
+              asString(
+                error &&
+                error.message
+              ) ||
+              "Permintaan gagal diproses."
+            );
+        }
+      }
+
+
+      /*
+      =====================================================
+      AUTHENTICATION
+      =====================================================
+      */
+
+      function redirectToLogin() {
+        if (
+          window.P3R_ADMIN_API &&
+          typeof window.P3R_ADMIN_API.redirectToLogin === "function"
+        ) {
+          window.P3R_ADMIN_API.redirectToLogin(
+            window.location.href
+          );
+
+          return;
+        }
+
+        window.location.replace(
+          "./admin-login.html"
+        );
+      }
+
+
+      async function initializeAuthentication() {
+        if (
+          !window.P3R_ADMIN_API ||
+          typeof window.P3R_ADMIN_API.requireSession !== "function"
+        ) {
+          redirectToLogin();
+
+          return false;
+        }
+
+        try {
+          const session =
+            await window.P3R_ADMIN_API.requireSession({
+              redirect: true,
+              verify: true,
+              returnUrl: window.location.href
+            });
+
+          if (!session) {
+            return false;
+          }
+
+          state.authenticated = true;
+
+          const user = session.user || {};
+
+          if (elements.summaryAdmin) {
+            elements.summaryAdmin.textContent =
+              asString(user.name) ||
+              asString(user.email) ||
+              "Administrator";
+          }
+
+          state.media.available = Boolean(
+            typeof window.P3R_ADMIN_API.uploadMediaFile === "function" &&
+            typeof window.P3R_ADMIN_API.listMedia === "function" &&
+            typeof window.P3R_ADMIN_API.deleteMedia === "function"
+          );
+
+          if (elements.memberMediaDisabledNote) {
+            elements.memberMediaDisabledNote.classList.toggle(
+              "is-visible",
+              !state.media.available
+            );
+          }
+
+          return true;
+        } catch (error) {
+          redirectToLogin();
+
+          return false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      FILTERS
+      =====================================================
+      */
+
+      function readFilters() {
+        state.filters.search =
+          asString(
+            elements.searchInput.value
+          );
+
+        state.filters.status =
+          asString(
+            elements.statusFilter.value
+          );
+
+        state.filters.division =
+          asString(
+            elements.divisionFilter.value
+          );
+
+        state.filters.includeDeleted =
+          elements.includeDeletedFilter.checked;
+
+        state.pagination.pageSize =
+          Math.max(
+            1,
+            Number(
+              elements.pageSizeFilter.value
+            ) || 50
+          );
+      }
+
+
+      /*
+      =====================================================
+      SUMMARY, PAGINATION, TABLE
+      =====================================================
+      */
+
+      function getStatusClass(status) {
+        const normalized =
+          asString(status)
+            .toLowerCase();
+
+        const allowed = [
+          "active",
+          "inactive",
+          "draft",
+          "hidden",
+          "deleted"
+        ];
+
+        return allowed.includes(normalized)
+          ? "is-" + normalized
+          : "";
+      }
+
+
+      function renderSummary() {
+        elements.summaryTotal.textContent =
+          String(
+            state.pagination.total
+          );
+
+        elements.summaryDisplayed.textContent =
+          String(
+            state.members.length
+          );
+
+        elements.summaryPage.textContent =
+          (
+            state.pagination.page +
+            "/" +
+            state.pagination.totalPages
+          );
+      }
+
+
+      function renderPagination() {
+        const start =
+          state.pagination.total === 0
+            ? 0
+            : (
+                (
+                  state.pagination.page - 1
+                ) *
+                state.pagination.pageSize
+              ) + 1;
+
+        const end =
+          state.pagination.total === 0
+            ? 0
+            : Math.min(
+                state.pagination.total,
+                start +
+                state.members.length -
+                1
+              );
+
+        elements.paginationInfo.innerHTML =
+          "Menampilkan <strong>" +
+          start +
+          "–" +
+          end +
+          "</strong> dari <strong>" +
+          state.pagination.total +
+          "</strong> data.";
+
+        elements.previousPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasPrevious;
+
+        elements.nextPageButton.disabled =
+          state.loading ||
+          !state.pagination.hasNext;
+      }
+
+
+      function normalizeMember(member) {
+        if (!isPlainObject(member)) {
+          return null;
+        }
+
+        return {
+          id: asString(member.id),
+          name: asString(member.name) || "Tanpa Nama",
+          role: asString(member.role) || "—",
+          division: asString(member.division) || "—",
+          divisionKey: asString(
+            member.divisionKey ||
+            member.division_key
+          ),
+          mainRole: asString(
+            member.mainRole ||
+            member.main_role
+          ) || "—",
+          status: asString(member.status) || "Active",
+          photo: asString(member.photo),
+          updatedAt: asString(
+            member.updatedAt ||
+            member.updated_at
+          )
+        };
+      }
+
+
+      function renderMemberTable() {
+        if (!state.members.length) {
+          elements.memberTableContainer.innerHTML = `
+            <div class="admin-state">
+              <div class="admin-state-title">
+                Data Tidak Ditemukan
+              </div>
+
+              <div class="admin-state-message">
+                Tidak ada member yang sesuai dengan pencarian
+                atau filter yang dipilih.
+              </div>
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.memberTableContainer.innerHTML = `
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Role</th>
+                  <th>Main Role</th>
+                  <th>Divisi</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${state.members.map(
+                  function createMemberRow(member) {
+                    const deleted =
+                      member.status.toLowerCase() === "deleted";
+
+                    return `
+                      <tr>
+                        <td>
+                          <div class="admin-member-cell">
+                            <img
+                              class="admin-member-photo"
+                              src="${escapeAttribute(
+                                getPublicMediaUrl(
+                                  member.photo
+                                )
+                              )}"
+                              alt="${escapeAttribute(
+                                member.name
+                              )}"
+                              loading="lazy"
+                              decoding="async"
+                              onerror="
+                                this.onerror=null;
+                                this.src='./assets/img/placeholder.png';
+                              "
+                            >
+
+                            <div>
+                              <div class="admin-member-name">
+                                ${escapeHTML(member.name)}
+                              </div>
+
+                              <div class="admin-member-id">
+                                ${escapeHTML(member.id)}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td>
+                          ${escapeHTML(member.role)}
+                        </td>
+
+                        <td>
+                          ${escapeHTML(member.mainRole)}
+                        </td>
+
+                        <td>
+                          ${escapeHTML(member.division)}
+
+                          ${
+                            member.divisionKey
+                              ? `
+                                <div class="admin-member-id">
+                                  ${escapeHTML(
+                                    member.divisionKey
+                                  )}
+                                </div>
+                              `
+                              : ""
+                          }
+                        </td>
+
+                        <td>
+                          <span class="admin-badge ${getStatusClass(
+                            member.status
+                          )}">
+                            ${escapeHTML(member.status)}
+                          </span>
+                        </td>
+
+                        <td>
+                          ${escapeHTML(
+                            member.updatedAt ||
+                            "—"
+                          )}
+                        </td>
+
+                        <td>
+                          <div class="admin-actions">
+
+                            ${
+                              !deleted
+                                ? `
+                                  <a
+                                    class="admin-action-button"
+                                    href="${escapeAttribute(
+                                      getProfileUrl(
+                                        member.id
+                                      )
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener"
+                                  >
+                                    View
+                                  </a>
+                                `
+                                : ""
+                            }
+
+                            <button
+                              class="admin-action-button"
+                              type="button"
+                              data-action="edit"
+                              data-member-id="${escapeAttribute(
+                                member.id
+                              )}"
+                            >
+                              Edit
+                            </button>
+
+                            ${
+                              deleted
+                                ? `
+                                  <button
+                                    class="admin-action-button is-restore"
+                                    type="button"
+                                    data-action="restore"
+                                    data-member-id="${escapeAttribute(
+                                      member.id
+                                    )}"
+                                  >
+                                    Restore
+                                  </button>
+                                `
+                                : `
+                                  <button
+                                    class="admin-action-button is-danger"
+                                    type="button"
+                                    data-action="delete"
+                                    data-member-id="${escapeAttribute(
+                                      member.id
+                                    )}"
+                                  >
+                                    Delete
+                                  </button>
+                                `
+                            }
+
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }
+                ).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+
+      async function loadMembers(options) {
+        const settings =
+          isPlainObject(options)
+            ? options
+            : {};
+
+        if (
+          (
+            state.loading &&
+            settings.force !== true
+          ) ||
+          !state.authenticated
+        ) {
+          return;
+        }
+
+        setLoading(true);
+
+        elements.tableSubtitle.textContent =
+          "Mengambil data member";
+
+        elements.memberTableContainer.innerHTML = `
+          <div class="admin-state">
+            <div class="admin-state-title">
+              Loading Members
+            </div>
+
+            <div class="admin-state-message">
+              Mengambil data member dari Google Spreadsheet.
+            </div>
+          </div>
+        `;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.listMembers({
+              search: state.filters.search,
+              division: state.filters.division,
+              status: state.filters.status,
+              includeDeleted: state.filters.includeDeleted,
+              page: state.pagination.page,
+              pageSize: state.pagination.pageSize
+            });
+
+          state.members =
+            getResultCollection(
+              result,
+              [
+                "members",
+                "items",
+                "data"
+              ]
+            )
+              .map(normalizeMember)
+              .filter(Boolean);
+
+          const pagination =
+            result &&
+            isPlainObject(result.pagination)
+              ? result.pagination
+              : {};
+
+          state.pagination = {
+            page: Math.max(
+              1,
+              Number(
+                pagination.page
+              ) || state.pagination.page
+            ),
+            pageSize: Math.max(
+              1,
+              Number(
+                pagination.pageSize ||
+                pagination.page_size
+              ) || state.pagination.pageSize
+            ),
+            total: Math.max(
+              0,
+              Number(
+                pagination.total
+              ) || 0
+            ),
+            totalPages: Math.max(
+              1,
+              Number(
+                pagination.totalPages ||
+                pagination.total_pages
+              ) || 1
+            ),
+            hasPrevious:
+              pagination.hasPrevious === true ||
+              pagination.has_previous === true,
+            hasNext:
+              pagination.hasNext === true ||
+              pagination.has_next === true
+          };
+
+          elements.tableSubtitle.textContent =
+            state.pagination.total +
+            " member ditemukan";
+
+          renderSummary();
+          renderMemberTable();
+          renderPagination();
+        } catch (error) {
+          const code = asString(
+            error &&
+            error.code
+          );
+
+          if (
+            [
+              "ADMIN_SESSION_INVALID",
+              "ADMIN_SESSION_MISSING",
+              "ADMIN_TOKEN_REQUIRED",
+              "SESSION_EXPIRED",
+              "INVALID_SESSION",
+              "AUTH_REQUIRED",
+              "UNAUTHORIZED"
+            ].includes(code)
+          ) {
+            redirectToLogin();
+
+            return;
+          }
+
+          elements.tableSubtitle.textContent =
+            "Gagal memuat data";
+
+          elements.memberTableContainer.innerHTML = `
+            <div class="admin-state">
+              <div class="admin-state-title">
+                Member Data Unavailable
+              </div>
+
+              <div class="admin-state-message">
+                ${escapeHTML(
+                  getFriendlyError(error)
+                )}
+              </div>
+
+              <button
+                class="admin-button is-primary"
+                id="retryLoadButton"
+                type="button"
+                style="margin-top:16px"
+              >
+                Coba Lagi
+              </button>
+            </div>
+          `;
+
+          const retryButton =
+            getElement("retryLoadButton");
+
+          if (retryButton) {
+            retryButton.addEventListener(
+              "click",
+              function retryLoad() {
+                loadMembers({
+                  force: true
+                });
+              }
+            );
+          }
+
+          showToast(
+            "error",
+            "Load Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      /*
+      =====================================================
+      JSON FIELDS
+      =====================================================
+      */
+
+      function clearJsonErrors() {
+        [
+          elements.skillsJsonError,
+          elements.expertiseJsonError,
+          elements.galleryJsonError,
+          elements.alterJsonError
+        ].forEach(
+          function clearError(element) {
+            element.textContent = "";
+            element.classList.remove(
+              "is-visible"
+            );
+          }
+        );
+      }
+
+
+      function parseJsonField(
+        textarea,
+        errorElement,
+        expectedType
+      ) {
+        const rawValue =
+          textarea.value.trim();
+
+        try {
+          const parsed = JSON.parse(
+            rawValue ||
+            (
+              expectedType === "array"
+                ? "[]"
+                : "{}"
+            )
+          );
+
+          const validType =
+            expectedType === "array"
+              ? Array.isArray(parsed)
+              : isPlainObject(parsed);
+
+          if (!validType) {
+            throw new Error(
+              expectedType === "array"
+                ? "Nilai harus berupa array JSON."
+                : "Nilai harus berupa object JSON."
+            );
+          }
+
+          errorElement.textContent = "";
+          errorElement.classList.remove(
+            "is-visible"
+          );
+
+          return {
+            valid: true,
+            value: parsed
+          };
+        } catch (error) {
+          errorElement.textContent =
+            error.message;
+
+          errorElement.classList.add(
+            "is-visible"
+          );
+
+          return {
+            valid: false,
+            value: null
+          };
+        }
+      }
+
+
+      /*
+      =====================================================
+      FORM DATA
+      =====================================================
+      */
+
+      function getDefaultMemberData() {
+        return {
+          id: "",
+          name: "",
+          role: "",
+          mainRole: "",
+          division: "",
+          divisionKey: "",
+          status: "Active",
+          joinDate: "",
+          tagline: "",
+          bio: "",
+          signature: "",
+          photo: "",
+          videoCV: "",
+
+          stats: {
+            rank: "",
+            level: 0,
+            winrate: 0
+          },
+
+          skills: [],
+
+          expertise: {
+            playstyle: "",
+            strength: [],
+            rolePool: [],
+            mains: [],
+            achievement: ""
+          },
+
+          gallery: [],
+
+          alter: {
+            enabled: false,
+            alterId: "",
+            label: "",
+            hint: ""
+          }
+        };
+      }
+
+
+      function fillMemberForm(member) {
+        const data = Object.assign(
+          getDefaultMemberData(),
+          member || {}
+        );
+
+        const stats =
+          isPlainObject(data.stats)
+            ? data.stats
+            : {};
+
+        elements.memberId.value =
+          asString(data.id);
+
+        elements.memberName.value =
+          asString(data.name);
+
+        elements.memberRole.value =
+          asString(data.role);
+
+        elements.memberMainRole.value =
+          asString(
+            data.mainRole ||
+            data.main_role
+          );
+
+        elements.memberDivision.value =
+          asString(data.division);
+
+        elements.memberDivisionKey.value =
+          asString(
+            data.divisionKey ||
+            data.division_key
+          );
+
+        elements.memberStatus.value =
+          asString(data.status) ||
+          "Active";
+
+        elements.memberJoinDate.value =
+          normalizeDateInput(
+            data.joinDate ||
+            data.join_date
+          );
+
+        elements.memberTagline.value =
+          asString(data.tagline);
+
+        elements.memberBio.value =
+          asString(data.bio);
+
+        elements.memberSignature.value =
+          asString(data.signature);
+
+        elements.memberRank.value =
+          asString(stats.rank);
+
+        elements.memberLevel.value =
+          String(
+            toNumber(
+              stats.level,
+              0
+            )
+          );
+
+        elements.memberWinrate.value =
+          String(
+            toNumber(
+              stats.winrate,
+              0
+            )
+          );
+
+        elements.memberPhoto.value =
+          asString(data.photo);
+
+        elements.memberVideoCV.value =
+          asString(
+            data.videoCV ||
+            data.video_cv
+          );
+
+        elements.memberSkills.value =
+          prettyJSON(
+            asArray(data.skills)
+          );
+
+        elements.memberExpertise.value =
+          prettyJSON(
+            isPlainObject(data.expertise)
+              ? data.expertise
+              : {}
+          );
+
+        writeGalleryToTextarea(
+          asArray(data.gallery)
+        );
+
+        elements.memberAlter.value =
+          prettyJSON(
+            isPlainObject(data.alter)
+              ? data.alter
+              : {
+                  enabled: false
+                }
+          );
+
+        renderAllMediaPreviews();
+      }
+
+
+      function collectMemberForm() {
+        clearJsonErrors();
+
+        const memberId =
+          asString(
+            elements.memberId.value
+          );
+
+        const memberName =
+          asString(
+            elements.memberName.value
+          );
+
+        if (!memberId) {
+          elements.memberId.focus();
+
+          showToast(
+            "warning",
+            "ID Required",
+            "ID member wajib diisi."
+          );
+
+          return null;
+        }
+
+        if (!memberName) {
+          elements.memberName.focus();
+
+          showToast(
+            "warning",
+            "Name Required",
+            "Nama member wajib diisi."
+          );
+
+          return null;
+        }
+
+        const skills =
+          parseJsonField(
+            elements.memberSkills,
+            elements.skillsJsonError,
+            "array"
+          );
+
+        const expertise =
+          parseJsonField(
+            elements.memberExpertise,
+            elements.expertiseJsonError,
+            "object"
+          );
+
+        const gallery =
+          parseJsonField(
+            elements.memberGallery,
+            elements.galleryJsonError,
+            "array"
+          );
+
+        const alter =
+          parseJsonField(
+            elements.memberAlter,
+            elements.alterJsonError,
+            "object"
+          );
+
+        if (
+          !skills.valid ||
+          !expertise.valid ||
+          !gallery.valid ||
+          !alter.valid
+        ) {
+          showToast(
+            "warning",
+            "Invalid JSON",
+            "Periksa kembali field JSON yang ditandai."
+          );
+
+          return null;
+        }
+
+        return {
+          id: memberId,
+          name: memberName,
+          role: asString(
+            elements.memberRole.value
+          ),
+          mainRole: asString(
+            elements.memberMainRole.value
+          ),
+          division: asString(
+            elements.memberDivision.value
+          ),
+          divisionKey: asString(
+            elements.memberDivisionKey.value
+          ),
+          status: asString(
+            elements.memberStatus.value
+          ) || "Active",
+          joinDate: asString(
+            elements.memberJoinDate.value
+          ),
+          tagline: asString(
+            elements.memberTagline.value
+          ),
+          bio: asString(
+            elements.memberBio.value
+          ),
+          signature: asString(
+            elements.memberSignature.value
+          ),
+          photo: asString(
+            elements.memberPhoto.value
+          ),
+          videoCV: asString(
+            elements.memberVideoCV.value
+          ),
+
+          stats: {
+            rank: asString(
+              elements.memberRank.value
+            ),
+            level: Math.max(
+              0,
+              toNumber(
+                elements.memberLevel.value,
+                0
+              )
+            ),
+            winrate: Math.max(
+              0,
+              Math.min(
+                100,
+                toNumber(
+                  elements.memberWinrate.value,
+                  0
+                )
+              )
+            )
+          },
+
+          skills: skills.value,
+          expertise: expertise.value,
+          gallery: gallery.value,
+          alter: alter.value
+        };
+      }
+
+
+      /*
+      =====================================================
+      MEDIA PREVIEW
+      =====================================================
+      */
+
+      function setMediaStatus(
+        type,
+        message,
+        visible
+      ) {
+        if (!elements.memberMediaStatus) {
+          return;
+        }
+
+        elements.memberMediaStatus.classList.remove(
+          "is-info",
+          "is-success",
+          "is-warning",
+          "is-error"
+        );
+
+        if (
+          visible === false ||
+          !message
+        ) {
+          elements.memberMediaStatus.textContent = "";
+          elements.memberMediaStatus.classList.remove(
+            "is-visible"
+          );
+
+          return;
+        }
+
+        elements.memberMediaStatus.textContent =
+          message;
+
+        elements.memberMediaStatus.classList.add(
+          "is-visible",
+          "is-" + (
+            type || "info"
+          )
+        );
+      }
+
+
+      function setMediaProgress(
+        visible,
+        percent,
+        message
+      ) {
+        if (
+          !elements.memberMediaProgress ||
+          !elements.memberMediaProgressBar ||
+          !elements.memberMediaProgressText
+        ) {
+          return;
+        }
+
+        const safePercent = Math.max(
+          0,
+          Math.min(
+            100,
+            Number(percent) || 0
+          )
+        );
+
+        elements.memberMediaProgress.classList.toggle(
+          "is-visible",
+          visible === true
+        );
+
+        elements.memberMediaProgressBar.style.width =
+          safePercent + "%";
+
+        elements.memberMediaProgressText.textContent =
+          message ||
+          "Menyiapkan media.";
+      }
+
+
+      function renderPhotoPreview() {
+        let source =
+          asString(
+            elements.memberPhoto.value
+          );
+
+        let label =
+          source
+            ? "URL saat ini"
+            : "Belum ada foto";
+
+        if (state.media.photoFile) {
+          source = createMediaObjectUrl(
+            state.media.photoFile
+          );
+
+          label = "File baru dipilih";
+        }
+
+        elements.memberPhotoPreview.src =
+          getPublicMediaUrl(source);
+
+        elements.memberPhotoPreviewLabel.textContent =
+          label;
+
+        elements.openMemberPhotoLink.hidden =
+          !source;
+
+        if (source) {
+          elements.openMemberPhotoLink.href =
+            getPublicMediaUrl(source);
+        } else {
+          elements.openMemberPhotoLink.removeAttribute(
+            "href"
+          );
+        }
+      }
+
+
+      function renderVideoPreview() {
+        const currentUrl =
+          asString(
+            elements.memberVideoCV.value
+          );
+
+        let text =
+          currentUrl
+            ? "Video CV tersedia melalui URL."
+            : "Belum ada Video CV";
+
+        let label =
+          currentUrl
+            ? "URL saat ini"
+            : "URL / Drive";
+
+        if (state.media.videoFile) {
+          text =
+            state.media.videoFile.name +
+            " — " +
+            (
+              window.P3R_ADMIN_API &&
+              typeof window.P3R_ADMIN_API.formatMediaFileSize === "function"
+                ? window.P3R_ADMIN_API.formatMediaFileSize(
+                    state.media.videoFile.size
+                  )
+                : state.media.videoFile.size + " byte"
+            );
+
+          label = "File baru dipilih";
+        }
+
+        elements.memberVideoPreviewText.textContent =
+          text;
+
+        elements.memberVideoPreviewLabel.textContent =
+          label;
+
+        elements.openMemberVideoLink.hidden =
+          !currentUrl;
+
+        if (currentUrl) {
+          elements.openMemberVideoLink.href =
+            getPublicMediaUrl(currentUrl);
+        } else {
+          elements.openMemberVideoLink.removeAttribute(
+            "href"
+          );
+        }
+      }
+
+
+      function createExistingGalleryCard(
+        item,
+        index
+      ) {
+        return `
+          <article
+            class="admin-gallery-item"
+            data-gallery-kind="existing"
+            data-gallery-index="${index}"
+          >
+            <div class="admin-gallery-thumb-wrap">
+              <img
+                class="admin-gallery-thumb"
+                src="${escapeAttribute(
+                  getPublicMediaUrl(
+                    item.src
+                  )
+                )}"
+                alt="${escapeAttribute(
+                  item.caption ||
+                  "Gallery " + (
+                    index + 1
+                  )
+                )}"
+                loading="lazy"
+                onerror="
+                  this.onerror=null;
+                  this.src='./assets/img/placeholder.png';
+                "
+              >
+
+              <div class="admin-gallery-type">
+                Tersimpan
+              </div>
+            </div>
+
+            <div class="admin-gallery-body">
+              <input
+                class="admin-gallery-caption"
+                type="text"
+                maxlength="500"
+                value="${escapeAttribute(
+                  item.caption
+                )}"
+                placeholder="Caption gallery"
+                data-gallery-caption-index="${index}"
+              >
+
+              <div class="admin-gallery-item-actions">
+                <button
+                  class="admin-gallery-remove"
+                  type="button"
+                  data-remove-existing-gallery="${index}"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+
+      function createPendingGalleryCard(
+        item,
+        index
+      ) {
+        return `
+          <article
+            class="admin-gallery-item"
+            data-gallery-kind="pending"
+            data-gallery-pending-index="${index}"
+          >
+            <div class="admin-gallery-thumb-wrap">
+              <img
+                class="admin-gallery-thumb"
+                src="${escapeAttribute(
+                  item.previewUrl
+                )}"
+                alt="${escapeAttribute(
+                  item.file.name
+                )}"
+              >
+
+              <div class="admin-gallery-type">
+                Akan diupload
+              </div>
+            </div>
+
+            <div class="admin-gallery-body">
+              <input
+                class="admin-gallery-caption"
+                type="text"
+                maxlength="500"
+                value="${escapeAttribute(
+                  item.caption
+                )}"
+                placeholder="Caption gallery"
+                data-pending-gallery-caption-index="${index}"
+              >
+
+              <div class="admin-field-note">
+                ${escapeHTML(
+                  item.file.name
+                )}
+              </div>
+
+              <div class="admin-gallery-item-actions">
+                <button
+                  class="admin-gallery-remove"
+                  type="button"
+                  data-remove-pending-gallery="${index}"
+                >
+                  Batal Upload
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+
+      function renderGalleryPreview() {
+        const gallery =
+          readGalleryFromTextarea(false) ||
+          [];
+
+        const existingCards =
+          gallery.map(
+            createExistingGalleryCard
+          );
+
+        const pendingCards =
+          state.media.galleryFiles.map(
+            createPendingGalleryCard
+          );
+
+        const cards =
+          existingCards.concat(
+            pendingCards
+          );
+
+        elements.memberGalleryPreview.innerHTML =
+          cards.length
+            ? cards.join("")
+            : `
+              <div class="admin-gallery-empty">
+                Gallery masih kosong. Pilih satu atau beberapa
+                gambar untuk menambah gallery.
+              </div>
+            `;
+      }
+
+
+      function renderAllMediaPreviews() {
+        revokeMediaObjectUrls();
+
+        if (state.media.photoFile) {
+          state.media.photoFile.__previewUrl =
+            createMediaObjectUrl(
+              state.media.photoFile
+            );
+        }
+
+        state.media.galleryFiles.forEach(
+          function refreshPendingPreview(item) {
+            item.previewUrl =
+              createMediaObjectUrl(
+                item.file
+              );
+          }
+        );
+
+        let photoSource =
+          asString(
+            elements.memberPhoto.value
+          );
+
+        let photoLabel =
+          photoSource
+            ? "URL saat ini"
+            : "Belum ada foto";
+
+        if (state.media.photoFile) {
+          photoSource =
+            state.media.photoFile.__previewUrl;
+
+          photoLabel =
+            "File baru dipilih";
+        }
+
+        elements.memberPhotoPreview.src =
+          getPublicMediaUrl(
+            photoSource
+          );
+
+        elements.memberPhotoPreviewLabel.textContent =
+          photoLabel;
+
+        elements.openMemberPhotoLink.hidden =
+          !photoSource;
+
+        if (photoSource) {
+          elements.openMemberPhotoLink.href =
+            getPublicMediaUrl(
+              photoSource
+            );
+        }
+
+        renderVideoPreview();
+        renderGalleryPreview();
+      }
+
+
+      function queueAssetDeletion(asset) {
+        if (
+          asset &&
+          asset.id
+        ) {
+          state.media.removedAssetIds.add(
+            asset.id
+          );
+        }
+      }
+
+
+      function handlePhotoFileChange() {
+        const file =
+          elements.memberPhotoFile.files &&
+          elements.memberPhotoFile.files[0];
+
+        if (!file) {
+          state.media.photoFile = null;
+          renderAllMediaPreviews();
+
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.memberPhotoFile.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload file belum tersedia. Gunakan Photo Path / URL."
+          );
+
+          return;
+        }
+
+        try {
+          window.P3R_ADMIN_API.validateMediaFile(
+            file,
+            "profile"
+          );
+
+          state.media.photoFile = file;
+          state.media.photoRemoveRequested = false;
+
+          setMediaStatus(
+            "info",
+            "Foto baru dipilih dan akan diunggah setelah Member disimpan.",
+            true
+          );
+
+          renderAllMediaPreviews();
+        } catch (error) {
+          elements.memberPhotoFile.value = "";
+          state.media.photoFile = null;
+
+          showToast(
+            "error",
+            "Invalid Photo",
+            getFriendlyError(error)
+          );
+
+          renderAllMediaPreviews();
+        }
+      }
+
+
+      function handleVideoFileChange() {
+        const file =
+          elements.memberVideoFile.files &&
+          elements.memberVideoFile.files[0];
+
+        if (!file) {
+          state.media.videoFile = null;
+          renderVideoPreview();
+
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.memberVideoFile.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload file belum tersedia. Gunakan Video CV Path / URL."
+          );
+
+          return;
+        }
+
+        try {
+          window.P3R_ADMIN_API.validateMediaFile(
+            file,
+            "video"
+          );
+
+          state.media.videoFile = file;
+          state.media.videoRemoveRequested = false;
+
+          setMediaStatus(
+            "info",
+            "Video baru dipilih dan akan diunggah setelah Member disimpan.",
+            true
+          );
+
+          renderVideoPreview();
+        } catch (error) {
+          elements.memberVideoFile.value = "";
+          state.media.videoFile = null;
+
+          showToast(
+            "error",
+            "Invalid Video",
+            getFriendlyError(error)
+          );
+
+          renderVideoPreview();
+        }
+      }
+
+
+      function handleGalleryFilesChange() {
+        const files = Array.from(
+          elements.memberGalleryFiles.files ||
+          []
+        );
+
+        if (!files.length) {
+          return;
+        }
+
+        if (!state.media.available) {
+          elements.memberGalleryFiles.value = "";
+
+          showToast(
+            "warning",
+            "Media API Unavailable",
+            "Upload gallery belum tersedia."
+          );
+
+          return;
+        }
+
+        const currentGallery =
+          readGalleryFromTextarea(false) ||
+          [];
+
+        const maximumGalleryItems = 30;
+        const availableSlots = Math.max(
+          0,
+          maximumGalleryItems -
+          currentGallery.length -
+          state.media.galleryFiles.length
+        );
+
+        if (availableSlots < 1) {
+          elements.memberGalleryFiles.value = "";
+
+          showToast(
+            "warning",
+            "Gallery Full",
+            "Jumlah gallery telah mencapai batas 30 gambar."
+          );
+
+          return;
+        }
+
+        const accepted = [];
+        const rejected = [];
+
+        files
+          .slice(
+            0,
+            availableSlots
+          )
+          .forEach(
+            function validateGalleryFile(file) {
+              try {
+                window.P3R_ADMIN_API.validateMediaFile(
+                  file,
+                  "gallery"
+                );
+
+                accepted.push({
+                  file: file,
+                  caption: "",
+                  previewUrl: ""
+                });
+              } catch (error) {
+                rejected.push({
+                  file: file,
+                  error: error
+                });
+              }
+            }
+          );
+
+        state.media.galleryFiles.push(
+          ...accepted
+        );
+
+        elements.memberGalleryFiles.value = "";
+
+        renderAllMediaPreviews();
+
+        if (accepted.length) {
+          setMediaStatus(
+            "info",
+            accepted.length +
+            " gambar gallery akan diunggah setelah Member disimpan.",
+            true
+          );
+        }
+
+        if (rejected.length) {
+          showToast(
+            "warning",
+            "Some Files Rejected",
+            rejected.length +
+            " gambar ditolak karena format atau ukurannya tidak sesuai."
+          );
+        }
+
+        if (
+          files.length >
+          availableSlots
+        ) {
+          showToast(
+            "warning",
+            "Gallery Limit",
+            "Sebagian gambar tidak ditambahkan karena batas gallery adalah 30 item."
+          );
+        }
+      }
+
+
+      function clearPhotoReference() {
+        const activeAsset =
+          findActiveAssetByType(
+            "profile"
+          );
+
+        queueAssetDeletion(
+          activeAsset
+        );
+
+        state.media.photoFile = null;
+        state.media.photoRemoveRequested = true;
+
+        elements.memberPhoto.value = "";
+        elements.memberPhotoFile.value = "";
+
+        setMediaStatus(
+          "warning",
+          "Referensi foto akan dihapus saat Member disimpan. File lama tidak dipindahkan ke Trash.",
+          true
+        );
+
+        renderAllMediaPreviews();
+      }
+
+
+      function clearVideoReference() {
+        const activeAsset =
+          findActiveAssetByType(
+            "video"
+          );
+
+        queueAssetDeletion(
+          activeAsset
+        );
+
+        state.media.videoFile = null;
+        state.media.videoRemoveRequested = true;
+
+        elements.memberVideoCV.value = "";
+        elements.memberVideoFile.value = "";
+
+        setMediaStatus(
+          "warning",
+          "Referensi video akan dihapus saat Member disimpan. File lama tidak dipindahkan ke Trash.",
+          true
+        );
+
+        renderVideoPreview();
+      }
+
+
+      function handleGalleryPreviewClick(event) {
+        const removeExistingButton =
+          event.target.closest(
+            "[data-remove-existing-gallery]"
+          );
+
+        if (removeExistingButton) {
+          const index = Number(
+            removeExistingButton.dataset
+              .removeExistingGallery
+          );
+
+          const gallery =
+            readGalleryFromTextarea(true);
+
+          if (
+            !gallery ||
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >= gallery.length
+          ) {
+            return;
+          }
+
+          const item = gallery[index];
+          const asset =
+            findAssetByReference(
+              item.src
+            );
+
+          queueAssetDeletion(asset);
+
+          gallery.splice(
+            index,
+            1
+          );
+
+          writeGalleryToTextarea(
+            gallery
+          );
+
+          setMediaStatus(
+            "warning",
+            "Gambar gallery dikeluarkan dari profil. Perubahan berlaku setelah Member disimpan.",
+            true
+          );
+
+          renderGalleryPreview();
+
+          return;
+        }
+
+        const removePendingButton =
+          event.target.closest(
+            "[data-remove-pending-gallery]"
+          );
+
+        if (removePendingButton) {
+          const index = Number(
+            removePendingButton.dataset
+              .removePendingGallery
+          );
+
+          if (
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >=
+              state.media.galleryFiles.length
+          ) {
+            return;
+          }
+
+          state.media.galleryFiles.splice(
+            index,
+            1
+          );
+
+          renderAllMediaPreviews();
+        }
+      }
+
+
+      function handleGalleryPreviewInput(event) {
+        const existingCaption =
+          event.target.closest(
+            "[data-gallery-caption-index]"
+          );
+
+        if (existingCaption) {
+          const index = Number(
+            existingCaption.dataset
+              .galleryCaptionIndex
+          );
+
+          const gallery =
+            readGalleryFromTextarea(false);
+
+          if (
+            !gallery ||
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >= gallery.length
+          ) {
+            return;
+          }
+
+          gallery[index].caption =
+            asString(
+              existingCaption.value
+            );
+
+          writeGalleryToTextarea(
+            gallery
+          );
+
+          return;
+        }
+
+        const pendingCaption =
+          event.target.closest(
+            "[data-pending-gallery-caption-index]"
+          );
+
+        if (pendingCaption) {
+          const index = Number(
+            pendingCaption.dataset
+              .pendingGalleryCaptionIndex
+          );
+
+          if (
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >=
+              state.media.galleryFiles.length
+          ) {
+            return;
+          }
+
+          state.media.galleryFiles[index].caption =
+            asString(
+              pendingCaption.value
+            );
+        }
+      }
+
+
+      async function loadMemberMediaAssets(memberId) {
+        state.media.assets = [];
+
+        if (
+          !state.media.available ||
+          !memberId
+        ) {
+          return;
+        }
+
+        state.media.loadingAssets = true;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.listMedia({
+              ownerType: "member",
+              ownerId: memberId,
+              includeDeleted: false,
+              page: 1,
+              pageSize: 200
+            });
+
+          state.media.assets =
+            getResultCollection(
+              result,
+              [
+                "assets",
+                "items",
+                "media"
+              ]
+            )
+              .map(normalizeMediaAsset)
+              .filter(Boolean);
+        } catch (error) {
+          setMediaStatus(
+            "warning",
+            "Data profil tetap dapat diedit, tetapi daftar Asset_Map tidak dapat dimuat: " +
+            getFriendlyError(error),
+            true
+          );
+        } finally {
+          state.media.loadingAssets = false;
+        }
+      }
+
+
+      /*
+      =====================================================
+      OPEN AND CLOSE DIALOG
+      =====================================================
+      */
+
+      function openCreateDialog() {
+        state.editingMemberId = "";
+
+        resetPendingMedia();
+        clearJsonErrors();
+
+        elements.memberDialogTitle.textContent =
+          "Tambah Member";
+
+        elements.memberId.disabled = false;
+
+        fillMemberForm(
+          getDefaultMemberData()
+        );
+
+        setMediaStatus(
+          "info",
+          "Buat Member terlebih dahulu. File yang dipilih akan diunggah otomatis setelah data dasar berhasil disimpan.",
+          true
+        );
+
+        elements.memberDialog.showModal();
+
+        window.setTimeout(
+          function focusMemberId() {
+            elements.memberId.focus();
+          },
+          50
+        );
+      }
+
+
+      async function openEditDialog(memberId) {
+        if (
+          state.loading ||
+          state.saving
+        ) {
+          return;
+        }
+
+        setLoading(true);
+        resetPendingMedia();
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.getMember(
+              memberId
+            );
+
+          const member =
+            result &&
+            result.member
+              ? result.member
+              : result;
+
+          if (
+            !member ||
+            !isPlainObject(member)
+          ) {
+            throw new Error(
+              "Data member tidak ditemukan."
+            );
+          }
+
+          state.editingMemberId =
+            memberId;
+
+          clearJsonErrors();
+
+          elements.memberDialogTitle.textContent =
+            "Edit Member";
+
+          elements.memberId.disabled = true;
+
+          fillMemberForm(member);
+
+          elements.memberDialog.showModal();
+
+          await loadMemberMediaAssets(
+            memberId
+          );
+
+          renderAllMediaPreviews();
+        } catch (error) {
+          showToast(
+            "error",
+            "Edit Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+
+
+      function closeMemberDialog(options) {
+        const settings =
+          isPlainObject(options)
+            ? options
+            : {};
+
+        if (
+          state.saving &&
+          settings.force !== true
+        ) {
+          return;
+        }
+
+        if (elements.memberDialog.open) {
+          elements.memberDialog.close();
+        }
+
+        state.editingMemberId = "";
+
+        elements.memberForm.reset();
+
+        resetPendingMedia();
+        clearJsonErrors();
+      }
+
+
+      /*
+      =====================================================
+      MEDIA OPERATIONS AFTER SAVE
+      =====================================================
+      */
+
+      function getPendingMediaOperationCount() {
+        return (
+          state.media.removedAssetIds.size +
+          (
+            state.media.photoFile
+              ? 1
+              : 0
+          ) +
+          (
+            state.media.videoFile
+              ? 1
+              : 0
+          ) +
+          state.media.galleryFiles.length
+        );
+      }
+
+
+      async function processPendingMedia(memberId) {
+        const totalOperations =
+          getPendingMediaOperationCount();
+
+        if (
+          !state.media.available ||
+          totalOperations < 1
+        ) {
+          return {
+            total: totalOperations,
+            success: 0,
+            failed: 0,
+            errors: []
+          };
+        }
+
+        const errors = [];
+        let completed = 0;
+        let successful = 0;
+
+        function updateProgress(message) {
+          completed++;
+
+          const percent = Math.round(
+            completed /
+            totalOperations *
+            100
+          );
+
+          setMediaProgress(
+            true,
+            percent,
+            message
+          );
+        }
+
+        setMediaProgress(
+          true,
+          0,
+          "Menyiapkan operasi media."
+        );
+
+        for (
+          const assetId
+          of state.media.removedAssetIds
+        ) {
+          try {
+            await window.P3R_ADMIN_API.deleteMedia(
+              assetId,
+              {
+                removeReference: false,
+                trashFile: false
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Referensi media lama berhasil dinonaktifkan."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "delete",
+              assetId: assetId,
+              error: error
+            });
+
+            updateProgress(
+              "Sebagian referensi media gagal dinonaktifkan."
+            );
+          }
+        }
+
+        if (state.media.photoFile) {
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "member",
+              memberId,
+              "profile",
+              state.media.photoFile,
+              {
+                caption: "Foto profil " +
+                  asString(
+                    elements.memberName.value
+                  ),
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Foto profil berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "photo-upload",
+              error: error
+            });
+
+            updateProgress(
+              "Upload foto profil gagal."
+            );
+          }
+        }
+
+        if (state.media.videoFile) {
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "member",
+              memberId,
+              "video",
+              state.media.videoFile,
+              {
+                caption: "Video CV " +
+                  asString(
+                    elements.memberName.value
+                  ),
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Video CV berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "video-upload",
+              error: error
+            });
+
+            updateProgress(
+              "Upload Video CV gagal."
+            );
+          }
+        }
+
+        for (
+          let index = 0;
+          index <
+            state.media.galleryFiles.length;
+          index++
+        ) {
+          const item =
+            state.media.galleryFiles[index];
+
+          try {
+            await window.P3R_ADMIN_API.uploadMediaFile(
+              "member",
+              memberId,
+              "gallery",
+              item.file,
+              {
+                caption: item.caption,
+                updateReference: true
+              }
+            );
+
+            successful++;
+
+            updateProgress(
+              "Gallery " +
+              (
+                index + 1
+              ) +
+              " berhasil diunggah."
+            );
+          } catch (error) {
+            errors.push({
+              operation: "gallery-upload",
+              fileName: item.file.name,
+              error: error
+            });
+
+            updateProgress(
+              "Sebagian gallery gagal diunggah."
+            );
+          }
+        }
+
+        return {
+          total: totalOperations,
+          success: successful,
+          failed: errors.length,
+          errors: errors
+        };
+      }
+
+
+      /*
+      =====================================================
+      SAVE MEMBER
+      =====================================================
+      */
+
+      async function saveMember(event) {
+        event.preventDefault();
+
+        if (state.saving) {
+          return;
+        }
+
+        const memberData =
+          collectMemberForm();
+
+        if (!memberData) {
+          return;
+        }
+
+        const wasEditing =
+          Boolean(
+            state.editingMemberId
+          );
+
+        const targetMemberId =
+          wasEditing
+            ? state.editingMemberId
+            : memberData.id;
+
+        setSaving(true);
+
+        let baseResult = null;
+        let mediaResult = {
+          total: 0,
+          success: 0,
+          failed: 0,
+          errors: []
+        };
+
+        try {
+          if (wasEditing) {
+            baseResult =
+              await window.P3R_ADMIN_API.updateMember(
+                targetMemberId,
+                memberData
+              );
+          } else {
+            baseResult =
+              await window.P3R_ADMIN_API.createMember(
+                memberData
+              );
+          }
+
+          mediaResult =
+            await processPendingMedia(
+              targetMemberId
+            );
+
+          setSaving(false);
+
+          closeMemberDialog({
+            force: true
+          });
+
+          if (
+            mediaResult.failed > 0
+          ) {
+            showToast(
+              "warning",
+              wasEditing
+                ? "Member Updated"
+                : "Member Created",
+              "Data Member tersimpan. " +
+              mediaResult.success +
+              " operasi media berhasil dan " +
+              mediaResult.failed +
+              " gagal."
+            );
+          } else {
+            showToast(
+              "success",
+              wasEditing
+                ? "Member Updated"
+                : "Member Created",
+              asString(
+                baseResult &&
+                baseResult.message
+              ) ||
+              (
+                mediaResult.total > 0
+                  ? "Data Member dan media berhasil disimpan."
+                  : "Data Member berhasil disimpan."
+              )
+            );
+          }
+
+          state.pagination.page = 1;
+
+          await loadMembers({
+            force: true
+          });
+        } catch (error) {
+          showToast(
+            "error",
+            "Save Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setSaving(false);
+          setMediaProgress(false, 0, "");
+        }
+      }
+
+
+      /*
+      =====================================================
+      DELETE AND RESTORE MEMBER
+      =====================================================
+      */
+
+      async function deleteMember(memberId) {
+        const member =
+          state.members.find(
+            function findMember(item) {
+              return item.id === memberId;
+            }
+          );
+
+        const memberName =
+          member
+            ? member.name
+            : memberId;
+
+        const confirmed = window.confirm(
+          "Hapus sementara member \"" +
+          memberName +
+          "\"?\n\n" +
+          "Data tidak dihapus permanen dan masih dapat dipulihkan."
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        setLoading(true);
+        let shouldReload = false;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.deleteMember(
+              memberId,
+              {
+                force: false
+              }
+            );
+
+          showToast(
+            "success",
+            "Member Deleted",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Member dipindahkan ke status Deleted."
+          );
+
+          shouldReload = true;
+        } catch (error) {
+          if (
+            asString(
+              error &&
+              error.code
+            ) ===
+            "ADMIN_MEMBER_HAS_LINKED_ALTER"
+          ) {
+            const forceDelete = window.confirm(
+              "Member masih memiliki Alter Profile.\n\n" +
+              "Tetap ubah member menjadi Deleted?"
+            );
+
+            if (forceDelete) {
+              try {
+                await window.P3R_ADMIN_API.deleteMember(
+                  memberId,
+                  {
+                    force: true
+                  }
+                );
+
+                showToast(
+                  "success",
+                  "Member Deleted",
+                  "Member dan relasi Alter tetap tersimpan, tetapi profil normal berstatus Deleted."
+                );
+
+                shouldReload = true;
+              } catch (forceError) {
+                showToast(
+                  "error",
+                  "Delete Failed",
+                  getFriendlyError(
+                    forceError
+                  )
+                );
+              }
+            }
+          } else {
+            showToast(
+              "error",
+              "Delete Failed",
+              getFriendlyError(error)
+            );
+          }
+        } finally {
+          setLoading(false);
+        }
+
+        if (shouldReload) {
+          await loadMembers({
+            force: true
+          });
+        }
+      }
+
+
+      async function restoreMember(memberId) {
+        const confirmed = window.confirm(
+          "Pulihkan member \"" +
+          memberId +
+          "\" menjadi Active?"
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        setLoading(true);
+        let shouldReload = false;
+
+        try {
+          const result =
+            await window.P3R_ADMIN_API.restoreMember(
+              memberId
+            );
+
+          showToast(
+            "success",
+            "Member Restored",
+            asString(
+              result &&
+              result.message
+            ) ||
+            "Member berhasil dipulihkan."
+          );
+
+          shouldReload = true;
+        } catch (error) {
+          showToast(
+            "error",
+            "Restore Failed",
+            getFriendlyError(error)
+          );
+        } finally {
+          setLoading(false);
+        }
+
+        if (shouldReload) {
+          await loadMembers({
+            force: true
+          });
+        }
+      }
+
+
+      /*
+      =====================================================
+      TABLE, FILTER, PAGINATION
+      =====================================================
+      */
+
+      function handleTableClick(event) {
+        const button = event.target.closest(
+          "[data-action][data-member-id]"
+        );
+
+        if (!button) {
+          return;
+        }
+
+        const action = asString(
+          button.dataset.action
+        );
+
+        const memberId = asString(
+          button.dataset.memberId
+        );
+
+        if (!memberId) {
+          return;
+        }
+
+        if (action === "edit") {
+          openEditDialog(memberId);
+        }
+
+        if (action === "delete") {
+          deleteMember(memberId);
+        }
+
+        if (action === "restore") {
+          restoreMember(memberId);
+        }
+      }
+
+
+      function applyFilters() {
+        readFilters();
+
+        state.pagination.page = 1;
+
+        loadMembers({
+          force: true
+        });
+      }
+
+
+      function handleSearchInput() {
+        if (state.searchTimer) {
+          window.clearTimeout(
+            state.searchTimer
+          );
+        }
+
+        state.searchTimer =
+          window.setTimeout(
+            applyFilters,
+            450
+          );
+      }
+
+
+      function goToPreviousPage() {
+        if (
+          state.pagination.hasPrevious &&
+          !state.loading
+        ) {
+          state.pagination.page -= 1;
+
+          loadMembers({
+            force: true
+          });
+        }
+      }
+
+
+      function goToNextPage() {
+        if (
+          state.pagination.hasNext &&
+          !state.loading
+        ) {
+          state.pagination.page += 1;
+
+          loadMembers({
+            force: true
+          });
+        }
+      }
+
+
+      /*
+      =====================================================
+      LOGOUT
+      =====================================================
+      */
+
+      async function logoutAdmin() {
+        elements.logoutButton.disabled = true;
+
+        try {
+          await window.P3R_ADMIN_API.logout();
+        } finally {
+          window.location.replace(
+            "./admin-login.html"
+          );
+        }
+      }
+
+
+      /*
+      =====================================================
+      LISTENERS
+      =====================================================
+      */
+
+      function setupListeners() {
+        elements.addMemberButton.addEventListener(
+          "click",
+          openCreateDialog
+        );
+
+        elements.refreshButton.addEventListener(
+          "click",
+          function refreshMembers() {
+            loadMembers({
+              force: true
+            });
+          }
+        );
+
+        elements.applyFilterButton.addEventListener(
+          "click",
+          applyFilters
+        );
+
+        elements.searchInput.addEventListener(
+          "input",
+          handleSearchInput
+        );
+
+        elements.searchInput.addEventListener(
+          "keydown",
+          function handleSearchEnter(event) {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              applyFilters();
+            }
+          }
+        );
+
+        elements.statusFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.pageSizeFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.includeDeletedFilter.addEventListener(
+          "change",
+          applyFilters
+        );
+
+        elements.previousPageButton.addEventListener(
+          "click",
+          goToPreviousPage
+        );
+
+        elements.nextPageButton.addEventListener(
+          "click",
+          goToNextPage
+        );
+
+        elements.memberTableContainer.addEventListener(
+          "click",
+          handleTableClick
+        );
+
+        elements.closeDialogButton.addEventListener(
+          "click",
+          closeMemberDialog
+        );
+
+        elements.cancelMemberButton.addEventListener(
+          "click",
+          closeMemberDialog
+        );
+
+        elements.memberForm.addEventListener(
+          "submit",
+          saveMember
+        );
+
+        elements.logoutButton.addEventListener(
+          "click",
+          logoutAdmin
+        );
+
+        elements.memberPhoto.addEventListener(
+          "input",
+          function updatePhotoFromUrl() {
+            state.media.photoRemoveRequested = false;
+            renderAllMediaPreviews();
+          }
+        );
+
+        elements.memberVideoCV.addEventListener(
+          "input",
+          function updateVideoFromUrl() {
+            state.media.videoRemoveRequested = false;
+            renderVideoPreview();
+          }
+        );
+
+        elements.memberPhotoFile.addEventListener(
+          "change",
+          handlePhotoFileChange
+        );
+
+        elements.memberVideoFile.addEventListener(
+          "change",
+          handleVideoFileChange
+        );
+
+        elements.memberGalleryFiles.addEventListener(
+          "change",
+          handleGalleryFilesChange
+        );
+
+        elements.clearMemberPhotoButton.addEventListener(
+          "click",
+          clearPhotoReference
+        );
+
+        elements.clearMemberVideoButton.addEventListener(
+          "click",
+          clearVideoReference
+        );
+
+        elements.refreshGalleryPreviewButton.addEventListener(
+          "click",
+          function refreshGalleryPreview() {
+            const gallery =
+              readGalleryFromTextarea(true);
+
+            if (!gallery) {
+              showToast(
+                "warning",
+                "Invalid Gallery JSON",
+                "Periksa format Gallery JSON terlebih dahulu."
+              );
+
+              return;
+            }
+
+            writeGalleryToTextarea(
+              gallery
+            );
+
+            renderGalleryPreview();
+          }
+        );
+
+        elements.memberGalleryPreview.addEventListener(
+          "click",
+          handleGalleryPreviewClick
+        );
+
+        elements.memberGalleryPreview.addEventListener(
+          "input",
+          handleGalleryPreviewInput
+        );
+
+        elements.memberGallery.addEventListener(
+          "blur",
+          function syncGalleryOnBlur() {
+            const gallery =
+              readGalleryFromTextarea(false);
+
+            if (gallery) {
+              writeGalleryToTextarea(
+                gallery
+              );
+
+              renderGalleryPreview();
+            }
+          }
+        );
+
+        elements.memberDialog.addEventListener(
+          "cancel",
+          function handleDialogCancel(event) {
+            if (state.saving) {
+              event.preventDefault();
+
+              return;
+            }
+
+            resetPendingMedia();
+            state.editingMemberId = "";
+          }
+        );
+
+        window.addEventListener(
+          "p3r:admin-logout",
+          redirectToLogin
+        );
+      }
+
+
+      /*
+      =====================================================
+      INIT
+      =====================================================
+      */
+
+      async function init() {
+        if (state.initialized) {
+          return;
+        }
+
+        state.initialized = true;
+
+        setupListeners();
+
+        setLoading(true);
+
+        const authenticated =
+          await initializeAuthentication();
+
+        setLoading(false);
+
+        if (!authenticated) {
+          return;
+        }
+
+        readFilters();
+
+        await loadMembers({
+          force: true
+        });
+      }
+
+
+      if (
+        document.readyState === "loading"
+      ) {
+        document.addEventListener(
+          "DOMContentLoaded",
+          init,
+          {
+            once: true
+          }
+        );
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
